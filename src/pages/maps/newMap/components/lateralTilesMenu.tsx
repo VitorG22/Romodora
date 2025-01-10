@@ -1,11 +1,11 @@
 import { useContext, useEffect, useState } from "react"
-import { BlocksList, IBlock } from "../BlocksList"
+import { BlocksList, IBlock } from "../../BlocksList"
 import { BrickWall, DoorOpen, Ghost, Grid2X2, ScanIcon } from "lucide-react";
 import SquareButton from "../../../../components/buttons";
 import { saveMapsInLocalStorage } from "../../../../scripts/localStorage/localStorage";
 import { MapsContext } from "../..";
-import { ITileData } from "../updateMapMatrix";
 import { useParams } from "react-router-dom";
+import { IMapMatrix } from "../../../../interfaces";
 
 interface ILateralTileMenu {
     selectedTile: { tileId: number, variant: number }
@@ -13,10 +13,14 @@ interface ILateralTileMenu {
         tileId: number;
         variant: number;
     }>>
-    mapMatrix: ITileData[][]
+    mapMatrix: IMapMatrix| null
+    mapSize:{
+        X:number,
+        Y:number
+    }
 }
 
-export default function LateralTileMenu({ selectedTile, setSelectedTileId , mapMatrix }: ILateralTileMenu) {
+export default function LateralTileMenu({ selectedTile, setSelectedTileId , mapMatrix, mapSize }: ILateralTileMenu) {
     const [selectedBlockId, setSelectedBlockId] = useState<number>(0)
     const [selectedBlockData, setSelectedBlockData] = useState<IBlock | undefined>(undefined)
     const [blocksListToRender, setBlocksListToRender] = useState<IBlock[]>(BlocksList)
@@ -73,7 +77,7 @@ export default function LateralTileMenu({ selectedTile, setSelectedTileId , mapM
                     <SquareButton size="lg" variant="ghost" onClick={() => history.back()}>
                         Cancel
                     </SquareButton>
-                    <SaveMapButton mapMatrix={mapMatrix}/>
+                    <SaveMapButton mapMatrix={mapMatrix} mapSize={mapSize}/>
 
                 </div>
             </section>
@@ -114,23 +118,23 @@ function FilterButton(props: React.ComponentProps<'li'>) {
     )
 }
 
-function SaveMapButton({mapMatrix}:{mapMatrix: ITileData[][]}) {
+function SaveMapButton({mapMatrix,mapSize}:{mapMatrix: IMapMatrix|null,mapSize:{X:number, Y:number}}) {
     const {mapId} = useParams()
     const {mapList, setMapList} = useContext(MapsContext)
     
     const saveMap = ()=>{
+        if(!mapMatrix)return
         let mapIndex = mapList.findIndex(mapData => mapData.id == mapId)
         let newMapList = [...mapList]
         if(mapIndex == -1 || !setMapList)return
 
 
-        const mapSizeX = mapMatrix[0].length
-        const mapSizeY = mapMatrix.length
+        
         newMapList[mapIndex] = {
             ...newMapList[mapIndex],
-            mapStructureData: mapMatrix,
-            sizeX: mapSizeX,
-            sizeY: mapSizeY
+            mapMatrix: mapMatrix,
+            sizeX: mapSize.X,
+            sizeY: mapSize.Y
         }
         
         saveMapsInLocalStorage({
@@ -141,7 +145,7 @@ function SaveMapButton({mapMatrix}:{mapMatrix: ITileData[][]}) {
     }
     
     return (
-        <SquareButton size="lg" variant="secondary" onClick={saveMap}>
+        <SquareButton disabled={!mapMatrix} size="lg" variant="secondary" onClick={saveMap}>
             Save
         </SquareButton>
     )

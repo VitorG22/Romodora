@@ -1,15 +1,14 @@
 import React, { createContext, useEffect, useState } from "react";
 import LateralNavBar from "../../components/navbar/lateral";
 import { Outlet } from "react-router-dom";
-import { ITileData } from "./newMap/updateMapMatrix";
 import { getMapsFromLocalStorage } from "../../scripts/localStorage/localStorage";
-import { Mob } from "./newMap/components/classes/mobClasses";
+import { IMapMatrix } from "../../interfaces";
 
 export interface IMap {
     name: string,
     picture: string,
     id: string,
-    mapStructureData: Array<ITileData[]> | []
+    mapMatrix: IMapMatrix
     sizeX: number
     sizeY: number
 }
@@ -46,20 +45,3 @@ export default function Maps() {
         </MapsContext.Provider>
     )
 }
-
-
-
-function teste() {
-    let MobArrays = []
-
-    for (let i = 0; i < 10; i++) {
-        const NewMob = new Mob({ name: `Mob_${i}`, position: { X: 0, Y: 0 } })
-        MobArrays.push(NewMob)
-    }
-    MobArrays.forEach(element =>
-        element.moveTo({
-            X: Math.floor(Math.random() * 20),
-            Y: Math.floor(Math.random() * 20)
-        }))
-}
-teste()

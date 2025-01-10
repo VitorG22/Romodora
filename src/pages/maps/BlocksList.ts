@@ -14,7 +14,8 @@ export interface IBlock {
         Y: number
     }
     renderLevel: number,
-    type: 'floor' | 'prop' | 'wall'|'mob'
+    type: 'floor' | 'prop' | 'wall'|'mob',
+    group: Array<number[]>
 }
 
 export const BlocksList: IBlock[] = [
@@ -101,7 +102,8 @@ export const BlocksList: IBlock[] = [
         size: {
             X: 1,
             Y: 1
-        }
+        },
+        group:[[1]]
     },
     {
         id: 1,
@@ -186,7 +188,8 @@ export const BlocksList: IBlock[] = [
         size: {
             X: 1,
             Y: 1
-        }
+        },
+        group:[[1]]
     },
     {
         id: 2,
@@ -271,7 +274,8 @@ export const BlocksList: IBlock[] = [
         size: {
             X: 1,
             Y: 1
-        }
+        },
+        group:[[1]]
     },
     {
         id: 3,
@@ -308,7 +312,8 @@ export const BlocksList: IBlock[] = [
         size: {
             X: 1,
             Y: 1
-        }
+        },
+        group:[[1]]
     },
     {
         id: 4,
@@ -369,7 +374,8 @@ export const BlocksList: IBlock[] = [
         size: {
             X: 1,
             Y: 1
-        }
+        },
+        group:[[1]]
     },
     {
         id: 5,
@@ -406,7 +412,8 @@ export const BlocksList: IBlock[] = [
         size: {
             X: 1,
             Y: 1
-        }
+        },
+        group:[[1]]
     },
     {
         id: 6,
@@ -431,7 +438,11 @@ export const BlocksList: IBlock[] = [
         size: {
             X: 1,
             Y: 2
-        }
+        },
+        group:[
+            [1],
+            [1]
+        ]
     },
     {
         id: 7,
@@ -456,7 +467,11 @@ export const BlocksList: IBlock[] = [
         size: {
             X: 2,
             Y: 2
-        }
+        },
+        group:[
+            [1,1],
+            [1,1], 
+        ]
     },
     {
         id: 8,
@@ -488,7 +503,11 @@ export const BlocksList: IBlock[] = [
         size: {
             X:2,
             Y:2
-        }
+        },
+        group:[
+            [1,1],
+            [1,1]
+        ]
     },
     {
         id: 9,
@@ -520,7 +539,12 @@ export const BlocksList: IBlock[] = [
         size: {
             X:3,
             Y:3
-        }
+        },
+        group:[
+            [0,1,1],
+            [1,1,1],
+            [1,1,1],
+        ]
     },
     {
         id: 10,
@@ -552,7 +576,13 @@ export const BlocksList: IBlock[] = [
         size: {
             X:4,
             Y:4
-        }
+        },
+        group:[
+            [0,0,1,1],
+            [0,0,1,1],
+            [1,1,1,1],
+            [1,1,1,1],
+        ]
     },
     {
         id: 11,
@@ -572,7 +602,8 @@ export const BlocksList: IBlock[] = [
         size: {
             X: 1,
             Y: 1
-        }
+        },
+        group:[[1]]
     },
     {
         id: 12,
@@ -592,7 +623,12 @@ export const BlocksList: IBlock[] = [
         size: {
             X: 2,
             Y: 3
-        }
+        },
+        group:[
+            [1,1],
+            [1,1],
+            [1,1],
+        ]
     },
     {
         id: 13,
@@ -624,7 +660,11 @@ export const BlocksList: IBlock[] = [
         size: {
             X:2,
             Y:2
-        }
+        },
+        group:[
+            [1,1],
+            [1,1]
+        ]
     },
     {
         id: 14,
@@ -656,7 +696,12 @@ export const BlocksList: IBlock[] = [
         size: {
             X:3,
             Y:3
-        }
+        },
+        group:[
+            [0,1,1],
+            [1,1,1],
+            [1,1,1]
+        ]
     },
     {
         id: 15,
@@ -688,7 +733,13 @@ export const BlocksList: IBlock[] = [
         size: {
             X:4,
             Y:4
-        }
+        },
+        group:[
+            [0,0,1,1],
+            [0,0,1,1],
+            [1,1,1,1],
+            [1,1,1,1],
+        ]
     },
     {
         id: 16,
@@ -721,7 +772,11 @@ export const BlocksList: IBlock[] = [
         size: {
             X:1,
             Y:2
-        }
+        },
+        group:[
+            [1],
+            [1]
+        ]
     },
     {
         id: 17,
@@ -754,7 +809,11 @@ export const BlocksList: IBlock[] = [
         size: {
             X:2,
             Y:2
-        }
+        },
+        group:[
+            [1,1],
+            [1,1]
+        ]
     },
     {
         id: 18,
@@ -773,7 +832,11 @@ export const BlocksList: IBlock[] = [
         size: {
             X:2,
             Y:2
-        }
+        },
+        group:[
+            [1,1],
+            [1,1]
+        ]
     },
     {
         id: 19,
@@ -799,7 +862,11 @@ export const BlocksList: IBlock[] = [
         size: {
             X:1,
             Y:2
-        }
+        },
+        group:[
+            [1],
+            [1]
+        ]
     },
     {
         id: 20,
@@ -848,7 +915,8 @@ export const BlocksList: IBlock[] = [
         size: {
             X:1,
             Y:1
-        }
+        },
+        group:[[1]]
     },
     {
         id: 21,
@@ -867,7 +935,11 @@ export const BlocksList: IBlock[] = [
         size: {
             X:1,
             Y:2
-        }
+        },
+        group:[
+            [1],
+            [1]
+        ]
     },
     {
         id: 22,
@@ -886,7 +958,11 @@ export const BlocksList: IBlock[] = [
         size: {
             X:2,
             Y:2
-        }
+        },
+        group:[
+            [1,1],
+            [1,1]
+        ]
     },
     {
         id: 23,
@@ -905,7 +981,11 @@ export const BlocksList: IBlock[] = [
         size: {
             X:3,
             Y:2
-        }
+        },
+        group:[
+            [1,1,1],
+            [1,1,1]
+        ]
     },
     {
         id: 24,
@@ -924,7 +1004,11 @@ export const BlocksList: IBlock[] = [
         size: {
             X:4,
             Y:2
-        }
+        },
+        group:[
+            [1,1,1,1],
+            [1,1,1,1]
+        ]
     },
     {
         id: 25,
@@ -949,7 +1033,11 @@ export const BlocksList: IBlock[] = [
         size: {
             X:2,
             Y:2
-        }
+        },
+        group:[
+            [1,1],
+            [1,1]
+        ]
     },
     {
         id: 26,
@@ -968,6 +1056,10 @@ export const BlocksList: IBlock[] = [
         size: {
             X:2,
             Y:2
-        }
+        },
+        group:[
+            [1,1],
+            [1,1]
+        ]
     },
 ]

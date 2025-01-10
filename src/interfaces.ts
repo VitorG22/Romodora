@@ -1,6 +1,6 @@
 import React from "react";
 import { Socket } from "socket.io-client";
-import { ITileData } from "./pages/maps/newMap/updateMapMatrix";
+import { Tile } from "./pages/maps/classes/tileClasses";
 
 
 export interface IAppProvider{
@@ -37,7 +37,11 @@ export interface IPartyData {
         owner: string,
         banner: string
     },
-    mapMatrix: ITileData[][]
+    mapData: {
+        mapId: string,
+        mapMatrix: IMapMatrix,
+        mapName: string
+    }
 }
 
 export interface IPlayerData{
@@ -85,4 +89,12 @@ export interface IAbilityScore{
     setScore:number,
     stackingBonus:number,
     
+}
+
+
+export interface IMapMatrix{
+    floor:Array<Tile[]>
+    prop:Array<Tile[]>
+    wall:Array<Tile[]>
+    mob:Array<Tile[]>
 }

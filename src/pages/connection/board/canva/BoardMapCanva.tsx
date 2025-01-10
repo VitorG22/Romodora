@@ -1,6 +1,8 @@
 import { useContext, useEffect, useRef, useState } from "react"
 import { AppContext } from "../../../../AppContext"
-import { drawGhostHover, DrawInCanva } from "../../../maps/newMap/drawInCanva"
+import { drawGhostHover } from "../../../maps/scripts/drawInCanva"
+import { IMapMatrix } from "../../../../interfaces"
+import convertMapJsonToClasses from "../../../maps/scripts/convertMapJsonToClasses"
 
 export default function BoardMapCanvas() {
     const { partyData } = useContext(AppContext)
@@ -8,6 +10,8 @@ export default function BoardMapCanvas() {
     const canvasCoverRef = useRef<HTMLCanvasElement | null>(null)
     const canvasPropsRef = useRef<HTMLCanvasElement | null>(null)
     const canvasFloorRef = useRef<HTMLCanvasElement | null>(null)
+    const canvasMobRef = useRef<HTMLCanvasElement | null>(null)
+    const canvasWallRef = useRef<HTMLCanvasElement | null>(null)
     const canvasContainer = useRef<HTMLElement | null>(null)
     const [isDampingActive, setIsDampingActive] = useState<boolean>(false)
     const [translateX, setTranslateX] = useState<number>(0)
@@ -16,52 +20,110 @@ export default function BoardMapCanvas() {
     const [tileCountX, setTileCountX] = useState<number>(0)
     const [tileCountY, setTileCountY] = useState<number>(0)
 
+    let lastMapId = ''
     useEffect(() => {
-        setTileCountX(partyData?.mapMatrix[0].length || 0)
-        setTileCountY(partyData?.mapMatrix.length || 0)
-        console.log('sdyifgushd')
-    }, [partyData])
+        let newTileCountX = partyData?.mapData.mapMatrix.floor[0].length || 0
+        let newTileCountY = partyData?.mapData.mapMatrix.floor.length || 0
+        setTileCountX(newTileCountX)
+        setTileCountY(newTileCountY)
 
-    useEffect(() => {
-        if (!canvasPropsRef.current || !canvasFloorRef.current || !canvasCoverRef.current || !canvasContainer.current) return
+        tradeMapSize({
+            sizeCountX: newTileCountX, sizeCountY: newTileCountY, callback: () => {
 
-        canvasCoverRef.current.width = tileCountX * blockSize
-        canvasCoverRef.current.height = tileCountY * blockSize
+                    if (partyData?.mapData.mapMatrix) {
+                        // if (partyData?.mapData.mapId != lastMapId) clearBoard().then(() => {
+                            // RenderTiles(convertMapJsonToClasses(partyData?.mapData.mapMatrix))
+                            // return
+                        // })
 
-        canvasPropsRef.current.width = tileCountX * blockSize
-        canvasPropsRef.current.height = tileCountY * blockSize
-
-        canvasFloorRef.current.width = tileCountX * blockSize
-        canvasFloorRef.current.height = tileCountY * blockSize
-
-    }, [tileCountX, tileCountY])
-
-    useEffect(() => {
-        if (!canvasPropsRef.current || !canvasFloorRef.current) return
-        DrawInCanva({
-            blockSize: blockSize,
-            canvas: canvasFloorRef.current,
-            mapMatrix: partyData?.mapMatrix || [],
-            canvaType: 'floor'
+                        RenderTiles(convertMapJsonToClasses(partyData?.mapData.mapMatrix))
+                    }
+            }
         })
-        DrawInCanva({
-            blockSize: blockSize,
-            canvas: canvasPropsRef.current,
-            mapMatrix: partyData?.mapMatrix || [],
-            canvaType: 'props'
-        })
+    }, [partyData?.mapData])
 
+
+
+    const tradeMapSize = ({ sizeCountX, sizeCountY, callback }: { sizeCountX: number, sizeCountY: number, callback?: () => void }) => {
+
+        if (!canvasPropsRef.current || !canvasFloorRef.current || !canvasMobRef.current || !canvasWallRef.current || !canvasCoverRef.current || !canvasContainer.current) return
+
+        canvasCoverRef.current.width = sizeCountX * blockSize
+        canvasCoverRef.current.height = sizeCountY * blockSize
+
+        canvasPropsRef.current.width = sizeCountX * blockSize
+        canvasPropsRef.current.height = sizeCountY * blockSize
+
+        canvasFloorRef.current.width = sizeCountX * blockSize
+        canvasFloorRef.current.height = sizeCountY * blockSize
+
+        canvasMobRef.current.width = sizeCountX * blockSize
+        canvasMobRef.current.height = sizeCountY * blockSize
+
+        canvasWallRef.current.width = sizeCountX * blockSize
+        canvasWallRef.current.height = sizeCountY * blockSize
+        console.log('trade size')
+
+        callback?.()
+    }
+
+    useEffect(() => {
+        if (!canvasPropsRef.current || !canvasFloorRef.current || !canvasMobRef.current || !canvasWallRef.current) return
         canvasCoverRef.current?.addEventListener('mousemove', drawInCanva)
 
-        return()=>{
+        return () => {
             canvasCoverRef.current?.removeEventListener('mousemove', drawInCanva)
-
         }
-    }, [partyData, tileCountX, tileCountY])
+    }, [partyData?.mapData.mapMatrix, tileCountX, tileCountY])
+
+    const RenderTiles = (mapMatrix: IMapMatrix) => {
+
+        let canvasList = {
+            floor: canvasFloorRef,
+            mob: canvasMobRef,
+            prop: canvasPropsRef,
+            wall: canvasWallRef
+        }
+
+        console.log('render', mapMatrix)
+        mapMatrix.floor.forEach(row => {
+            row.forEach(tileData => {
+                tileData.renderTile({
+                    blockSize: blockSize,
+                    canvas: canvasList[tileData.canvaType]
+                })
+            })
+
+        })
+        mapMatrix.mob.forEach(row => {
+            row.forEach(tileData => {
+                tileData.renderTile({
+                    blockSize: blockSize,
+                    canvas: canvasList[tileData.canvaType]
+                })
+            })
+        })
+        mapMatrix.prop.forEach(row => {
+            row.forEach(tileData => {
+                tileData.renderTile({
+                    blockSize: blockSize,
+                    canvas: canvasList[tileData.canvaType]
+                })
+            })
+        })
+        mapMatrix.wall.forEach(row => {
+            row.forEach(tileData => {
+                tileData.renderTile({
+                    blockSize: blockSize,
+                    canvas: canvasList[tileData.canvaType]
+                })
+            })
+        })
+    }
 
 
     const handleGetCanvasMousePosition = (e: MouseEvent) => {
-        if (!canvasPropsRef.current || !canvasFloorRef.current || !canvasCoverRef.current) return { tileX: -1, tileY: -1 }
+        if (!canvasPropsRef.current || !canvasFloorRef.current || !canvasMobRef.current || !canvasWallRef.current || !canvasCoverRef.current || !canvasContainer.current) return { tileX: -1, tileY: -1 }
         const tilePercentWidth = 100 / tileCountX
         const mousePositionXPercent = (e.offsetX / canvasCoverRef.current.offsetWidth) * 100
         const tileX = Math.floor(mousePositionXPercent / tilePercentWidth)
@@ -75,9 +137,9 @@ export default function BoardMapCanvas() {
         return ({ tileX, tileY })
     }
 
-    const drawInCanva = (e:MouseEvent) => {
-        if(!canvasCoverRef.current)return
-        const {tileX, tileY}=handleGetCanvasMousePosition(e)
+    const drawInCanva = (e: MouseEvent) => {
+        if (!canvasCoverRef.current) return
+        const { tileX, tileY } = handleGetCanvasMousePosition(e)
 
         drawGhostHover({
             blockSize,
@@ -87,7 +149,7 @@ export default function BoardMapCanvas() {
             Y: tileY,
             canvas: canvasCoverRef.current,
             isCtrlActive: false,
-            isShiftActive: false,
+            isAltActive: false,
             tileId: -1,
             rotate: 'top'
         })
@@ -96,15 +158,17 @@ export default function BoardMapCanvas() {
 
 
     useEffect(() => {
-        if (!canvasPropsRef.current || !canvasFloorRef.current || !canvasCoverRef.current || !canvasContainer.current) return
+        if (!canvasPropsRef.current || !canvasFloorRef.current || !canvasMobRef.current || !canvasWallRef.current || !canvasCoverRef.current || !canvasContainer.current) return
 
         canvasContainer.current.addEventListener('wheel', canvasZoom)
 
         canvasCoverRef.current.style.scale = (canvasZoomValue / 100).toString()
         canvasFloorRef.current.style.scale = (canvasZoomValue / 100).toString()
         canvasPropsRef.current.style.scale = (canvasZoomValue / 100).toString()
+        canvasWallRef.current.style.scale = (canvasZoomValue / 100).toString()
+        canvasMobRef.current.style.scale = (canvasZoomValue / 100).toString()
         return () => {
-            if (!canvasPropsRef.current || !canvasFloorRef.current || !canvasCoverRef.current || !canvasContainer.current) return
+            if (!canvasPropsRef.current || !canvasFloorRef.current || !canvasMobRef.current || !canvasWallRef.current || !canvasCoverRef.current || !canvasContainer.current) return
             canvasContainer.current.removeEventListener('wheel', canvasZoom)
 
         }
@@ -150,7 +214,6 @@ export default function BoardMapCanvas() {
         lastMousePositionYDamping = 0
     }
     const CanvasToggleDamping = (e: KeyboardEvent) => {
-        e.preventDefault()
         if (e.code == 'ShiftLeft') {
             setIsDampingActive(e.shiftKey)
             setLastMousePositionTo0()
@@ -176,10 +239,12 @@ export default function BoardMapCanvas() {
     }
 
     useEffect(() => {
-        if (!canvasCoverRef.current || !canvasFloorRef.current || !canvasPropsRef.current) return
+        if (!canvasPropsRef.current || !canvasFloorRef.current || !canvasMobRef.current || !canvasWallRef.current || !canvasCoverRef.current || !canvasContainer.current) return
         canvasCoverRef.current.style.transform = `translate(${translateX.toString()}%,${translateY.toString()}% )`
         canvasFloorRef.current.style.transform = `translate(${translateX.toString()}%,${translateY.toString()}% )`
         canvasPropsRef.current.style.transform = `translate(${translateX.toString()}%,${translateY.toString()}% )`
+        canvasWallRef.current.style.transform = `translate(${translateX.toString()}%,${translateY.toString()}% )`
+        canvasMobRef.current.style.transform = `translate(${translateX.toString()}%,${translateY.toString()}% )`
 
     }, [translateX, translateY])
 
@@ -188,10 +253,11 @@ export default function BoardMapCanvas() {
         <main className='absolute border border-red-500 flex flex-row justify-between hiddenScroll overflow-hidden h-screen w-full'>
             <section style={{ 'cursor': isDampingActive ? ('move') : ('pointer') }} ref={canvasContainer} className='relative w-full h-full overflow-hidden'>
                 <canvas ref={canvasCoverRef} style={{ 'zIndex': isDampingActive ? ('50') : ('20') }} className="absolute top-0 lef-0 border border-lagun-500/50 h-screen " />
+                <canvas ref={canvasMobRef} className="absolute top-0 lef-0 z-30 h-screen " />
+                <canvas ref={canvasWallRef} className="absolute top-0 lef-0 z-20 h-screen " />
                 <canvas ref={canvasPropsRef} className="absolute top-0 lef-0 z-10 h-screen " />
                 <canvas ref={canvasFloorRef} className="absolute top-0 lef-0 z-0 h-screen " />
             </section>
-            {/* <LateralTileMenu selectedTile={selectedTile} setSelectedTileId={setSelectedTileId} mapMatrix={mapMatrix} /> */}
         </main>
     )
 } 

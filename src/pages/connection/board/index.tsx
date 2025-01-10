@@ -5,8 +5,17 @@ import { BoardContext } from "./boardContext"
 import { Heart, Send } from "lucide-react"
 import LeavePartyButton from "../../../components/leavePartyButton"
 import { getMapsFromLocalStorage } from "../../../scripts/localStorage/localStorage"
-import { ITileData } from "../../maps/newMap/updateMapMatrix"
 import BoardMapCanvas from "./canva/BoardMapCanva"
+import { IMap } from "../../maps"
+import { IPlayerData } from "../../../interfaces"
+
+
+
+interface IChat {
+    message: string,
+    ownerData: IPlayerData | undefined,
+    type: 'userMessage' | 'sistemMessage'
+}
 
 
 export default function Board() {
@@ -24,14 +33,14 @@ export default function Board() {
             setSelectedCharacterInfo: setSelectedCharacterInfo
         }}>
             <main className='relative grid grid-rows-5 grid-cols-11 text-lagun-200 h-screen w-screen overflow-hidden'>
-                    {partyData?.mapMatrix && <BoardMapCanvas />}
-                    <LeftChat />
-                    <RightDinamicSection />
-                    <LeftCharacterInfo />
-                    <div className='z-40 flex flex-row justify-end items-end p-4 row-start-5 row-end-6 col-start-9 col-end-12'>
-                        <LeavePartyButton />
-                    </div>
-                    <BottomSubMenuBar isThisUserHost={isThisUserHost} />
+                {partyData?.mapData?.mapMatrix && <BoardMapCanvas />}
+                <LeftChat />
+                <RightDinamicSection />
+                <LeftCharacterInfo />
+                <div className='z-40 flex flex-row justify-end items-end p-4 row-start-5 row-end-6 col-start-9 col-end-12'>
+                    <LeavePartyButton />
+                </div>
+                <BottomSubMenuBar isThisUserHost={isThisUserHost} />
 
             </main>
         </BoardContext.Provider>
@@ -114,24 +123,84 @@ function LeftCharacterInfo() {
 
 
 function LeftChat() {
+
+    const { socket, partyData } = useContext(AppContext)
+    const chatInputRef = useRef<HTMLInputElement | null>(null)
+    const chatTextBoxRef = useRef<HTMLUListElement | null>(null)
+    
+    const [chatData, setChatData] = useState<IChat[]>([])
+
+    socket?.off(`chatMessage_${partyData?.partyCode}`)
+    socket?.on(`chatMessage_${partyData?.partyCode}`, body => {
+
+        let newChatData = [...chatData]
+        switch (body.type){
+            case 'sistemMessage' : 
+                newChatData.push({
+                    message: 'Luna (Sistem) Roll: 12',
+                    type: "sistemMessage",
+                    ownerData: undefined
+                })
+                break
+
+            case 'userMessage':
+                newChatData.push({
+                    message: body.message,
+                    type: 'userMessage',
+                    ownerData: partyData?.players.find(playerData => playerData.id == body.ownerId)
+                })
+                break
+        }
+        setChatData(newChatData)
+    })
+    useEffect(()=>{
+        chatTextBoxRef?.current?.scrollTo({top: chatTextBoxRef?.current.scrollHeight})
+    },[chatData])
+
+
+
+    const handleSendMessage = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+
+        if (!chatInputRef.current) return
+        let message = chatInputRef.current.value.trim()
+
+        if (message == '') return
+        socket?.emit('chatMessage', {
+            partyCode: partyData?.partyCode,
+            message: message
+        })
+
+        chatInputRef.current.value = ''
+    }
+
     return (
         <section className='z-40 bg-lagun-950/80 m-2 flex flex-col gap-2 justify-between border border-lagun-500 p-2 rounded-md row-start-4 row-end-6 col-start-1 col-end-4'>
-            <ul className='hiddenScroll h-full  overflow-scroll'>
-
-                <li className='flex flex-row gap-2 items-center'>
-                    <h1 className='text-lagun-500 italic text-sm'>Vitor (Sistem) : </h1>
-                    <span>Mensagem</span>
-                </li>
-            </ul>
-            <div className='flex flex-row h-8 items-center w-full gap-2'>
-                <input type="text"
+            <ul ref={chatTextBoxRef} className='hiddenScroll h-full  overflow-scroll'>
+                {chatData.map(messagedata =>
+                    messagedata.type == "sistemMessage" ? (
+                        <li className="flex justify-center text--300  italic text-sm text-cyan-400 bg-cyan-500/10 py-[2px]">
+                            {messagedata.message}
+                        </li>
+                    ) : (
+                        <li className='flex flex-row gap-2 items-center'>
+                            <h1 className='text-lagun-500 italic text-sm'>{messagedata.ownerData?.name} ({messagedata.ownerData?.characterData?.name || 'Master'}) :
+                                <span className='text-lagun-200 not-italic'> {messagedata.message}</span>
+                            </h1>
+                        </li>
+                    )
+                )
+                }
+            </ul >
+            <form onSubmit={(e) => handleSendMessage(e)} className='flex flex-row h-8 items-center w-full gap-2'>
+                <input ref={chatInputRef} type="text"
                     className="w-full h-full bg-transparent border border-lagun-500 rounded-md"
                 />
-                <button className='aspect-square flex justify-center items-center h-full bg-lagun-500 rounded-md text-lagun-950'>
+                <button type="submit" className='aspect-square flex justify-center items-center h-full bg-lagun-500 rounded-md text-lagun-950'>
                     <Send size={15} strokeWidth={1} />
                 </button>
-            </div>
-        </section>
+            </form>
+        </section >
     )
 }
 
@@ -164,10 +233,16 @@ function DinamicSectionMaps() {
     const { socket, partyData } = useContext(AppContext)
     console.log(myMaps)
 
-    const handleSetMapMatrix = (mapMatrix: ITileData[][]) => {
+    const handleSetMapMatrix = (element: IMap) => {
+        // console.log('set Map', mapMatrix)
+        console.log(partyData)
         socket?.emit('setMapMatrix', {
             partyCode: partyData?.partyCode,
-            newMapMatrix: mapMatrix
+            newMapData: {
+                mapMatrix: element.mapMatrix,
+                mapName: element.name,
+                mapId: element.id
+            }
         })
     }
 
@@ -178,7 +253,7 @@ function DinamicSectionMaps() {
             <ul className='flex flex-col items-end gap-2 w-fit'>
                 {myMaps?.map(element =>
                     <li
-                        onClick={() => handleSetMapMatrix(element.mapStructureData)}
+                        onClick={() => handleSetMapMatrix(element)}
                         className='flex flex-row w-fit gap-2 hover:bg-gradient-to-tl from-lagun-500/40 via-lagun-600/40 to-transparent p-1 pl-40  rounded-md'>
                         <article className='text-end'>
                             <h1 className='text-lagun-200 text-lg font-normal'>{element.name}</h1>

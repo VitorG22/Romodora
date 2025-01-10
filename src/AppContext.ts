@@ -10,7 +10,16 @@ export const AppContext = createContext<IAppProvider>({
     },
     token: '',
     partyData: {
-        mapMatrix: [],
+        mapData: {
+            mapId:'',
+            mapName:'',
+            mapMatrix: {
+                floor: [],
+                mob: [],
+                prop: [],
+                wall: []
+            },
+        },
         partyCode: '',
         hostId: '',
         players: [
