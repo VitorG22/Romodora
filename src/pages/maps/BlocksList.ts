@@ -21,79 +21,21 @@ export interface IBlock {
 export const BlocksList: IBlock[] = [
     {
         id: 0,
-        statusCount: 1,
+        statusCount: 2,
         filter: 'floor',
         variant: [
             {
-                name: 'A1 Blue',
+                name: 'Forest Needles',
                 path: [
-                    '/assets/Ceremorph/Textures/Ceremorph_Blue_A1.jpg'
+                    '/assets/modularTileSet/Floors/Texture_Pack_05/Forest_Floor_Needles_A_02.jpg',
+                    '/assets/modularTileSet/Floors/Texture_Pack_05/Forest_Floor_Needles_B_02.jpg',
                 ]
             },
             {
-                name: 'A2 Blue',
+                name: 'Forest Needles',
                 path: [
-                    '/assets/Ceremorph/Textures/Ceremorph_Blue_A2.jpg'
-                ]
-            },
-            {
-                name: 'A3 Blue',
-                path: [
-                    '/assets/Ceremorph/Textures/Ceremorph_Blue_A3.jpg'
-                ]
-            },
-            {
-                name: 'A1 Gray',
-                path: [
-                    '/assets/Ceremorph/Textures/Ceremorph_Gray_A1.jpg'
-                ]
-            },
-            {
-                name: 'A2 Gray',
-                path: [
-                    '/assets/Ceremorph/Textures/Ceremorph_Gray_A2.jpg'
-                ]
-            },
-            {
-                name: 'A3 Gray',
-                path: [
-                    '/assets/Ceremorph/Textures/Ceremorph_Gray_A3.jpg'
-                ]
-            },
-            {
-                name: 'A1 Green',
-                path: [
-                    '/assets/Ceremorph/Textures/Ceremorph_Green_A1.jpg'
-                ]
-            },
-            {
-                name: 'A2 Green',
-                path: [
-                    '/assets/Ceremorph/Textures/Ceremorph_Green_A2.jpg'
-                ]
-            },
-            {
-                name: 'A3 Green',
-                path: [
-                    '/assets/Ceremorph/Textures/Ceremorph_Green_A3.jpg'
-                ]
-            },
-            {
-                name: 'A1 Purple',
-                path: [
-                    '/assets/Ceremorph/Textures/Ceremorph_Purple_A1.jpg'
-                ]
-            },
-            {
-                name: 'A2 Purple',
-                path: [
-                    '/assets/Ceremorph/Textures/Ceremorph_Purple_A2.jpg'
-                ]
-            },
-            {
-                name: 'A3 Purple',
-                path: [
-                    '/assets/Ceremorph/Textures/Ceremorph_Purple_A3.jpg'
+                    '/assets/modularTileSet/Floors/Texture_Pack_05/Forest_Floor_Needles_A_03.jpg',
+                    '/assets/modularTileSet/Floors/Texture_Pack_05/Forest_Floor_Needles_B_03.jpg'
                 ]
             },
         ],
@@ -107,165 +49,92 @@ export const BlocksList: IBlock[] = [
     },
     {
         id: 1,
-        statusCount: 1,
+        statusCount: 4,
         filter: 'floor',
         variant: [
             {
-                name: 'B1 Blue',
+                name: 'White Marble Tile',
                 path: [
-                    '/assets/Ceremorph/Textures/Ceremorph_Blue_B1.jpg'
+                    '/assets/modularTileSet/Floors/Texture_Pack_05/Marble_Tiles_A_01.jpg',
+                    '/assets/modularTileSet/Floors/Texture_Pack_05/Marble_Tiles_B_01.jpg',
+                    '/assets/modularTileSet/Floors/Texture_Pack_05/Marble_Tiles_C_01.jpg',
+                    '/assets/modularTileSet/Floors/Texture_Pack_05/Marble_Tiles_C_02.jpg',
                 ]
             },
             {
-                name: 'B2 Blue',
+                name: 'Black Marble Tile',
                 path: [
-                    '/assets/Ceremorph/Textures/Ceremorph_Blue_B2.jpg'
+                    '/assets/modularTileSet/Floors/Texture_Pack_05/Marble_Tiles_A_02.jpg',
+                    '/assets/modularTileSet/Floors/Texture_Pack_05/Marble_Tiles_B_02.jpg',
+                    '/assets/modularTileSet/Floors/Texture_Pack_05/Marble_Tiles_C_03.jpg',
+                    '/assets/modularTileSet/Floors/Texture_Pack_05/Marble_Tiles_C_04.jpg',
                 ]
             },
             {
-                name: 'B3 Blue',
+                name: 'Green Marble Tile',
                 path: [
-                    '/assets/Ceremorph/Textures/Ceremorph_Blue_B3.jpg'
+                    '/assets/modularTileSet/Floors/Texture_Pack_05/Marble_Tiles_A_03.jpg',
+                    '/assets/modularTileSet/Floors/Texture_Pack_05/Marble_Tiles_B_03.jpg',
+                    '/assets/modularTileSet/Floors/Texture_Pack_05/Marble_Tiles_C_05.jpg',
+                    '/assets/modularTileSet/Floors/Texture_Pack_05/Marble_Tiles_C_06.jpg',
                 ]
             },
             {
-                name: 'B1 Gray',
+                name: 'Checkered Marble Tile',
                 path: [
-                    '/assets/Ceremorph/Textures/Ceremorph_Gray_B1.jpg'
-                ]
-            },
-            {
-                name: 'B2 Gray',
-                path: [
-                    '/assets/Ceremorph/Textures/Ceremorph_Gray_B2.jpg'
-                ]
-            },
-            {
-                name: 'B3 Gray',
-                path: [
-                    '/assets/Ceremorph/Textures/Ceremorph_Gray_B3.jpg'
-                ]
-            },
-            {
-                name: 'B1 Green',
-                path: [
-                    '/assets/Ceremorph/Textures/Ceremorph_Green_B1.jpg'
-                ]
-            },
-            {
-                name: 'B2 Green',
-                path: [
-                    '/assets/Ceremorph/Textures/Ceremorph_Green_B2.jpg'
-                ]
-            },
-            {
-                name: 'B3 Green',
-                path: [
-                    '/assets/Ceremorph/Textures/Ceremorph_Green_B3.jpg'
-                ]
-            },
-            {
-                name: 'B1 Purple',
-                path: [
-                    '/assets/Ceremorph/Textures/Ceremorph_Purple_B1.jpg'
-                ]
-            },
-            {
-                name: 'B2 Purple',
-                path: [
-                    '/assets/Ceremorph/Textures/Ceremorph_Purple_B2.jpg'
-                ]
-            },
-            {
-                name: 'B3 Purple',
-                path: [
-                    '/assets/Ceremorph/Textures/Ceremorph_Purple_B3.jpg'
+                    '/assets/modularTileSet/Floors/Texture_Pack_05/Marble_Tiles_A_04.jpg',
+                    '/assets/modularTileSet/Floors/Texture_Pack_05/Marble_Tiles_A_05.jpg',
+                    '/assets/modularTileSet/Floors/Texture_Pack_05/Marble_Tiles_A_06.jpg',
+                    '/assets/modularTileSet/Floors/Texture_Pack_05/Marble_Tiles_A_07.jpg',
                 ]
             },
         ],
         renderLevel: 0,
         type: 'floor',
         size: {
-            X: 1,
-            Y: 1
+            X: 2,
+            Y: 2
         },
-        group:[[1]]
+        group:[
+            [1,1],
+            [1,1]
+    ]
     },
     {
         id: 2,
-        statusCount: 1,
+        statusCount: 3,
         filter: 'floor',
         variant: [
             {
-                name: 'C1 Blue',
+                name: 'Rock',
                 path: [
-                    '/assets/Ceremorph/Textures/Ceremorph_Blue_C1.jpg'
+                    '/assets/modularTileSet/Floors/Texture_Pack_05/Rock_A_01.jpg',
+                    '/assets/modularTileSet/Floors/Texture_Pack_05/Rock_B_02.jpg',
+                    '/assets/modularTileSet/Floors/Texture_Pack_05/Rock_C_02.jpg',
                 ]
             },
             {
-                name: 'C2 Blue',
+                name: 'Rock',
                 path: [
-                    '/assets/Ceremorph/Textures/Ceremorph_Blue_C2.jpg'
+                    '/assets/modularTileSet/Floors/Texture_Pack_05/Rock_A_02.jpg',
+                    '/assets/modularTileSet/Floors/Texture_Pack_05/Rock_B_01.jpg',
+                    '/assets/modularTileSet/Floors/Texture_Pack_05/Rock_C_01.jpg',
                 ]
             },
             {
-                name: 'C3 Blue',
+                name: 'Rock',
                 path: [
-                    '/assets/Ceremorph/Textures/Ceremorph_Blue_C3.jpg'
+                    '/assets/modularTileSet/Floors/Texture_Pack_05/Rock_A_03.jpg',
+                    '/assets/modularTileSet/Floors/Texture_Pack_05/Rock_B_03.jpg',
+                    '/assets/modularTileSet/Floors/Texture_Pack_05/Rock_C_03.jpg',
                 ]
             },
             {
-                name: 'C1 Gray',
+                name: 'Rock',
                 path: [
-                    '/assets/Ceremorph/Textures/Ceremorph_Gray_C1.jpg'
-                ]
-            },
-            {
-                name: 'C2 Gray',
-                path: [
-                    '/assets/Ceremorph/Textures/Ceremorph_Gray_C2.jpg'
-                ]
-            },
-            {
-                name: 'C3 Gray',
-                path: [
-                    '/assets/Ceremorph/Textures/Ceremorph_Gray_C3.jpg'
-                ]
-            },
-            {
-                name: 'C1 Green',
-                path: [
-                    '/assets/Ceremorph/Textures/Ceremorph_Green_C1.jpg'
-                ]
-            },
-            {
-                name: 'C2 Green',
-                path: [
-                    '/assets/Ceremorph/Textures/Ceremorph_Green_C2.jpg'
-                ]
-            },
-            {
-                name: 'C3 Green',
-                path: [
-                    '/assets/Ceremorph/Textures/Ceremorph_Green_C3.jpg'
-                ]
-            },
-            {
-                name: 'C1 Purple',
-                path: [
-                    '/assets/Ceremorph/Textures/Ceremorph_Purple_C1.jpg'
-                ]
-            },
-            {
-                name: 'C2 Purple',
-                path: [
-                    '/assets/Ceremorph/Textures/Ceremorph_Purple_C2.jpg'
-                ]
-            },
-            {
-                name: 'C3 Purple',
-                path: [
-                    '/assets/Ceremorph/Textures/Ceremorph_Purple_C3.jpg'
+                    '/assets/modularTileSet/Floors/Texture_Pack_05/Rock_A_04.jpg',
+                    '/assets/modularTileSet/Floors/Texture_Pack_05/Rock_B_04.jpg',
+                    '/assets/modularTileSet/Floors/Texture_Pack_05/Rock_C_04.jpg',
                 ]
             },
         ],
@@ -279,41 +148,41 @@ export const BlocksList: IBlock[] = [
     },
     {
         id: 3,
-        statusCount: 1,
+        statusCount: 2,
         filter: 'floor',
         variant: [
             {
-                name: 'D1 Blue',
+                name: 'Grout',
                 path: [
-                    '/assets/Ceremorph/Textures/Ceremorph_Blue_D1.jpg'
+                    '/assets/modularTileSet/Floors/Texture_Pack_05/Square_Grout_A_01.png',
+                    '/assets/modularTileSet/Floors/Texture_Pack_05/Square_Grout_A_02.png',
                 ]
             },
             {
-                name: 'D1 Gray',
+                name: 'Grout',
                 path: [
-                    '/assets/Ceremorph/Textures/Ceremorph_Gray_D1.jpg'
+                    '/assets/modularTileSet/Floors/Texture_Pack_05/Square_Grout_B_01.png',
+                    '/assets/modularTileSet/Floors/Texture_Pack_05/Square_Grout_B_02.png',
                 ]
             },
             {
-                name: 'D1 Green',
+                name: 'Grout',
                 path: [
-                    '/assets/Ceremorph/Textures/Ceremorph_Green_D1.jpg'
-                ]
-            },
-            {
-                name: 'D1 Purple',
-                path: [
-                    '/assets/Ceremorph/Textures/Ceremorph_Purple_D1.jpg'
+                    '/assets/modularTileSet/Floors/Texture_Pack_05/Square_Grout_C_01.png',
+                    '/assets/modularTileSet/Floors/Texture_Pack_05/Square_Grout_C_02.png',
                 ]
             },
         ],
         renderLevel: 0,
-        type: 'floor',
+        type: 'prop',
         size: {
-            X: 1,
-            Y: 1
+            X: 2,
+            Y: 2
         },
-        group:[[1]]
+        group:[
+            [1,1],
+            [1,1]
+    ]
     },
     {
         id: 4,
@@ -321,91 +190,91 @@ export const BlocksList: IBlock[] = [
         filter: 'floor',
         variant: [
             {
-                name: 'E1 Blue',
+                name: 'Height Map',
                 path: [
-                    '/assets/Ceremorph/Textures/Ceremorph_Blue_E1.jpg'
-                ]
-            },
-            {
-                name: 'E2 Blue',
-                path: [
-                    '/assets/Ceremorph/Textures/Ceremorph_Blue_E2.jpg'
-                ]
-            },
-            {
-                name: 'E1 Gray',
-                path: [
-                    '/assets/Ceremorph/Textures/Ceremorph_Gray_E1.jpg'
-                ]
-            },
-            {
-                name: 'E2 Gray',
-                path: [
-                    '/assets/Ceremorph/Textures/Ceremorph_Gray_E2.jpg'
-                ]
-            },
-            {
-                name: 'E1 Green',
-                path: [
-                    '/assets/Ceremorph/Textures/Ceremorph_Green_E1.jpg'
-                ]
-            },
-            {
-                name: 'E2 Green',
-                path: [
-                    '/assets/Ceremorph/Textures/Ceremorph_Green_E2.jpg'
-                ]
-            },
-            {
-                name: 'E1 Purple',
-                path: [
-                    '/assets/Ceremorph/Textures/Ceremorph_Purple_E1.jpg'
-                ]
-            },
-            {
-                name: 'E2 Purple',
-                path: [
-                    '/assets/Ceremorph/Textures/Ceremorph_Purple_E2.jpg'
+                    '/assets/modularTileSet/Floors/Texture_Pack_05/Square_Tiles_HeightMap_Overlay.png',
                 ]
             },
         ],
         renderLevel: 0,
-        type: 'floor',
+        type: 'prop',
         size: {
-            X: 1,
-            Y: 1
+            X: 2,
+            Y: 2
         },
-        group:[[1]]
+        group:[
+            [1,1],
+            [1,1]
+        ]
     },
     {
         id: 5,
-        statusCount: 1,
+        statusCount: 4,
         filter: 'floor',
         variant: [
             {
-                name: 'F1 Blue',
+                name: 'Still Water',
                 path: [
-                    '/assets/Ceremorph/Textures/Ceremorph_Blue_F1.jpg'
+                    '/assets/modularTileSet/Floors/Texture_Pack_05/Still_Water_A_01.jpg',
+                    '/assets/modularTileSet/Floors/Texture_Pack_05/Still_Water_B_01.jpg',
+                    '/assets/modularTileSet/Floors/Texture_Pack_05/Still_Water_C_01.jpg',
+                    '/assets/modularTileSet/Floors/Texture_Pack_05/Still_Water_Overlay_01.jpg',
                 ]
             },
             {
-                name: 'F1 Gray',
+                name: 'Still Water',
                 path: [
-                    '/assets/Ceremorph/Textures/Ceremorph_Gray_F1.jpg'
+                    '/assets/modularTileSet/Floors/Texture_Pack_05/Still_Water_A_02.jpg',
+                    '/assets/modularTileSet/Floors/Texture_Pack_05/Still_Water_B_02.jpg',
+                    '/assets/modularTileSet/Floors/Texture_Pack_05/Still_Water_C_02.jpg',
+                    '/assets/modularTileSet/Floors/Texture_Pack_05/Still_Water_Overlay_02.jpg',
                 ]
             },
             {
-                name: 'F1 Green',
+                name: 'Still Water',
                 path: [
-                    '/assets/Ceremorph/Textures/Ceremorph_Green_F1.jpg'
+                    '/assets/modularTileSet/Floors/Texture_Pack_05/Still_Water_A_03.jpg',
+                    '/assets/modularTileSet/Floors/Texture_Pack_05/Still_Water_B_03.jpg',
+                    '/assets/modularTileSet/Floors/Texture_Pack_05/Still_Water_C_03.jpg',
+                    '/assets/modularTileSet/Floors/Texture_Pack_05/Still_Water_Overlay_03.jpg',
                 ]
             },
             {
-                name: 'F1 Purple',
+                name: 'Still Water',
                 path: [
-                    '/assets/Ceremorph/Textures/Ceremorph_Purple_F1.jpg'
+                    '/assets/modularTileSet/Floors/Texture_Pack_05/Still_Water_A_04.jpg',
+                    '/assets/modularTileSet/Floors/Texture_Pack_05/Still_Water_B_04.jpg',
+                    '/assets/modularTileSet/Floors/Texture_Pack_05/Still_Water_C_04.jpg',
+                    '/assets/modularTileSet/Floors/Texture_Pack_05/Still_Water_Overlay_04.jpg',
                 ]
             },
+            {
+                name: 'Still Water',
+                path: [
+                    '/assets/modularTileSet/Floors/Texture_Pack_05/Still_Water_A_05.jpg',
+                    '/assets/modularTileSet/Floors/Texture_Pack_05/Still_Water_B_05.jpg',
+                    '/assets/modularTileSet/Floors/Texture_Pack_05/Still_Water_C_05.jpg',
+                    '/assets/modularTileSet/Floors/Texture_Pack_05/Still_Water_Overlay_05.jpg',
+                ]
+            },
+            {
+                name: 'Still Water',
+                path: [
+                    '/assets/modularTileSet/Floors/Texture_Pack_05/Still_Water_A_06.jpg',
+                    '/assets/modularTileSet/Floors/Texture_Pack_05/Still_Water_B_06.jpg',
+                    '/assets/modularTileSet/Floors/Texture_Pack_05/Still_Water_C_06.jpg',
+                    '/assets/modularTileSet/Floors/Texture_Pack_05/Still_Water_Overlay_06.jpg',
+                ]
+            },
+            {
+                name: 'Still Water',
+                path: [
+                    '/assets/modularTileSet/Floors/Texture_Pack_05/Still_Water_A_07.jpg',
+                    '/assets/modularTileSet/Floors/Texture_Pack_05/Still_Water_B_07.jpg',
+                    '/assets/modularTileSet/Floors/Texture_Pack_05/Still_Water_C_07.jpg',
+                ]
+            },
+            
         ],
         renderLevel: 0,
         type: 'floor',
@@ -616,6 +485,12 @@ export const BlocksList: IBlock[] = [
                     '/assets/modularTileSet/Dungeon1/Dungeon_Straight_2x3_A.png'
                 ]
             },
+            {
+                name: 'Dungeon Straight 2x3 A',
+                path: [
+                    '/assets/modularTileSet/Dungeon1/Dungeon_Straight_2x3_B.png'
+                ]
+            },
             
         ],
         renderLevel: 0,
@@ -625,9 +500,9 @@ export const BlocksList: IBlock[] = [
             Y: 3
         },
         group:[
+            [1,0],
             [1,1],
-            [1,1],
-            [1,1],
+            [0,1],
         ]
     },
     {
@@ -1060,6 +935,339 @@ export const BlocksList: IBlock[] = [
         group:[
             [1,1],
             [1,1]
+        ]
+    },
+    {
+        id: 27,
+        statusCount: 1,
+        filter: 'border',
+        variant: [
+            {
+                name: 'Dungeon Dead End 3x2 A',
+                path: [
+                    '/assets/modularTileSet/Dungeon1/Dungeon_Dead_End_3x2_A.png'
+                ]
+            },                        
+            {
+                name: 'Dungeon Dead End 3x2 B',
+                path: [
+                    '/assets/modularTileSet/Dungeon1/Dungeon_Dead_End_3x2_B.png'
+                ]
+            },                        
+        ],
+        renderLevel: 0,
+        type: 'wall',
+        size: {
+            X:3,
+            Y:2
+        },
+        group:[
+            [1,1,1],
+            [1,1,1]
+        ]
+    },
+    {
+        id: 28,
+        statusCount: 1,
+        filter: 'border',
+        variant: [
+            {
+                name: 'Dungeon Dead End Out 3x2 A',
+                path: [
+                    '/assets/modularTileSet/Dungeon1/Dungeon_Dead_End_Out_3x2_A.png'
+                ]
+            },                        
+            {
+                name: 'Dungeon Dead End 3x2 B',
+                path: [
+                    '/assets/modularTileSet/Dungeon1/Dungeon_Dead_End_Out_3x2_B.png'
+                ]
+            },                        
+        ],
+        renderLevel: 0,
+        type: 'wall',
+        size: {
+            X:3,
+            Y:2
+        },
+        group:[
+            [0,1,0],
+            [1,1,1]
+        ]
+    },
+    {
+        id: 29,
+        statusCount: 1,
+        filter: 'border',
+        variant: [
+            {
+                name: 'Dungeon End',
+                path: [
+                    '/assets/modularTileSet/Dungeon1/Dungeon_End_Right.png'
+                ]
+            },                        
+        ],
+        renderLevel: 0,
+        type: 'wall',
+        size: {
+            X:1,
+            Y:2
+        },
+        group:[
+            [1],
+            [1]
+        ]
+    },
+    {
+        id: 30,
+        statusCount: 1,
+        filter: 'border',
+        variant: [
+            {
+                name: 'Dungeon Pillar',
+                path: [
+                    '/assets/modularTileSet/Dungeon1/Dungeon_Pillar_1x1_A.png'
+                ]
+            },                        
+            {
+                name: 'Dungeon Pillar',
+                path: [
+                    '/assets/modularTileSet/Dungeon1/Dungeon_Pillar_1x1_B.png'
+                ]
+            },                        
+        ],
+        renderLevel: 0,
+        type: 'wall',
+        size: {
+            X:1,
+            Y:1
+        },
+        group:[
+            [1]
+        ]
+    },
+    {
+        id: 31,
+        statusCount: 1,
+        filter: 'border',
+        variant: [
+            {
+                name: 'Dungeon Pillar',
+                path: [
+                    '/assets/modularTileSet/Dungeon1/Dungeon_Pillar_2x2_A.png'
+                ]
+            },                        
+            {
+                name: 'Dungeon Pillar',
+                path: [
+                    '/assets/modularTileSet/Dungeon1/Dungeon_Pillar_2x2_B.png'
+                ]
+            },                        
+            {
+                name: 'Dungeon Pillar',
+                path: [
+                    '/assets/modularTileSet/Dungeon1/Dungeon_Pillar_2x2_C.png'
+                ]
+            },                        
+            {
+                name: 'Dungeon Pillar',
+                path: [
+                    '/assets/modularTileSet/Dungeon1/Dungeon_Pillar_2x2_D.png'
+                ]
+            },                        
+        ],
+        renderLevel: 0,
+        type: 'wall',
+        size: {
+            X:2,
+            Y:2
+        },
+        group:[
+            [1,1],
+            [1,1]
+        ]
+    },
+    {
+        id: 33,
+        statusCount: 1,
+        filter: 'floor',
+        variant: [
+            {
+                name: 'Dungeon Stair 2x2',
+                path: [
+                    '/assets/modularTileSet/Dungeon1/Dungeon_Stairs_Thick_2x2.png'
+                ]
+            },                      
+            {
+                name: 'Dungeon Stair 2x2',
+                path: [
+                    '/assets/modularTileSet/Dungeon1/Dungeon_Stairs_Thick_2x2_Transparent.png'
+                ]
+            },                      
+        ],
+        renderLevel: 0,
+        type: 'prop',
+        size: {
+            X:2,
+            Y:2
+        },
+        group:[
+            [1,1],
+            [1,1]
+        ]
+    },
+    {
+        id: 34,
+        statusCount: 1,
+        filter: 'floor',
+        variant: [
+            {
+                name: 'Dungeon Stair 3x2',
+                path: [
+                    '/assets/modularTileSet/Dungeon1/Dungeon_Stairs_Thick_3x2.png'
+                ]
+            },                      
+            {
+                name: 'Dungeon Stair 3x2',
+                path: [
+                    '/assets/modularTileSet/Dungeon1/Dungeon_Stairs_Thick_3x2_Transparent.png'
+                ]
+            },                      
+        ],
+        renderLevel: 0,
+        type: 'prop',
+        size: {
+            X:3,
+            Y:2
+        },
+        group:[
+            [1,1,1],
+            [1,1,1],
+        ]
+    },
+    {
+        id: 35,
+        statusCount: 1,
+        filter: 'floor',
+        variant: [
+            {
+                name: 'Dungeon Stair 2x1',
+                path: [
+                    '/assets/modularTileSet/Dungeon1/Dungeon_Stairs_Thin_2x1.png'
+                ]
+            },                      
+            {
+                name: 'Dungeon Stair 2x1',
+                path: [
+                    '/assets/modularTileSet/Dungeon1/Dungeon_Stairs_Thin_2x1_Transparent.png'
+                ]
+            },                      
+        ],
+        renderLevel: 0,
+        type: 'prop',
+        size: {
+            X:2,
+            Y:1
+        },
+        group:[
+            [1,1]
+        ]
+    },
+    {
+        id: 36,
+        statusCount: 1,
+        filter: 'border',
+        variant: [
+            {
+                name: 'Dungeon Straight 3x3',
+                path: [
+                    '/assets/modularTileSet/Dungeon1/Dungeon_Straight_3x3_A.png'
+                ]
+            },                  
+        ],
+        renderLevel: 0,
+        type: 'wall',
+        size: {
+            X:3,
+            Y:1
+        },
+        group:[
+            [1,1,1]
+        ]
+    },
+    {
+        id: 37,
+        statusCount: 1,
+        filter: 'border',
+        variant: [
+            {
+                name: 'Dungeon Straight 4x4',
+                path: [
+                    '/assets/modularTileSet/Dungeon1/Dungeon_Straight_4x4_A.png'
+                ]
+            },                  
+        ],
+        renderLevel: 0,
+        type: 'wall',
+        size: {
+            X:4,
+            Y:4
+        },
+        group:[
+            [1,1,0,0],
+            [1,1,1,0],
+            [0,1,1,1],
+            [0,0,1,1],
+        ]
+    },
+    {
+        id: 38,
+        statusCount: 1,
+        filter: 'floor',
+        variant: [
+            {
+                name: 'Hatching Patern',
+                path: [
+                    '/assets/modularTileSet/Dungeon1/Hatching_Patern_A.png'
+                ]
+            },                  
+        ],
+        renderLevel: 0,
+        type: 'floor',
+        size: {
+            X:1,
+            Y:1
+        },
+        group:[
+            [1],
+        ]
+    },
+    {
+        id: 39,
+        statusCount: 1,
+        filter: 'floor',
+        variant: [
+            {
+                name: 'Dungeon Stair 3x1',
+                path: [
+                    '/assets/modularTileSet/Dungeon1/Dungeon_Stairs_Thin_3x1.png'
+                ]
+            },                      
+            {
+                name: 'Dungeon Stair 3x1',
+                path: [
+                    '/assets/modularTileSet/Dungeon1/Dungeon_Stairs_Thin_3x1_Transparent.png'
+                ]
+            },                      
+        ],
+        renderLevel: 0,
+        type: 'prop',
+        size: {
+            X:3,
+            Y:1
+        },
+        group:[
+            [1,1,1]
         ]
     },
 ]

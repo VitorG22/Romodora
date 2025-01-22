@@ -1,11 +1,11 @@
-import React, { useContext, useEffect, useRef, useState } from "react"
+import { useContext, useEffect, useRef, useState } from "react"
 import { updateMapMatrixAdd, updateMapMatrixDelete } from "../scripts/updateMapMatrix"
 import { drawGhostHover } from "../scripts/drawInCanva"
 import LateralTileMenu from "./components/lateralTilesMenu"
 import { useParams } from "react-router-dom"
 import { MapsContext } from ".."
 import { BlocksList } from "../BlocksList"
-import { Minus, Mouse, Move, Plus, SquareDashedMousePointer, SquareMousePointer } from "lucide-react"
+import { Minus, Mouse, Move, Plus, RotateCcwSquareIcon, SquareDashedMousePointer, SquareMousePointer } from "lucide-react"
 import { Tile } from "../classes/tileClasses"
 import convertMapJsonToClasses from "../scripts/convertMapJsonToClasses"
 import { IMapMatrix } from "../../../interfaces"
@@ -16,11 +16,12 @@ export default function CreateMap() {
     const blockSize: number = 100
     const [tileCountX, setTileCountX] = useState<number>(35)
     const [tileCountY, setTileCountY] = useState<number>(35)
-    const [selectedTile, setSelectedTileId] = useState<{ tileId: number, variant: number }>({ tileId: 0, variant: 0 })
+    const [selectedTile, setSelectedTileId] = useState<{ tileId: number, variant: number, statusCount: number }>({ tileId: 0, variant: 0, statusCount: 0 })
     const [isDampingActive, setIsDampingActive] = useState<boolean>(false)
     const [translateX, setTranslateX] = useState<number>(0)
     const [translateY, setTranslateY] = useState<number>(0)
     const [tileRotate, setTileRotate] = useState<number>(0)
+    const [tileStatus, setTileStatus] = useState<number>(0)
     const [canvasZoomValue, setCanvasZoomValue] = useState<number>(100)
     const canvasCoverRef = useRef<HTMLCanvasElement | null>(null)
     const canvasPropsRef = useRef<HTMLCanvasElement | null>(null)
@@ -102,7 +103,9 @@ export default function CreateMap() {
 
     }, [])
 
-
+    useEffect(() => {
+        setTileStatus(0)
+    }, [selectedTile])
 
     useEffect(() => {
         if (!canvasCoverRef.current || !canvasFloorRef.current || !canvasPropsRef.current || !canvasMobRef.current || !canvasWallRef.current) return
@@ -141,24 +144,34 @@ export default function CreateMap() {
             canvasCoverRef.current.removeEventListener('mousemove', handleDraw)
             canvasCoverRef.current.removeEventListener("contextmenu", handleDraw)
         }
-    }, [tileCountX, tileCountY, mapMatrix, selectedTile, tileRotate])
+    }, [tileCountX, tileCountY, mapMatrix, selectedTile, tileRotate, tileStatus])
 
 
 
     const handleKeyDown = (e: KeyboardEvent) => {
         e.preventDefault()
-        if (e.code == 'KeyQ') {
-            if (tileRotate == 3) {
-                setTileRotate(0)
-            } else {
-                setTileRotate(prevValue => prevValue + 1)
-            }
+        switch (e.code) {
+            case 'KeyQ':
+                if (tileRotate == 3) {
+                    setTileRotate(0)
+                } else {
+                    setTileRotate(prevValue => prevValue + 1)
+                }
+                break
+            case 'KeyA':
+                if (tileStatus >= selectedTile.statusCount - 1) {
+                    setTileStatus(0)
+                } else {
+                    setTileStatus(prevValue => prevValue + 1)
+                }
+
+                break
         }
     }
 
     const handleDraw = (e: MouseEvent) => {
         e.preventDefault()
-        if (isDampingActive == true) return
+        if (isDampingActive == true || e.shiftKey) return
         const { tileX, tileY } = handleGetCanvasMousePosition(e)
         if (!canvasCoverRef.current) return
         drawGhostHover({
@@ -248,6 +261,7 @@ export default function CreateMap() {
 
             const newMapMatrix = updateMapMatrixAdd({
                 blockSize: blockSize,
+                status: tileStatus,
                 canvasList: {
                     floor: canvasFloorRef,
                     mob: canvasMobRef,
@@ -615,7 +629,7 @@ export default function CreateMap() {
     return (
         <main className='relative flex flex-row justify-between hiddenScroll overflow-hidden h-screen w-full'>
             <section ref={canvasContainer} className='relative w-full h-full overflow-hidden'>
-                <CreateMapHud canvasZoomValue={canvasZoomValue} tileCountX={tileCountX} tileCountY={tileCountY} selectedTile={selectedTile} tileRotate={tileRotate} handleTileCountXMinus={handleTileCountXMinus} handleTileCountXPlus={handleTileCountXPlus} handleTileCountYMinus={handleTileCountYMinus} handleTileCountYPlus={handleTileCountYPlus}/>
+                <CreateMapHud canvasZoomValue={canvasZoomValue} tileCountX={tileCountX} tileCountY={tileCountY} selectedTile={selectedTile} selectedTileStatus={tileStatus} tileRotate={tileRotate} handleTileCountXMinus={handleTileCountXMinus} handleTileCountXPlus={handleTileCountXPlus} handleTileCountYMinus={handleTileCountYMinus} handleTileCountYPlus={handleTileCountYPlus} />
                 <canvas ref={canvasCoverRef} className="absolute top-0 lef-0 z-40 border border-lagun-500/50 h-screen " />
                 <canvas ref={canvasMobRef} className="absolute top-0 lef-0 z-30 h-screen " />
                 <canvas ref={canvasWallRef} className="absolute top-0 lef-0 z-20 h-screen " />
@@ -636,14 +650,15 @@ interface IHud {
         variant: number;
     }
     tileRotate: number
-    handleTileCountXPlus: ()=>void
-    handleTileCountXMinus:()=>void
-    handleTileCountYPlus:()=>void
-    handleTileCountYMinus:()=>void
+    selectedTileStatus: number
+    handleTileCountXPlus: () => void
+    handleTileCountXMinus: () => void
+    handleTileCountYPlus: () => void
+    handleTileCountYMinus: () => void
 }
 
 
-function CreateMapHud({ canvasZoomValue, tileCountX, tileCountY, selectedTile, tileRotate,handleTileCountXMinus,handleTileCountXPlus,handleTileCountYMinus,handleTileCountYPlus }: IHud) {
+function CreateMapHud({ canvasZoomValue, tileCountX, tileCountY, selectedTile, selectedTileStatus, tileRotate, handleTileCountXMinus, handleTileCountXPlus, handleTileCountYMinus, handleTileCountYPlus }: IHud) {
     let selectedBlock = BlocksList.find(blockData => blockData.id == selectedTile.tileId)
 
     return (
@@ -671,24 +686,31 @@ function CreateMapHud({ canvasZoomValue, tileCountX, tileCountY, selectedTile, t
                 </div>
                 Zoom: {canvasZoomValue}%
             </section>
+            {/* Top Right section */}
+            <section className="flex flex-col items-end  *:text-sm *:text-lagun-200/40 hover:*:text-lagun-200 *:flex *:flex-row *:gap-2 *:items-center absolute top-1 right-2">
+                <p><b>Q</b> To Rotate <RotateCcwSquareIcon size={15} strokeWidth={1} /></p>
+                <p><b>A</b> To Trade Aspect <SquareDashedMousePointer size={15} strokeWidth={1} /></p>
+            </section>
             {/* Bottom Right section */}
-            <section className='absolute right-2 bottom-1 flex flex-row gap-2 items-end'>
+            <section className='absolute right-2 bottom-2 flex flex-row gap-2 items-end'>
                 {selectedBlock &&
                     <>
                         <p className='font-thin text-sm italic text-lagun-200'>{selectedBlock.variant[selectedTile.variant].name}</p>
                         <img style={{ rotate: `${tileRotate * 90}deg` }}
                             className='border border-lagun-500 aspect-square w-20 rounded-md'
-                            src={selectedBlock.variant[selectedTile.variant].path[0]} />
+                            src={selectedBlock.variant[selectedTile.variant].path[selectedTileStatus]} />
                     </>
                 }
             </section>
             {/* Bottom Left section */}
-            <section className="*:text-lagun-200/40 hover:*:text-lagun-200 *:flex *:flex-row *:gap-2 *:items-center absolute left-2 bottom-1">
-                <p><Mouse size={20} strokeWidth={1} /> Scroll To Zoom</p>
-                <p><SquareMousePointer size={20} strokeWidth={1} /> Mouse Left To Add Block</p>
-                <p><Move size={20} strokeWidth={1} />Shift + Mouse Left To Move Map</p>
-                <p><SquareDashedMousePointer size={20} strokeWidth={1} />Ctrl + Mouse Left To Delete Floor</p>
-                <p><SquareDashedMousePointer size={20} strokeWidth={1} />Ctrl + Mouse Right To Delete Props</p>
+            <section className="*:text-sm *:text-lagun-200/40 hover:*:text-lagun-200 *:flex *:flex-row *:gap-2 *:items-center absolute left-2 bottom-1">
+                <p><Mouse size={15} strokeWidth={1} /> Scroll To Zoom</p>
+                <p><SquareMousePointer size={15} strokeWidth={1} /> Mouse Left To Add Block</p>
+                <p><Move size={15} strokeWidth={1} />Shift + Mouse Left To Move Map</p>
+                <p><SquareDashedMousePointer size={15} strokeWidth={1} />Ctrl + Mouse Left To Delete Floors</p>
+                <p><SquareDashedMousePointer size={15} strokeWidth={1} />Ctrl + Mouse Right To Delete Walls</p>
+                <p><SquareDashedMousePointer size={15} strokeWidth={1} />Alt + Mouse Left To Delete Props</p>
+                <p><SquareDashedMousePointer size={15} strokeWidth={1} />Alt + Mouse Right To Delete Mobs</p>
             </section>
         </main>
     )

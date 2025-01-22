@@ -12,6 +12,7 @@ interface ILateralTileMenu {
     setSelectedTileId: React.Dispatch<React.SetStateAction<{
         tileId: number;
         variant: number;
+        statusCount:number
     }>>
     mapMatrix: IMapMatrix| null
     mapSize:{
@@ -31,14 +32,17 @@ export default function LateralTileMenu({ selectedTile, setSelectedTileId , mapM
         setSelectedBlockData(Block)
         setSelectedTileId({
             tileId: selectedBlockId,
-            variant: 0
+            variant: 0,
+            statusCount: Block.statusCount
         })
     }, [selectedBlockId])
 
     const setVariant = (variantIndex: number) => {
+        if(!selectedBlockData) {return}
         setSelectedTileId({
             tileId: selectedBlockId,
-            variant: variantIndex
+            variant: variantIndex,
+            statusCount: selectedBlockData.statusCount
         })
     }
 
@@ -47,7 +51,7 @@ export default function LateralTileMenu({ selectedTile, setSelectedTileId , mapM
             {selectedBlockData &&
                 <section>
                     <ul className='flex flex-col gap-2 p-4 bg-lagun-900/80  h-full overflow-y-scroll'>
-                        {selectedBlockData.variant.map((variantData, variantIndex) => <li key={variantData.name}>
+                        {selectedBlockData.variant.map((variantData, variantIndex) => <li key={`Block_${variantData.name}_${variantIndex}`}>
                             {variantIndex == selectedTile.variant ?
                                 <img src={variantData.path[0]} className='w-16 aspect-square border border-lagun-500 rounded-md'
                                 /> :

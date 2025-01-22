@@ -1,4 +1,4 @@
-interface ITile {
+export interface ITile {
     position: {
         X: number,
         Y: number
@@ -31,9 +31,14 @@ interface IDrawGhost {
     rotate: 'top' | 'right' | 'left' | 'bottom'
 }
 
+export interface IIteractiveMenu {
+    text: string,
+    functionName: 'rotateRight' | 'rotateLeft' | 'teste' | 'moveTo' | 'tradeStatus' | 'selectThisTile'
+}
 
 export class Tile {
-    position; paths; variant; size; rotate; canvaType; group; status; isVoidBlock;
+    position; paths; variant; size; rotate; canvaType; group; status; isVoidBlock; blockMatrix;
+
     imageElement = new Image();
 
     constructor(data: ITile) {
@@ -49,20 +54,13 @@ export class Tile {
             // define the tile group 
             (() => {
                 if (data.blockMatrix) {
-
-                    let newBlockMatrix: number[][] = rotateMatrix(data.blockMatrix, this.rotate)
-                    console.log(newBlockMatrix)
-
-                    let group = []
-                    for (let i = 0; i < newBlockMatrix.length; i++) {
-                        for (let z = 0; z < newBlockMatrix[0].length; z++) {
-                            if (newBlockMatrix[i][z] == 1) {
-                                group.push({ X: z + this.position.X, Y: i + this.position.Y })
-                            }
-                        }
-                    }
-                    this.group = group
-                } else if (data.group) { this.group = data.group }
+                    this.blockMatrix = data.blockMatrix
+                    this.group = rotateMatrix(data.blockMatrix, data.rotate, { X: data.position.X, Y: data.position.Y })
+                } else if (data.group && data.group.length >= 1) {
+                    this.group = data.group
+                } else {
+                    this.group = [{ X: data.position.X, Y: data.position.Y }]
+                }
 
             })();
 
@@ -74,68 +72,52 @@ export class Tile {
                 this.isVoidBlock = false
             }
         })();
+
     }
 
-    updateTile({ data, canvas, blockSize }: { data: ITile, canvas: React.MutableRefObject<HTMLCanvasElement | null>, blockSize: number }) {
-        this.eraseTile({ canvas, blockSize })
-        console.log('teste set Tile', data)
-        this.paths = data.paths
-        this.variant = data.variant
-        this.size = data.size
-        this.rotate = data.rotate
-        this.status = data.status
-        this.canvaType = data.canvaType
-        this.position = data.position
-        this.imageElement.src = this.paths[this.variant].path[this.status],
-            // define the tile group 
-            (() => {
-                if (data.blockMatrix) {
+    // updateTile({ data, canvas, blockSize }: { data: ITile, canvas: React.MutableRefObject<HTMLCanvasElement | null>, blockSize: number }) {
+    //     this.eraseTile({ canvas, blockSize })
+    //     console.log('teste set Tile', data)
+    //     this.paths = data.paths
+    //     this.variant = data.variant
+    //     this.size = data.size
+    //     this.rotate = data.rotate
+    //     this.status = data.status
+    //     this.canvaType = data.canvaType
+    //     this.position = data.position
+    //     this.imageElement.src = this.paths[this.variant].path[this.status],
+    //         // define the tile group 
+    //         (() => {
+    //             if (data.blockMatrix) {
 
-                    let newBlockMatrix: number[][] = rotateMatrix(data.blockMatrix, this.rotate)
-                    console.log(newBlockMatrix)
+    //                 let newBlockMatrix: number[][] = rotateMatrix(data.blockMatrix, this.rotate)
+    //                 console.log(newBlockMatrix)
 
-                    let group = []
-                    for (let i = 0; i < newBlockMatrix.length - 1; i++) {
-                        for (let z = 0; z < newBlockMatrix[0].length - 1; z++) {
-                            if (newBlockMatrix[i][z] == 1) {
-                                group.push({ X: z + this.position.X, Y: i + this.position.Y })
-                            }
-                        }
-                    }
-                    this.group = group
-                } else if (data.group) { this.group = data.group }
+    //                 let group = []
+    //                 for (let i = 0; i < newBlockMatrix.length - 1; i++) {
+    //                     for (let z = 0; z < newBlockMatrix[0].length - 1; z++) {
+    //                         if (newBlockMatrix[i][z] == 1) {
+    //                             group.push({ X: z + this.position.X, Y: i + this.position.Y })
+    //                         }
+    //                     }
+    //                 }
+    //                 this.group = group
+    //             } else if (data.group) { this.group = data.group }
 
-            })();
+    //         })();
 
-            // define if the block is a void tile(dont have a tile on it) based in if he have a images paths or not
-            (() => {
-                if (this.paths[0].path[0] == '') {
-                    this.isVoidBlock = true
-                } else {
-                    this.isVoidBlock = false
-                }
-            })();
-        this.renderTile({ blockSize, canvas })
-    }
+    //     // define if the block is a void tile(dont have a tile on it) based in if he have a images paths or not
+    //     (() => {
+    //         if (this.paths[0].path[0] == '') {
+    //             this.isVoidBlock = true
+    //         } else {
+    //             this.isVoidBlock = false
+    //         }
+    //     })();
+    //     this.renderTile({ blockSize, canvas })
+    // }
 
-    rotateRight() {
-        let rotateArray: Array<'top' | 'right' | 'bottom' | 'left'> = ['top', 'right', 'bottom', 'left']
-        let rotateIndex: number = rotateArray.findIndex(element => element == this.rotate)
-        if (rotateIndex >= 3) {
-            this.rotate = 'top'
-        } else {
-            this.rotate = rotateArray[rotateIndex + 1]
-        }
-    }
-    rotateLeft() {
-        let rotateArray: Array<'top' | 'right' | 'bottom' | 'left'> = ['top', 'right', 'bottom', 'left']
-        let rotateIndex: number = rotateArray.findIndex(element => element == this.rotate)
-        if (rotateIndex <= 0) {
-            this.rotate = 'left'
-        } else {
-            this.rotate = rotateArray[rotateIndex - 1]
-        }
-    }
+
 
     drawGhost({ MouseX, MouseY, canvas, blockSize }: IDrawGhost) {
         let canvasCtx = canvas.getContext("2d")
@@ -164,7 +146,6 @@ export class Tile {
     async eraseTile({ canvas, blockSize }: { canvas: React.MutableRefObject<HTMLCanvasElement | null>, blockSize: number }) {
         let canvasCtx = canvas.current?.getContext("2d")
         if (!canvasCtx) return new Error('Canvas Not Exist')
-        console.log('eraser')
         this.group?.forEach(elementInRow => {
             canvasCtx.clearRect(elementInRow.X * blockSize, elementInRow.Y * blockSize, blockSize, blockSize)
         })
@@ -214,41 +195,172 @@ export class Tile {
                 canvasCtx.drawImage(this.imageElement, tileLeft, tileTop, tileWidth, tileHeight);
                 break
         }
-        console.log('renderTile')
         canvasCtx.restore();
         // canvasCtx.strokeStyle = "#00000050"
         // canvasCtx.strokeRect(tileLeft, tileTop, blockSize, blockSize)
 
     }
 
-    delete() {
-        console.log('delete')
+    deleteThisTile() {
         this.paths = [{ name: '', path: [''] }],
             this.position = this.position,
             this.rotate = 'top',
             this.size = { X: 1, Y: 1 },
             this.status = 0,
             this.variant = 0,
-            this.group = undefined
+            this.group = [this.position]
+
+        return this
     }
 
+    // ----- Iteractive Menu Functions ----- //
+
+    tradeStatus() {
+        let MaxStatusCount = this.paths[this.variant].path.length
+        if (this.status + 1 >= MaxStatusCount) {
+            this.status = 0
+        } else {
+            this.status += 1
+        }
+        return { newTile: this, lastPosition: { X: this.position.X, Y: this.position.Y }, nedRefreshMap: true }
+    }
+
+    moveTo(TileData?: Tile) {
+        if (TileData && this.isVoidBlock) {
+            let MobLastPosition = { X: TileData.position.X, Y: TileData.position.Y }
+            
+            let newGroup: { X: number; Y: number; }[] = []
+            TileData.group.forEach(position => newGroup.push({
+                X: (position.X - MobLastPosition.X) + this.position.X,
+                Y: (position.Y - MobLastPosition.Y) + this.position.Y
+            }))
+            console.log(newGroup)
+
+            this.group = newGroup
+            this.blockMatrix = TileData.blockMatrix
+            this.canvaType = TileData.canvaType
+            this.imageElement = TileData.imageElement
+            this.isVoidBlock = TileData.isVoidBlock 
+            this.paths = TileData.paths
+            this.rotate = TileData.rotate
+            this.size = TileData.size
+            this.status = TileData.status
+            this.variant = TileData.variant
+
+            
+            return { newTile: this, lastPosition: { X: MobLastPosition.X, Y: MobLastPosition.Y }, nedRefreshMap: true }
+
+        }
+        return { newTile: this, lastPosition: { X: this.position.X, Y: this.position.Y }, nedRefreshMap: true }
+    }
+
+    teste() {
+        console.log(this)
+        return { newTile: this, lastPosition: { X: this.position.X, Y: this.position.Y }, nedRefreshMap: false }
+    }
+
+    rotateRight() {
+        let rotateArray: Array<'top' | 'right' | 'bottom' | 'left'> = ['top', 'right', 'bottom', 'left']
+        let rotateIndex: number = rotateArray.findIndex(element => element == this.rotate)
+        if (rotateIndex >= 3) {
+            this.rotate = 'top'
+        } else {
+            this.rotate = rotateArray[rotateIndex + 1]
+        }
+
+        if (this.blockMatrix) {
+            this.group = rotateMatrix(this.blockMatrix, this.rotate, { X: this.position.X, Y: this.position.Y })
+        }
+        return { newTile: this, lastPosition: { X: this.position.X, Y: this.position.Y }, nedRefreshMap: true }
+    }
+    rotateLeft() {
+        let rotateArray: Array<'top' | 'right' | 'bottom' | 'left'> = ['top', 'right', 'bottom', 'left']
+        let rotateIndex: number = rotateArray.findIndex(element => element == this.rotate)
+        if (rotateIndex <= 0) {
+            this.rotate = 'left'
+        } else {
+            this.rotate = rotateArray[rotateIndex - 1]
+        }
+        if (this.blockMatrix) {
+            this.group = rotateMatrix(this.blockMatrix, this.rotate, { X: this.position.X, Y: this.position.Y })
+        }
+        return { newTile: this, lastPosition: { X: this.position.X, Y: this.position.Y }, nedRefreshMap: true }
+    }
+
+    selectThisTile() {
+        console.log('selectThisTile')
+        return { newTile: this, lastPosition: { X: this.position.X, Y: this.position.Y }, nedRefreshMap: false }
+    }
+
+    getIteractiveMenuData(permissionType: "player" | "host") {
+        let iteractiveMenuData: Array<IIteractiveMenu> = []
+
+        if (permissionType == 'host') {
+            this.paths[this.variant].path.length > 1 && iteractiveMenuData.push({ text: `Change ${this.canvaType} status`, functionName: 'tradeStatus' });
+            // iteractiveMenuData.push({ text: `teste ${this.canvaType}`, functionName: 'teste' });
+
+            switch (this.canvaType) {
+                case "prop":
+                    this.isVoidBlock == false && iteractiveMenuData.push({ text: `Rotate ${this.canvaType} right`, functionName: 'rotateRight' });
+                    this.isVoidBlock == false && iteractiveMenuData.push({ text: `Rotate ${this.canvaType} left`, functionName: 'rotateLeft' });
+                    break
+                case "wall":
+                    iteractiveMenuData.push({ text: `teste ${this.canvaType}`, functionName: 'teste' });
+                    break
+                case "mob":
+                    this.isVoidBlock == false && iteractiveMenuData.push({ text: `Rotate ${this.canvaType} right`, functionName: 'rotateRight' });
+                    this.isVoidBlock == false && iteractiveMenuData.push({ text: `Rotate ${this.canvaType} left`, functionName: 'rotateLeft' });
+                    break
+                case "floor":
+                    iteractiveMenuData.push({ text: `teste ${this.canvaType}`, functionName: 'teste' });
+                    break
+            }
+        }
+        switch (this.canvaType) {
+            case "prop":
+                break
+            case "wall":
+                break
+            case "mob":
+                this.isVoidBlock && iteractiveMenuData.push({ text: `Move to`, functionName: 'moveTo' });
+                this.isVoidBlock == false && iteractiveMenuData.push({ text: `Select ${this.canvaType}`, functionName: 'selectThisTile' })
+                break
+            case "floor":
+                break
+        }
+
+
+        return iteractiveMenuData
+    }
 }
 
 
-const rotateMatrix = (blockMatrix: number[][], rotateDirection: 'top' | 'left' | 'right' | 'bottom') => {
+const rotateMatrix = (blockMatrix: number[][], rotateDirection: 'top' | 'left' | 'right' | 'bottom', position: { X: number, Y: number }) => {
     let newBlockMatrix: number[][] = []
+
     switch (rotateDirection) {
         case "top":
-            return blockMatrix
+            newBlockMatrix = blockMatrix
+            break
         case "right":
             newBlockMatrix = blockMatrix[0].map((val, index) => blockMatrix?.map(row => row[index]).reverse())
-            return newBlockMatrix
+            break
         case "bottom":
             newBlockMatrix = blockMatrix[0].map((val, index) => blockMatrix?.map(row => row[index]).reverse())
             newBlockMatrix = newBlockMatrix[0].map((val, index) => newBlockMatrix.map(row => row[index]).reverse())
-            return newBlockMatrix
+            break
         case "left":
             newBlockMatrix = blockMatrix[0].map((val, index) => blockMatrix.map(row => row[row.length - 1 - index]));
-            return newBlockMatrix
+            break
     }
+
+    let group = []
+    for (let i = 0; i < newBlockMatrix.length; i++) {
+        for (let z = 0; z < newBlockMatrix[0].length; z++) {
+            if (newBlockMatrix[i][z] == 1) {
+                group.push({ X: z + position.X, Y: i + position.Y })
+            }
+        }
+    }
+    return group
 }

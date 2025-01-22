@@ -5,6 +5,7 @@ import { Tile } from "../classes/tileClasses"
 interface IDraw {
     tileId: number
     variant: number
+    status: number
     X: number
     Y: number
     rotate: 'top' | 'right' | 'bottom' | 'left'
@@ -18,29 +19,22 @@ interface IDraw {
     blockSize: number
 }
 
-function findTileInMapMatrix({ mapMatrix, X, Y, canvaType }: { mapMatrix: Array<Tile[]>, X: number, Y: number, canvaType: 'mob' | 'prop' | 'floor' | 'wall' }): { tile: Tile | null, TilePosition: {X:number,Y:number} } {
-    let tile: Tile | null = null
-    let TileIndex = {X:-999,Y:-999}
-    mapMatrix.forEach((row, rowIndex) => {
-        row.forEach((tileData,columnIndex)=>{
+export function findTileInMapMatrix({ matrix, tilePositionX, tilePositionY }: { matrix: Tile[][], tilePositionX: number, tilePositionY: number }): Tile | undefined {
+    let tilesGroup: Array<Tile> = []
+    matrix.flat().forEach(tileData =>
+        tileData.group?.forEach(groupTilePosition => {
+            if (groupTilePosition.X == tilePositionX && groupTilePosition.Y == tilePositionY) {
+                console.log('find')
+                tilesGroup.push(tileData)
+                console.log(tileData.canvaType, tilesGroup)
+            }
+        }))
 
-            tileData.group?.forEach(PositionTileInGroup => {
-                if (PositionTileInGroup.X == X &&
-                    PositionTileInGroup.Y == Y &&
-                    tileData.canvaType == canvaType) {
-                        tile = tileData
-                        TileIndex = {X:columnIndex,Y:rowIndex}
-                    }
-                })
-            })
-    })
-    return {
-        tile: tile,
-        TilePosition: TileIndex
-    }
+    return tilesGroup[0]
 }
 
-export const updateMapMatrixAdd = ({ canvasList, mapMatrix, tileId, X, Y, variant, rotate, blockSize }: IDraw) => {
+
+export const updateMapMatrixAdd = ({ status, canvasList, mapMatrix, tileId, X, Y, variant, rotate, blockSize }: IDraw) => {
     if(!mapMatrix)return null
     
     const blockData = BlocksList.find(block => block.id == tileId)
@@ -56,7 +50,7 @@ export const updateMapMatrixAdd = ({ canvasList, mapMatrix, tileId, X, Y, varian
         position: { X: X, Y: Y },
         rotate: rotate,
         size: blockData.size,
-        status: 0,
+        status: status,
         canvaType: blockData.type,
         blockMatrix: blockData.group
     })
@@ -81,19 +75,19 @@ export const updateMapMatrixAdd = ({ canvasList, mapMatrix, tileId, X, Y, varian
 
 }
 
-export const updateMapMatrixDelete = ({ X, Y, mapMatrix, canva, canvaType, blockSize }: {
+export const updateMapMatrixDelete = ({ X, Y, mapMatrix, canva, blockSize }: {
     blockSize: number, X: number, Y: number, mapMatrix: Tile[][], canvaType: "prop" | "wall" | "mob" | "floor", canva: React.MutableRefObject<HTMLCanvasElement | null>
 }):Array<Tile[]>|[] => {
     let newMapMatrix = [...mapMatrix]
-    let { tile, TilePosition } = findTileInMapMatrix({ mapMatrix: newMapMatrix, X: X, Y: Y, canvaType: canvaType })
-    if (!TilePosition || !tile) return newMapMatrix
+    let tile  = findTileInMapMatrix({ matrix: newMapMatrix, tilePositionX: X, tilePositionY: Y})
+    if (!tile) return newMapMatrix
 
     tile.eraseTile({
         blockSize: blockSize,
         canvas: canva
     })
 
-    tile.delete()
+    tile.deleteThisTile()
     
 
     return newMapMatrix

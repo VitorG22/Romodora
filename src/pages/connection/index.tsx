@@ -3,6 +3,8 @@ import { useContext, useEffect } from "react"
 import { Outlet, useNavigate } from "react-router-dom"
 import { AppContext } from "../../AppContext"
 import { Alert } from "../../components/toasters"
+import convertMapJsonToClasses from "../maps/scripts/convertMapJsonToClasses"
+import { IMapMatrix } from "../../interfaces"
 
 export default function Party() {
     const { partyData, setPartyData, socket } = useContext(AppContext)
@@ -33,7 +35,20 @@ export default function Party() {
         socket?.on(`setPartyData_${partyData?.partyCode}`, body => {
             if (!setPartyData) return
             console.log(body)
-            setPartyData(body.partyData)
+
+            if (body.partyData.mapData) {
+
+                setPartyData?.({
+                    ...body.partyData,
+                    mapData: {
+                        mapId: body.partyData.mapData.mapId,
+                        mapName: body.partyData.mapData.mapName,
+                        mapMatrix: convertMapJsonToClasses(body.partyData.mapData.mapMatrix)
+                    }
+                })
+            } else {
+                setPartyData(body.partyData)
+            }
         })
 
         socket?.off(`requestPartyData_${partyData?.partyCode}`)
@@ -45,14 +60,18 @@ export default function Party() {
         })
 
         socket?.off(`setMapMatrix_${partyData?.partyCode}`)
-        socket?.on(`setMapMatrix_${partyData?.partyCode}`, (newMapData) => {
+        socket?.on(`setMapMatrix_${partyData?.partyCode}`, (newMapData: { mapId: string, mapName: string, mapMatrix: IMapMatrix }) => {
             if (!partyData) return
             setPartyData?.({
                 ...partyData,
-                mapData: newMapData
+                mapData: {
+                    mapId: newMapData.mapId,
+                    mapName: newMapData.mapName,
+                    mapMatrix: convertMapJsonToClasses(newMapData.mapMatrix)
+                }
             })
         })
-        
+
 
     }, [partyData])
 
