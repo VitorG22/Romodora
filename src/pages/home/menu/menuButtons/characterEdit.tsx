@@ -11,7 +11,7 @@ export default function CharacterEdit() {
     return (
         <SquareButton variant="default" size="lg" onClick={()=>handleClickCharacterEdit()}>
             <UserPen size={15} strokeWidth={1} />
-            Editor de Personagens
+            Characters
         </SquareButton>
     )
 }

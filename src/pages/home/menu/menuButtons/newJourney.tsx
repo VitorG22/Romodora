@@ -15,7 +15,7 @@ export default function NewJourney() {
         <>
             <SquareButton variant="default" size="lg" onClick={() => setIsCreateJourneyModalOpen(true)}>
                 <Plus size={15} strokeWidth={1} />
-                Nova Jornada
+                New Journey
             </SquareButton>
             {isCreateJourneyModalOpen && <NewJourneyModal setIsCreateJourneyModalOpen={setIsCreateJourneyModalOpen} />}
         </>

@@ -32,7 +32,7 @@ export default function ResumeJourney() {
         <>
             <SquareButton variant="secondary" onClick={() => setIsJourneysModalOpen(true)} size="lg">
                 <Map size={15} strokeWidth={1} />
-                Retomar Jornada
+                Start Journey
             </SquareButton>
             {isJourneysModalOpen&&
                 <JourneyModal journeyList={journeyList} setIsJourneysModalOpen={setIsJourneysModalOpen}/>

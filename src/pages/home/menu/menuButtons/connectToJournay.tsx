@@ -13,7 +13,7 @@ export default function ConnectToJourney() {
         <>
             <SquareButton variant="default" size="lg" onClick={() => setIsConnectionModalOpen(true)}>
                 <Component size={15} strokeWidth={1} />
-                Conectar a Jornada
+                Connect to Journey
             </SquareButton>
             {isConnectionModalOpen && <ConnectionModal setIsConnectionModalOpen={setIsConnectionModalOpen} />}
         </>

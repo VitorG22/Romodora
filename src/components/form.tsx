@@ -22,7 +22,7 @@ export function getFormData(event: React.FormEvent<HTMLFormElement>) {
 
 export function Container(props: IForm) {
     return (
-        <form {...props} className={`${props.className} bg-lagun-900 p-4 flex flex-col gap-2`}>
+        <form {...props} className={`${props.className} bg-lagun-900 p-4 flex gap-2`}>
             <input type="submit" hidden />
             {props.children}
         </form>

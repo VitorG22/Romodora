@@ -1,10 +1,11 @@
-import { Box, Ghost, Globe, Settings } from "lucide-react";
+import { Box, Ghost, Globe } from "lucide-react";
 import SquareButton from "../../../components/buttons";
 import NewJourney from "./menuButtons/newJourney";
 import ResumeJourney from "./menuButtons/resumeJourney";
 import ConnectToJourney from "./menuButtons/connectToJournay";
 import CharacterEdit from "./menuButtons/characterEdit";
 import MapEditorButton from "./menuButtons/mapEditor";
+import Settings from "./menuButtons/settings";
 
 export default function Menu() {
 
@@ -21,21 +22,18 @@ export default function Menu() {
                     <MapEditorButton/>
                     <SquareButton variant="default"  size="lg" unable>
                         <Ghost size={15} strokeWidth={1} />
-                        Editor de Criaturas
+                        Creatures
                     </SquareButton>
                     <SquareButton variant="default"  size="lg" unable>
                         <Box size={15} strokeWidth={1} />
-                        Editor de Items
+                        Items
                     </SquareButton>
                 </div>
                 <div className='flex flex-row gap-2 pt-4 *:w-full'>
-                    <SquareButton variant="default" size="lg" unable>
-                        <Settings size={15} strokeWidth={1} />
-                        Configurações
-                    </SquareButton>
+                    <Settings/>
                     <SquareButton variant="ghost"  size="lg" unable>
                         <Globe size={15} strokeWidth={1} />
-                        Comunidade
+                        Community
                     </SquareButton>
                 </div>
             </section>

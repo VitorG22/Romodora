@@ -66,7 +66,7 @@ export default function Login() {
     return (
         <section className="flex h-screen w-screen  justify-center items-center">
             {isLoading ? <Loader /> :
-                <Form.Container onSubmitCapture={(e) => LoginSubmite({ 'event': e })} className='w-96'>
+                <Form.Container onSubmitCapture={(e) => LoginSubmite({ 'event': e })} className='w-96 flex-col'>
                     <Form.Title>Login</Form.Title>
                     <Form.InputText required name='email' label='Email' type='email' placeholder='YourEmail@gmail.com' />
                     <Form.InputText required name='password' label='Password' type='password' />

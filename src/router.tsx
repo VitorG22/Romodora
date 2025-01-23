@@ -12,6 +12,8 @@ import Board from "./pages/connection/board";
 import Maps from "./pages/maps";
 import MyMaps from "./pages/maps/myMaps";
 import CreateMap from "./pages/maps/newMap/CreateMap";
+import SettingsPage from "./pages/settings";
+import ProfileSettings from "./pages/settings/profileSettings";
 
 
 export const router = createBrowserRouter([
@@ -57,6 +59,17 @@ export const router = createBrowserRouter([
                         path:'createCharacter',
                         element: <CreateCharacter/>
                     }
+                ]
+            },
+            {
+                path: '/settings',
+                element: <SettingsPage/>,
+                children:[
+                    {
+                        path:'',
+                        element: <ProfileSettings/>
+                    },
+                    
                 ]
             },
             {

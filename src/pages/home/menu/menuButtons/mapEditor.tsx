@@ -9,7 +9,7 @@ export default function MapEditorButton() {
     return (
             <SquareButton onClick={()=>navigate('/map')} variant="default" size="lg">
                 <Map size={15} strokeWidth={1} />
-                Editor de Mapas
+                Maps
             </SquareButton>
     )
 }
