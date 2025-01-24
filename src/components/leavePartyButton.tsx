@@ -31,11 +31,11 @@ export default function LeavePartyButton() {
 
     return (
         isThisUserPartyHost ? (
-            <SquareButton size="lg" variant="ghost" className="bg-red-500" onClick={handleClickDeleteParty}>
+            <SquareButton size="lg" variant="default" onClick={handleClickDeleteParty}>
                 Sair
                 <LogOut size={15} strokeWidth={1} />
             </SquareButton>) : (
-            <SquareButton size="lg" variant="ghost" className="bg-red-500" onClick={handleClickLeaveParty}>
+            <SquareButton size="lg" variant="default"  onClick={handleClickLeaveParty}>
                 Sair
                 <LogOut size={15} strokeWidth={1} />
             </SquareButton>)

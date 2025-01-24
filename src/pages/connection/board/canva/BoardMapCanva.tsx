@@ -269,8 +269,8 @@ export default function BoardMapCanvas() {
         <main className='absolute flex flex-row justify-between hiddenScroll overflow-hidden h-screen w-full'>
             <section style={{ 'cursor': isDampingActive ? ('move') : ('pointer') }} ref={canvasContainer} className='relative w-full h-full overflow-hidden'>
                 <IteractiveMenu iteractiveMenuPosition={iteractiveMenuPosition} iteractiveMenuSelectedTilePosition={iteractiveMenuSelectedTilePosition} setIteractiveMenuSelectedTilePosition={setIteractiveMenuSelectedTilePosition} selectedTileToMove={selectedTileToMove} setSelectedTileToMove={setSelectedTileToMove} canvasMobRef={canvasMobRef} />
-                <canvas style={{ 'zIndex': isDampingActive ? ('50') : ('') }} ref={canvasCoverRef} className="absolute top-0 lef-0 border border-lagun-500/50 h-screen z-[60]" />
-                <canvas ref={canvasMobRef} className="absolute top-0 lef-0 z-30 h-screen " />
+                <canvas style={{ 'zIndex': isDampingActive ? ('50') : ('') }} ref={canvasCoverRef} className="absolute top-0 lef-0 h-screen z-[60]" />
+                <canvas ref={canvasMobRef} className="absolute top-0 lef-0 z-30 h-screen border border-romo-400" />
                 <canvas ref={canvasWallRef} className="absolute top-0 lef-0 z-20 h-screen " />
                 <canvas ref={canvasPropsRef} className="absolute top-0 lef-0 z-10 h-screen " />
                 <canvas ref={canvasFloorRef} className="absolute top-0 lef-0 z-0 h-screen " />

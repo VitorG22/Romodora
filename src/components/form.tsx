@@ -22,7 +22,7 @@ export function getFormData(event: React.FormEvent<HTMLFormElement>) {
 
 export function Container(props: IForm) {
     return (
-        <form {...props} className={`${props.className} bg-lagun-900 p-4 flex gap-2`}>
+        <form {...props} className={`${props.className} p-4 flex gap-2`}>
             <input type="submit" hidden />
             {props.children}
         </form>
@@ -31,7 +31,7 @@ export function Container(props: IForm) {
 
 export function Title({ children }: { children: ReactNode }) {
     return (
-        <h1 className='flex justify-center text-lagun-500 w-full'>{children}</h1>
+        <h1 className='flex justify-center text-romo-200 w-full'>{children}</h1>
     )
 }
 
@@ -40,11 +40,10 @@ export function InputText(props: IinputText) {
         <div className="flex flex-col">
             <label
                 htmlFor={props.label}
-                className="text-lagun-500 font-thin text-xs "
+                className="text-romo-200 font-thin text-xs "
             >{props.label}</label>
             <input {...props} id={props.label}
-                className='bg-transparent border border-lagun-600 px-2 py-1 rounded-sm outline-none text-lagun-600 
-            focus:text-lagun-500 focus:border-lagun-500 placeholder:text-lagun-600' />
+                className='border-t border-transparent focus:border-romo-200 bg-romo-500 px-2 py-1 rounded-sm outline-none text-romo-200' />
         </div>
 
     )
@@ -52,14 +51,13 @@ export function InputText(props: IinputText) {
 
 export function InputSelect(props: ISelect) {
     return (
-        <div className=" group flex flex-col">
+        <div className="group flex flex-col">
             <label
                 htmlFor={props.label}
-                className="text-lagun-500 font-thin text-xs "
+                className="text-romo-200 font-thin text-xs "
             >{props.label}</label>
             <select {...props}
-                className=' bg-transparent border border-lagun-600 px-2 py-1 rounded-sm outline-none text-lagun-600 
-            focus:text-lagun-500 focus:border-lagun-500 placeholder:text-lagun-600  disabled:opacity-20'>
+                className='border-t border-transparent focus:border-romo-200 bg-romo-500 px-2 py-1 outline-none text-romo-200 disabled:opacity-35'>
                 {props.children}
             </select>
         </div>
@@ -68,10 +66,8 @@ export function InputSelect(props: ISelect) {
 
 export function SelectOption({name,OptionKey}:{name:string,OptionKey:string}){
     return(
-        <option value={OptionKey}
-        className=' appearance-none bg-lagun-950 border border-lagun-600 px-2 py-1 outline-none text-lagun-600 
-            hover:text-lagun-500 hover:border-lagun-500 hover:bg-lagun-950'
-        >{name}
+        <option value={OptionKey}className=' appearance-none bg-romo-900 px-2 py-1 outline-none text-romo-600'>
+            {name}
         </option>
     )
 }

@@ -38,7 +38,7 @@ export default function Maps() {
             mapList: mapList,
             setMapList: setMapList
         }}>
-            <main className='flex flex-row h-screen text-lagun-200'>
+            <main className='flex flex-row h-screen text-romo-200'>
                 <LateralNavBar />
                 <Outlet />
             </main>

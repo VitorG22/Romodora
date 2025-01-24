@@ -138,9 +138,9 @@ export default function CreateCharacter() {
 
     return (
         <main className='w-full h-full overflow-y-scroll'>
-            <Form.Container className='bg-transparent h-full'>
+            <Form.Container className='bg-transparent h-full flex flex-col'>
                 <section className='flex flex-row gap-2 h-full'>
-                    <div className='h-72 aspect-[3/4] overflow-hidden rounded-md border border-lagun-500'>
+                    <div className='h-72 aspect-[3/4] overflow-hidden border border-romo-500 bg-romo-500'>
                         <img src={characterData.picture} onErrorCapture={(e) => e.currentTarget.classList.add("opacity-0")} onLoad={(e) => e.currentTarget.classList.remove("opacity-0")} className='object-cover min-w-full min-h-full' />
                     </div>
                     <div className='flex h-72 flex-col justify-between'>
@@ -166,7 +166,7 @@ export default function CreateCharacter() {
                     </div>
                 </section>
                 <div className='flex flex-row justify-between h-full'>
-                    <section className='flex flex-col gap-2'>
+                    <section className='flex flex-col gap-2 h-fit w-30'>
                         <AbilityPoints label="Força" AbilityKey="strength" characterData={characterData} setCharacterData={setCharacterData} />
                         <AbilityPoints label="Carisma" AbilityKey='charisma' characterData={characterData} setCharacterData={setCharacterData} />
                         <AbilityPoints label="Sabedoria" AbilityKey='wisdom' characterData={characterData} setCharacterData={setCharacterData} />
@@ -176,7 +176,7 @@ export default function CreateCharacter() {
                     </section>
                 </div>
                     <section className='flex flex-row w-full items-end justify-end gap-2'>
-                        <SquareButton size="md" type="button" variant="ghost" onClick={() => navigate('../')}>Cancelar</SquareButton>
+                        <SquareButton size="md" type="button" variant="default" onClick={() => navigate('../')}>Cancelar</SquareButton>
                         <SquareButton size="md" type="button" variant="secondary" onClick={handleSubmitData}>Criar</SquareButton>
                     </section>
             </Form.Container>

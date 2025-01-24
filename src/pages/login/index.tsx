@@ -12,7 +12,7 @@ import { setSocketUserData } from '../connection/socket/socket'
 
 export default function Login() {
     const navigate = useNavigate()
-    const { setToken, setMainUser,setSocket } = useContext(AppContext)
+    const { setToken, setMainUser, setSocket } = useContext(AppContext)
     const [isLoading, setIsLoading] = useState<boolean>(false)
 
     async function LoginSubmite({ event }: { event: React.FormEvent<HTMLFormElement> }) {
@@ -49,7 +49,7 @@ export default function Login() {
                         navigate('/home')
                     }
                     setToken(getCookie('token'))
-                    
+
                     setSocket?.(await setSocketUserData({
                         token: getCookie('token'),
                     }))
@@ -64,26 +64,33 @@ export default function Login() {
 
 
     return (
-        <section className="flex h-screen w-screen  justify-center items-center">
+        <main className="flex h-screen w-screen  justify-center items-center">
             {isLoading ? <Loader /> :
-                <Form.Container onSubmitCapture={(e) => LoginSubmite({ 'event': e })} className='w-96 flex-col'>
-                    <Form.Title>Login</Form.Title>
-                    <Form.InputText required name='email' label='Email' type='email' placeholder='YourEmail@gmail.com' />
-                    <Form.InputText required name='password' label='Password' type='password' />
-                    <p
-                        onClick={() => navigate('forgotPassword')}
-                        className='text-lagun-600 font-thin text-xs italic hover:text-lagun-500 hover:cursor-pointer'
-                    >Forget password</p>
-                    <div className='flex flex-row gap-2 justify-end'>
-                        <SquareButton size='md' variant='ghost' onClick={() => navigate('/register')}>
-                            Register
-                        </SquareButton>
-                        <SquareButton size='md' variant='secondary' type='submit'>
-                            Login
-                        </SquareButton>
+                <section className='relative flex w-screen h-screen items-center justify-center'>
+                    <Form.Container onSubmitCapture={(e) => LoginSubmite({ 'event': e })} className='w-96 flex-col bg-romo-950 z-10'>
+                        <Form.Title>Login</Form.Title>
+                        <Form.InputText required name='email' label='Email' type='email' placeholder='YourEmail@gmail.com' />
+                        <Form.InputText required name='password' label='Password' type='password' />
+                        <p
+                            onClick={() => navigate('forgotPassword')}
+                            className='text-romo-200 font-thin text-xs italic hover:text-romo-100 hover:cursor-pointer'
+                        >Forget password</p>
+                        <div className='flex flex-row gap-2 justify-end'>
+                            <SquareButton size='md' variant='ghost' onClick={() => navigate('/register')}>
+                                Register
+                            </SquareButton>
+                            <SquareButton size='md' variant='secondary' type='submit'>
+                                Login
+                            </SquareButton>
+                        </div>
+                    </Form.Container>
+                    <div className='absolute inset-0 -z-10 [mask-image:linear-gradient(270deg,#000_-70%,#00000002_90%)] grayscale-[70%] opacity-40'>
+                        <img src="assets/arts/bg_forest.webp" alt=""
+                            className='object-cover w-full h-full'
+                        />
                     </div>
-                </Form.Container>
+                </section>
             }
-        </section>
+        </main>
     )
 }

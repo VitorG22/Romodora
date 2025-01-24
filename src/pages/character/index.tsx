@@ -20,7 +20,7 @@ export default function Character() {
     }, [])
 
     return (
-        <main className='text-white w-full h-full flex flex-row'>
+        <main className='text-romo-200 w-full h-full flex flex-row'>
             <LateralNavBar />
             <Outlet/>
         </main>

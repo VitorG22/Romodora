@@ -87,15 +87,15 @@ export default function NewMapModal({ setIsModalOpen }: { setIsModalOpen: React.
 
     return (
         <Modal.Container setIsModalOpen={() => setIsModalOpen(false)} title='Novo Mapa'>
-            <Form.Container onSubmit={(e: React.FormEvent<HTMLFormElement>) => createNewMap(e)}>
-                <div className='h-72 aspect-[3/4] overflow-hidden rounded-md border border-lagun-500'>
+            <Form.Container onSubmit={(e: React.FormEvent<HTMLFormElement>) => createNewMap(e)} className='flex-col'>
+                <div className='h-72 aspect-[3/4] overflow-hidden rounded-md border border-romo-900 bg-romo-900'>
                     <img src={imgUrl} onErrorCapture={(e) => e.currentTarget.classList.add("opacity-0")} onLoad={(e) => e.currentTarget.classList.remove("opacity-0")} className='object-cover min-w-full min-h-full' />
                 </div>
                 <Form.InputText name='name' label='Mapa' type='text' required onChange={(e) => setMapName(e.target.value)} />
                 <Form.InputText name='ImgUrl' label='Imagem' type='text' onChange={(e) => setImgUrl(e.target.value)} />
 
                 <div className='flex flex-row gap-2 '>
-                    <SquareButton type='button' size='lg' variant='ghost'
+                    <SquareButton type='button' size='lg' variant='default'
                         onClick={() => setIsModalOpen(false)}>
                         Cancelar
                     </SquareButton>

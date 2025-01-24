@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { BlocksList, IBlock } from "../../BlocksList"
 import { BrickWall, DoorOpen, Ghost, Grid2X2, ScanIcon } from "lucide-react";
 import SquareButton from "../../../../components/buttons";
@@ -12,16 +12,16 @@ interface ILateralTileMenu {
     setSelectedTileId: React.Dispatch<React.SetStateAction<{
         tileId: number;
         variant: number;
-        statusCount:number
+        statusCount: number
     }>>
-    mapMatrix: IMapMatrix| null
-    mapSize:{
-        X:number,
-        Y:number
+    mapMatrix: IMapMatrix | null
+    mapSize: {
+        X: number,
+        Y: number
     }
 }
 
-export default function LateralTileMenu({ selectedTile, setSelectedTileId , mapMatrix, mapSize }: ILateralTileMenu) {
+export default function LateralTileMenu({ selectedTile, setSelectedTileId, mapMatrix, mapSize }: ILateralTileMenu) {
     const [selectedBlockId, setSelectedBlockId] = useState<number>(0)
     const [selectedBlockData, setSelectedBlockData] = useState<IBlock | undefined>(undefined)
     const [blocksListToRender, setBlocksListToRender] = useState<IBlock[]>(BlocksList)
@@ -38,7 +38,7 @@ export default function LateralTileMenu({ selectedTile, setSelectedTileId , mapM
     }, [selectedBlockId])
 
     const setVariant = (variantIndex: number) => {
-        if(!selectedBlockData) {return}
+        if (!selectedBlockData) { return }
         setSelectedTileId({
             tileId: selectedBlockId,
             variant: variantIndex,
@@ -50,7 +50,7 @@ export default function LateralTileMenu({ selectedTile, setSelectedTileId , mapM
         <main className='flex flex-row h-screen z-10'>
             {selectedBlockData &&
                 <section>
-                    <ul className='flex flex-col gap-2 p-4 bg-lagun-900/80  h-full overflow-y-scroll'>
+                    <ul className='flex flex-col gap-2 p-4 bg-romo-950 border-l border-romo-400  h-full overflow-y-scroll'>
                         {selectedBlockData.variant.map((variantData, variantIndex) => <li key={`Block_${variantData.name}_${variantIndex}`}>
                             {variantIndex == selectedTile.variant ?
                                 <img src={variantData.path[0]} className='w-16 aspect-square border border-lagun-500 rounded-md'
@@ -63,16 +63,16 @@ export default function LateralTileMenu({ selectedTile, setSelectedTileId , mapM
                     </ul>
                 </section>
             }
-            <section className='text-white w-72 bg-lagun-900 p-2 h-full flex flex-col justify-between gap-2'>
+            <section className='text-white w-72 bg-romo-500 p-2 h-full flex flex-col justify-between gap-2'>
                 <Filter setBlocksListToRender={setBlocksListToRender} />
                 <ul className='max-h-full h-full py-2 flex flex-row justify-center items-start gap-2 flex-wrap w-full overflow-y-scroll'>
                     {blocksListToRender.map((BlockData) => <li key={`Block_${BlockData.id}`}>
                         {BlockData.id == selectedBlockId ?
                             <img src={BlockData.variant[0].path[0]}
-                                className='w-20 aspect-square border border-lagun-500 rounded-md'
+                                className='w-20 aspect-square border border-romo-200'
                             /> :
                             <img src={BlockData.variant[0].path[0]} onClick={() => setSelectedBlockId(BlockData.id)}
-                                className='w-20 aspect-square border border-transparent hover:border-lagun-500 rounded-md'
+                                className='w-20 aspect-square border border-transparent hover:border-romo-200'
                             />
                         }
                     </li>)}
@@ -81,7 +81,7 @@ export default function LateralTileMenu({ selectedTile, setSelectedTileId , mapM
                     <SquareButton size="lg" variant="ghost" onClick={() => history.back()}>
                         Cancel
                     </SquareButton>
-                    <SaveMapButton mapMatrix={mapMatrix} mapSize={mapSize}/>
+                    <SaveMapButton mapMatrix={mapMatrix} mapSize={mapSize} />
 
                 </div>
             </section>
@@ -105,49 +105,58 @@ function Filter({ setBlocksListToRender }: { setBlocksListToRender: React.Dispat
 
     return (
         <ul className=' flex flex-row flex-wrap gap-2 justify-center'>
-            <FilterButton onClick={() => setSelectedFilter('border')}><ScanIcon size={15} strokeWidth={1} />Border</FilterButton>
-            <FilterButton onClick={() => setSelectedFilter('floor')}><Grid2X2 size={15} strokeWidth={1} />Floor</FilterButton>
-            <FilterButton onClick={() => setSelectedFilter('wall')}><BrickWall size={15} strokeWidth={1} />Wall</FilterButton>
-            <FilterButton onClick={() => setSelectedFilter('door')}><DoorOpen size={15} strokeWidth={1} />Door</FilterButton>
-            <FilterButton onClick={() => setSelectedFilter('mob')}><Ghost size={15} strokeWidth={1} />Mob</FilterButton>
+            <FilterButton isSelectedFilter={selectedFilter == 'border'} onClick={() => setSelectedFilter('border')}><ScanIcon size={15} strokeWidth={1} />Border</FilterButton>
+            <FilterButton isSelectedFilter={selectedFilter == 'floor'} onClick={() => setSelectedFilter('floor')}><Grid2X2 size={15} strokeWidth={1} />Floor</FilterButton>
+            <FilterButton isSelectedFilter={selectedFilter == 'wall'} onClick={() => setSelectedFilter('wall')}><BrickWall size={15} strokeWidth={1} />Wall</FilterButton>
+            <FilterButton isSelectedFilter={selectedFilter == 'door'} onClick={() => setSelectedFilter('door')}><DoorOpen size={15} strokeWidth={1} />Door</FilterButton>
+            <FilterButton isSelectedFilter={selectedFilter == 'mob'} onClick={() => setSelectedFilter('mob')}><Ghost size={15} strokeWidth={1} />Mob</FilterButton>
         </ul>
     )
 }
 
-function FilterButton(props: React.ComponentProps<'li'>) {
+interface IFilterButton extends React.ComponentProps<'li'>{
+    isSelectedFilter: Boolean
+}
+function FilterButton(props: IFilterButton ) {
     return (
-        <li {...props} className='flex flex-row gap-2 justify-center items-center text-lagun-500 px-2 py-1 hover:bg-lagun-200/40'>
-            {props.children}
-        </li>
+        props.isSelectedFilter? (
+            <li {...props} className='flex flex-row gap-2 justify-center items-center text-romo-500 px-3 py-1 bg-romo-100' >
+                {props.children}
+            </li >
+        ) : (
+            <li {...props} className='flex flex-row gap-2 justify-center items-center text-romo-100 px-3 py-1 hover:bg-romo-950' >
+                {props.children}
+            </li >
+        )
     )
 }
 
-function SaveMapButton({mapMatrix,mapSize}:{mapMatrix: IMapMatrix|null,mapSize:{X:number, Y:number}}) {
-    const {mapId} = useParams()
-    const {mapList, setMapList} = useContext(MapsContext)
-    
-    const saveMap = ()=>{
-        if(!mapMatrix)return
+function SaveMapButton({ mapMatrix, mapSize }: { mapMatrix: IMapMatrix | null, mapSize: { X: number, Y: number } }) {
+    const { mapId } = useParams()
+    const { mapList, setMapList } = useContext(MapsContext)
+
+    const saveMap = () => {
+        if (!mapMatrix) return
         let mapIndex = mapList.findIndex(mapData => mapData.id == mapId)
         let newMapList = [...mapList]
-        if(mapIndex == -1 || !setMapList)return
+        if (mapIndex == -1 || !setMapList) return
 
 
-        
+
         newMapList[mapIndex] = {
             ...newMapList[mapIndex],
             mapMatrix: mapMatrix,
             sizeX: mapSize.X,
             sizeY: mapSize.Y
         }
-        
+
         saveMapsInLocalStorage({
             data: newMapList
         })
         setMapList(newMapList)
         history.back()
     }
-    
+
     return (
         <SquareButton disabled={!mapMatrix} size="lg" variant="secondary" onClick={saveMap}>
             Save

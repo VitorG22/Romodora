@@ -16,9 +16,8 @@ export default function SquareButton(props: Ibutton) {
                 case "sm":
                     return (
                         <button {...props} 
-                        className={props.unable?(
-                            'w-fit flex flex-row gap-2 justify-center items-center bg-lagun-900 px-2 py-2 text-lagun-200 h-fit  opacity-35'):
-                            ('w-fit flex flex-row gap-2 justify-center items-center bg-lagun-900 px-2 py-2 text-lagun-200 h-fit  hover:brightness-125')}
+                        style={{opacity:`${props.unable?'35%': '100%'}`}}
+                        className='w-fit flex flex-row gap-2 justify-center items-center bg-romo-500 px-2 py-2 text-romo-100 h-fit  hover:brightness-125'
                         disabled={props.unable}>
                             {props.children}
                         </button>
@@ -26,9 +25,8 @@ export default function SquareButton(props: Ibutton) {
                 case "md":
                     return (
                         <button {...props} 
-                        className={props.unable?(
-                            'w-fit flex flex-row gap-2 justify-center items-center bg-lagun-900 px-4 py-2 text-lagun-200 h-fit  opacity-35'):
-                            ('w-fit flex flex-row gap-2 justify-center items-center bg-lagun-900 px-4 py-2 text-lagun-200 h-fit  hover:brightness-125')}
+                        style={{opacity:`${props.unable?'35%': '100%'}`}}
+                        className='w-fit flex flex-row gap-2 justify-center items-center bg-romo-500 px-4 py-2 text-romo-100 h-fit  hover:brightness-125'
                         disabled={props.unable}>
                             {props.children}
                         </button>
@@ -36,9 +34,8 @@ export default function SquareButton(props: Ibutton) {
                 case "lg":
                     return (
                         <button {...props} 
-                        className={props.unable?(
-                            'w-fit flex flex-row gap-2 justify-center items-center bg-lagun-900 px-8 py-3 text-lagun-200 h-fit  opacity-35'):
-                            ('w-fit flex flex-row gap-2 justify-center items-center bg-lagun-900 px-8 py-3 text-lagun-200 h-fit  hover:brightness-125')}
+                        style={{opacity:`${props.unable?'20%': '100%'}`}}
+                        className='w-fit flex flex-row gap-2 justify-center items-center bg-romo-500 px-8 py-3 text-romo-100 h-fit  hover:brightness-125'
                         disabled={props.unable}>
                             {props.children}
                         </button>
@@ -49,9 +46,8 @@ export default function SquareButton(props: Ibutton) {
                 case "sm":
                     return (
                         <button {...props} 
-                        className={props.unable?(
-                            'w-fit flex flex-row gap-2 justify-center items-center px-2 py-2 text-lagun-500 border border-lagun-500 h-fit  opacity-35'):
-                            ('w-fit flex flex-row gap-2 justify-center items-center px-2 py-2 text-lagun-500 border border-lagun-500 h-fit  hover:brightness-125')}
+                        style={{opacity:`${props.unable?'35%': '100%'}`}}
+                        className='w-fit flex flex-row gap-2 justify-center items-center px-2 py-2 text-romo-100 border border-romo-100 h-fit  hover:brightness-125'
                         disabled={props.unable}>
                             {props.children}
                         </button>
@@ -59,9 +55,8 @@ export default function SquareButton(props: Ibutton) {
                 case "md":
                     return (
                         <button {...props} 
-                        className={props.unable?(
-                            'w-fit flex flex-row gap-2 justify-center items-center px-4 py-2 text-lagun-500 border border-lagun-500 h-fit  opacity-35'):
-                            ('w-fit flex flex-row gap-2 justify-center items-center px-4 py-2 text-lagun-500 border border-lagun-500 h-fit  hover:brightness-125')}
+                        style={{opacity:`${props.unable?'35%': '100%'}`}}
+                        className='w-fit flex flex-row gap-2 justify-center items-center px-4 py-2 text-romo-100 border border-romo-100 h-fit  hover:brightness-125'
                         disabled={props.unable}>
                             {props.children}
                         </button>
@@ -69,9 +64,8 @@ export default function SquareButton(props: Ibutton) {
                 case "lg":
                     return (
                         <button {...props} 
-                        className={props.unable?(
-                            'w-fit flex flex-row gap-2 justify-center items-center px-8 py-3 text-lagun-500 border border-lagun-500 h-fit  opacity-35'):
-                            ('w-fit flex flex-row gap-2 justify-center items-center px-8 py-3 text-lagun-500 border border-lagun-500 h-fit  hover:brightness-125')}
+                        style={{opacity:`${props.unable?'35%': '100%'}`}}
+                        className='w-fit flex flex-row gap-2 justify-center items-center px-8 py-3 text-romo-100 border border-romo-100 h-fit  hover:brightness-125'
                         disabled={props.unable}>
                             {props.children}
                         </button>
@@ -83,9 +77,8 @@ export default function SquareButton(props: Ibutton) {
                 case "sm":
                     return (
                 <button {...props} 
-                className={props.unable?(
-                    'w-fit flex flex-row gap-2 justify-center items-center bg-lagun-500 px-2 py-2 text-lagun-950 h-fit  opacity-35'):
-                    ('w-fit flex flex-row gap-2 justify-center items-center bg-lagun-500 px-2 py-2 text-lagun-950 h-fit  hover:brightness-125')}
+                style={{opacity:`${props.unable?'35%': '100%'}`}}
+                className='w-fit flex flex-row gap-2 justify-center items-center bg-romo-100 px-2 py-2 text-romo-500 h-fit  hover:brightness-125'
                 disabled={props.unable}>
                     {props.children}
                 </button>
@@ -93,9 +86,8 @@ export default function SquareButton(props: Ibutton) {
                 case "md":
                     return (
                 <button {...props} 
-                className={props.unable?(
-                    'w-fit flex flex-row gap-2 justify-center items-center bg-lagun-500 px-4 py-2 text-lagun-950 h-fit  opacity-35'):
-                    ('w-fit flex flex-row gap-2 justify-center items-center bg-lagun-500 px-4 py-2 text-lagun-950 h-fit  hover:brightness-125')}
+                style={{opacity:`${props.unable?'35%': '100%'}`}}
+                className='w-fit flex flex-row gap-2 justify-center items-center bg-romo-100 px-4 py-2 text-romo-500 h-fit  hover:brightness-125'
                 disabled={props.unable}>
                     {props.children}
                 </button>
@@ -103,9 +95,8 @@ export default function SquareButton(props: Ibutton) {
                 case "lg":
                     return (
                 <button {...props} 
-                className={props.unable?(
-                    'w-fit flex flex-row gap-2 justify-center items-center bg-lagun-500 px-8 py-3 text-lagun-950 h-fit  opacity-35'):
-                    ('w-fit flex flex-row gap-2 justify-center items-center bg-lagun-500 px-8 py-3 text-lagun-950 h-fit  hover:brightness-125')}
+                style={{opacity:`${props.unable?'35%': '100%'}`}}
+                className='w-fit flex flex-row gap-2 justify-center items-center bg-romo-100 px-8 py-3 text-romo-500 950 h-fit  hover:brightness-125'
                 disabled={props.unable}>
                     {props.children}
                 </button>

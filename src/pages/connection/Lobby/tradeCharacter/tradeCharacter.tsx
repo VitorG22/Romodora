@@ -44,18 +44,18 @@ export default function TradeCharacterModal({ setIsModalOpen }: { setIsModalOpen
                 {characters?.map(element =>
                     <li>
                         <section onClickCapture={()=> setUserSelectedCharacter(element.id)}
-                        className='flex flex-row gap-2 hover:bg-lagun-950/50 rounded-md  p-2'>
-                            <div className='flex justify-center items-center h-12 aspect-square rounded-md overflow-hidden'>
-                                <img src={element.picture}></img>
+                        className='flex flex-row gap-2 hover:bg-romo-500 hover:cursor-pointer  py-2  pl-2 pr-4'>
+                            <div className='flex aspect-square overflow-hidden'>
+                                <img src={element.picture} className='h-12 w-12 object-cover'></img>
                             </div>
-                            <div className='flex flex-row w-40 justify-between'>
+                            <div className='flex flex-row w-48 justify-between'>
                                 <article className=''>
-                                    <h1 className='text-lagun-500'>{element.name}</h1>
-                                    <p className='text-lagun-200 text-xs italic'>{element.class}</p>
+                                    <h1 className='text-romo-100'>{element.name}</h1>
+                                    <p className='text-romo-200 text-xs italic'>{element.class}</p>
                                 </article>
                                 <article className='text-end'>
-                                    <h1 className='text-lagun-500'>{element.race}</h1>
-                                    <p className='text-lagun-200 text-xs italic'>{element.subRace}</p>
+                                    <h1 className='text-romo-100'>{element.race}</h1>
+                                    <p className='text-romo-200 text-xs italic'>{element.subRace}</p>
                                 </article>
                             </div>
                         </section>

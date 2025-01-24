@@ -76,7 +76,7 @@ export default function Party() {
     }, [partyData])
 
     return (
-        <section className='text-white'>
+        <section className='text-romo-100'>
             <Outlet />
         </section >
     )

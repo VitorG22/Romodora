@@ -11,7 +11,7 @@ export default function Menu() {
 
     return (
         <main className='flex flex-col h-full w-full'>
-            <section className=" flex flex-col gap-4 w-fit h-full justify-center px-8  divide-y-2 divide-lagun-300/20 ">
+            <section className=" flex flex-col gap-4 w-fit h-full justify-center px-8  divide-y-[1px] divide-romo-900 ">
                 <div className='flex flex-row gap-2'>
                     <NewJourney/>
                     <ResumeJourney/>

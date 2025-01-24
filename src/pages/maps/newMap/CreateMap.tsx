@@ -630,7 +630,7 @@ export default function CreateMap() {
         <main className='relative flex flex-row justify-between hiddenScroll overflow-hidden h-screen w-full'>
             <section ref={canvasContainer} className='relative w-full h-full overflow-hidden'>
                 <CreateMapHud canvasZoomValue={canvasZoomValue} tileCountX={tileCountX} tileCountY={tileCountY} selectedTile={selectedTile} selectedTileStatus={tileStatus} tileRotate={tileRotate} handleTileCountXMinus={handleTileCountXMinus} handleTileCountXPlus={handleTileCountXPlus} handleTileCountYMinus={handleTileCountYMinus} handleTileCountYPlus={handleTileCountYPlus} />
-                <canvas ref={canvasCoverRef} className="absolute top-0 lef-0 z-40 border border-lagun-500/50 h-screen " />
+                <canvas ref={canvasCoverRef} className="absolute top-0 lef-0 z-40 border border-romo-400 h-screen " />
                 <canvas ref={canvasMobRef} className="absolute top-0 lef-0 z-30 h-screen " />
                 <canvas ref={canvasWallRef} className="absolute top-0 lef-0 z-20 h-screen " />
                 <canvas ref={canvasPropsRef} className="absolute top-0 lef-0 z-10 h-screen " />
@@ -662,7 +662,7 @@ function CreateMapHud({ canvasZoomValue, tileCountX, tileCountY, selectedTile, s
     let selectedBlock = BlocksList.find(blockData => blockData.id == selectedTile.tileId)
 
     return (
-        <main className='flex flex-col gap-2 selection:bg-transparent top-0 left-0 z-20 absolute w-full h-full border border-sky-500'>
+        <main className='flex flex-col gap-2 selection:bg-transparent top-0 left-0 z-20 absolute w-full h-full'>
             {/* top Left section */}
             <section className='absolute top-1 left-2 text-lagun-200/50 *:gap-2 *:flex *:flex-row'>
                 Map Size:

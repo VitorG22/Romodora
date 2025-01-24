@@ -45,7 +45,7 @@ export default function ResumeJourney() {
 function JourneyModal({ journeyList, setIsJourneysModalOpen }: {journeyList:IJourney[], setIsJourneysModalOpen: React.Dispatch<React.SetStateAction<boolean>> }) {
     
     return (
-        <Modal.Container title={'Jornadas'} setIsModalOpen={setIsJourneysModalOpen}>
+        <Modal.Container title={'Journeys'} setIsModalOpen={setIsJourneysModalOpen}>
             {journeyList.map(element => <JourneyCard journeyData={element} />)}
         </Modal.Container>
     )

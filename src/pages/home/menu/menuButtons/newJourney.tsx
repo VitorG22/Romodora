@@ -61,7 +61,7 @@ function NewJourneyModal({ setIsCreateJourneyModalOpen }: { setIsCreateJourneyMo
 
     return (
         <Modal.Container key='newJourneyModal' title="Nova Jornada" setIsModalOpen={setIsCreateJourneyModalOpen} >
-            <Form.Container onSubmit={(e: React.FormEvent<HTMLFormElement>) => handleSubmite(e)}>
+            <Form.Container onSubmit={(e: React.FormEvent<HTMLFormElement>) => handleSubmite(e)} className='flex-col'>
                 <Form.InputText name='name' type="text" label="Nome da Jornada" />
                 <div className="flex flex-row gap-2">
                     <Form.InputText name='banner' type="text" label="Banner" placeholder="Url da Imagem" onChange={(e) => setBannerPath(e.target.value)} />
@@ -70,7 +70,7 @@ function NewJourneyModal({ setIsCreateJourneyModalOpen }: { setIsCreateJourneyMo
                     </div>
                 </div>
                 <section className='flex justify-end mt-4 gap-2'>
-                    <SquareButton type='button' size="md" variant="ghost" >
+                    <SquareButton type='button' size="md" variant="default" >
                         Cancelar
                     </SquareButton>
                     <SquareButton type="submit" size="md" variant="secondary" >

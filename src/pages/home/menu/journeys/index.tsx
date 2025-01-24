@@ -40,25 +40,25 @@ export function JourneyCard({ journeyData }: { journeyData: IJourney }) {
     }
 
     return (
-        <section className='flex flex-row items-center justify-between hover:bg-lagun-950/50 pr-4 p-2 rounded-md'>
+        <section className='flex flex-row items-center justify-between border-b border-transparent  hover:border-romo-100 pr-4 p-2'>
             <div className='flex flex-row gap-2'>
-                <div className='flex justify-center items-center h-12 aspect-square rounded-md overflow-hidden'>
+                <div className='flex justify-center items-center h-12 aspect-square overflow-hidden'>
                     <img src={journeyData.banner} />
                 </div>
                 <article className='mr-8'>
-                    <h1 className='text-lagun-500'>{journeyData.name}</h1>
-                    <p className='text-lagun-200 text-xs italic'>{journeyData.id}</p>
+                    <h1 className='text-romo-100'>{journeyData.name}</h1>
+                    <p className='text-romo-200 text-xs italic'>{journeyData.id}</p>
                 </article>
             </div>
             <div className='flex flex-row gap-2'>
                 <SquareButton variant="secondary" size="sm"
                     onClickCapture={() => handleHostParty()}>
                     {/* onClick={()=>navigate(`/party/host/${journeyData.id}`)}> */}
-                    <LogIn size={15} strokeWidth={1} style={{}} />
+                    <LogIn size={15} strokeWidth={1} />
                 </SquareButton>
 
-                <SquareButton variant="ghost" size="sm">
-                    <Trash2 size={15} strokeWidth={1} style={{}} />
+                <SquareButton variant="default" size="sm">
+                    <Trash2 size={15} strokeWidth={1} />
                 </SquareButton>
             </div>
         </section>

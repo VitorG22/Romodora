@@ -23,13 +23,13 @@ export default function MyCharacters() {
 
     return (
         <section className='flex flex-col gap-2 w-full'>
-            <h1 className='pt-4 text-lg text-lagun-200/50 px-4'>
-                Personagens
-                <hr className='border-lagun-200/50'/>
+            <h1 className='pt-4 text-3xl font-semibold  text-romo-500 italic px-4'>
+                Characters
+                <hr className='border-romo-500'/>
             </h1>
             <ul className='flex flex-row flex-wrap gap-2 py-4 px-4 max-h-full h-fit overflow-y-scroll'>
-                <Link to={'createCharacter'} className='bg-lagun-200/5 flex items-center hover:bg-lagun-200/25 rounded-md'>
-                    <div className='flex justify-center text-lagun-200 items-center h-64 aspect-[3/4]  overflow-hidden '>
+                <Link to={'createCharacter'} className='bg-romo-500/70 flex items-center hover:bg-romo-500 rounded-md'>
+                    <div className='flex justify-center text-romo-600 items-center h-64 aspect-[3/4]  overflow-hidden '>
                         <Plus size={40} strokeWidth={1} />
                     </div>
                 </Link>
@@ -42,28 +42,28 @@ export default function MyCharacters() {
 function CharacterCard({ characterData }: { characterData: ICharacterData }) {
 
     return (
-        <section className='flex flex-col overflow-hidden rounded-md bg-lagun-200/5'>
+        <section className='flex flex-col overflow-hidden rounded-md hover:bg-romo-500'>
             <div className='h-64 aspect-[3/4] overflow-hidden'>
                 <img src={characterData.picture}
                     className='object-cover min-w-full min-h-full'
                 />
 
             </div>
-            <div className='flex justify-between items-start p-3 bottom-0 left-0 text-white w-full'>
+            <div className='flex justify-between items-start p-3 bottom-0 left-0 text-romo-200 w-full'>
                 <article className="flex flex-col items-start">
                     <p className="text-md font-thin">{characterData.name}</p>
                     <ul className="flex flex-row gap-1 text-xs font-thin  italic ">
-                        <li className='text-lagun-500 '>{characterData.abilityScores.strength.baseScore}</li>
-                        <li className='text-lagun-500 '>{characterData.abilityScores.dexterity.baseScore}</li>
-                        <li className='text-lagun-500 '>{characterData.abilityScores.charisma.baseScore}</li>
-                        <li className='text-lagun-500 '>{characterData.abilityScores.intelligence.baseScore}</li>
-                        <li className='text-lagun-500 '>{characterData.abilityScores.wisdom.baseScore}</li>
-                        <li className='text-lagun-500 '>{characterData.abilityScores.constitution.baseScore}</li>
+                        <li className='text-romo-100 '>{characterData.abilityScores.strength.baseScore}</li>
+                        <li className='text-romo-100 '>{characterData.abilityScores.dexterity.baseScore}</li>
+                        <li className='text-romo-100 '>{characterData.abilityScores.charisma.baseScore}</li>
+                        <li className='text-romo-100 '>{characterData.abilityScores.intelligence.baseScore}</li>
+                        <li className='text-romo-100 '>{characterData.abilityScores.wisdom.baseScore}</li>
+                        <li className='text-romo-100 '>{characterData.abilityScores.constitution.baseScore}</li>
                     </ul>
                 </article>
                 <article className="flex flex-col items-end">
-                    <p className="text-md font-thin text-lagun-500">{characterData.class}</p>
-                    <p className="text-xs font-thin italic text-lagun-200">{characterData.subClass}</p>
+                    <p className="text-md font-thin text-romo-600">{characterData.class}</p>
+                    <p className="text-xs font-thin italic text-romo-600">{characterData.subClass}</p>
                 </article>
             </div>
         </section>

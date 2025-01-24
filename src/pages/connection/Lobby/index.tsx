@@ -25,8 +25,8 @@ export default function Lobby() {
                     <img src={partyData?.journeyData.banner} className='object-cover' />
                 </div>
                 <article>
-                    <h1 className='text-lagun-500 font-semibold'>{partyData?.journeyData.name}</h1>
-                    <p className='text-lagun-200 text-xs font-thin italic'>{partyData?.partyCode}</p>
+                    <h1 className='text-romo-100 font-semibold'>{partyData?.journeyData.name}</h1>
+                    <p className='text-romo-200 text-xs font-thin italic'>{partyData?.partyCode}</p>
                 </article>
             </section>
             <div className='flex flex-row h-2/3 w-fit place-self-center gap-2'>

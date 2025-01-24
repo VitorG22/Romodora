@@ -61,9 +61,9 @@ export default function Register() {
 
 
     return (
-        <section className="flex h-screen w-screen  justify-center items-center">
+        <section className="flex h-screen w-screen  justify-center items-center relative">
             {isLoading ? <Loader /> :
-                <Form.Container onSubmit={(e) => RegisterSubmite({ 'event': e })} className='w-96'>
+                <Form.Container onSubmit={(e) => RegisterSubmite({ 'event': e })} className='w-96 flex-col bg-romo-950'>
                     <Form.Title>Register</Form.Title>
                     <Form.InputText required name='name' label='Name' type='text' placeholder='User Name' />
                     <Form.InputText required name='email' label='Email' type='email' placeholder='YourEmail@gmail.com' onChange={() => setShowEmailError(false)} />
@@ -80,6 +80,11 @@ export default function Register() {
                         </SquareButton>
                     </div>
                 </Form.Container>}
+                <div className='absolute inset-0 -z-10 [mask-image:linear-gradient(270deg,#000_-70%,#00000002_90%)] grayscale-[70%] opacity-40'>
+                        <img src="assets/arts/bg_forest.webp" alt=""
+                            className='object-cover w-full h-full'
+                        />
+                    </div>
         </section>
     )
 }

@@ -6,15 +6,15 @@ export default function AbilityPoints({ label, AbilityKey, characterData, setCha
     const [thisAbilityValues, setThisAbilityValues] = useState<IAbilityScore>(characterData.abilityScores[AbilityKey])
 
     const handleClickBaseScorePlus = () => {
-        setModifier({baseScore: thisAbilityValues.baseScore + 1})
+        setModifier({ baseScore: thisAbilityValues.baseScore + 1 })
     }
     const handleClickBaseScoreMinus = () => {
-        setModifier({baseScore: thisAbilityValues.baseScore - 1})
+        setModifier({ baseScore: thisAbilityValues.baseScore - 1 })
     }
 
 
     // define o valor do modificador de atributo apartir do valor base do atributo
-    const setModifier = ({baseScore}:{baseScore:number}) => {
+    const setModifier = ({ baseScore }: { baseScore: number }) => {
         let modifierValue = 0
         switch (true) {
             case (baseScore <= 1): modifierValue = -5; break
@@ -35,17 +35,17 @@ export default function AbilityPoints({ label, AbilityKey, characterData, setCha
             case (baseScore >= 30): modifierValue = 10; break
 
         }
-        
+
         setThisAbilityValues({
             ...thisAbilityValues,
-            baseScore:baseScore,
+            baseScore: baseScore,
             modifier: modifierValue
         })
     }
 
 
     useEffect(() => {
-        
+
         setThisAbilityValues({
             ...thisAbilityValues,
             totalScore: thisAbilityValues.baseScore + thisAbilityValues.bonus + thisAbilityValues.setScore + thisAbilityValues.stackingBonus
@@ -64,24 +64,24 @@ export default function AbilityPoints({ label, AbilityKey, characterData, setCha
     }, [thisAbilityValues.totalScore])
 
     return (
-        <div className='flex flex-row w-fit items-center gap-2'>
+        <div className='flex flex-row justify-between items-center gap-3 w-full'>
+            <label
+                htmlFor={label}
+                className="text-romo-200 font-thin text-xs text-nowrap w-fit min-w-16"
+            >{label} :</label>
             <div className="flex flex-row items-center">
-                <label
-                    htmlFor={label}
-                    className="text-lagun-500 font-thin text-xs text-nowrap "
-                >{label} :</label>
-                <button type='button' onClick={handleClickBaseScoreMinus} className='p-[2px] rounded-sm text-lagun-500 hover:bg-lagun-200/20 hover:text-lagun-200'>
-                    <ChevronLeft size={15} strokeWidth={1} />
+                <button type='button' onClick={handleClickBaseScoreMinus} className='p-[2px] rounded-sm text-romo-100 hover:bg-romo-200/10 mt-1'>
+                    <ChevronLeft size={10} strokeWidth={1} />
                 </button>
-                <input type="text" disabled value={thisAbilityValues.baseScore} className='w-8 flex flex-row bg-transparent text-center py-1 outline-none text-lagun-600 ' />
-                <button type='button' onClick={handleClickBaseScorePlus} className='p-[2px] rounded-sm text-lagun-500 hover:bg-lagun-200/20 hover:text-lagun-200'>
-                    <ChevronRight size={15} strokeWidth={1} />
+                <input type="text" disabled value={thisAbilityValues.baseScore} className='w-8 flex flex-row bg-transparent text-center py-1 outline-none text-romo-200 ' />
+                <button type='button' onClick={handleClickBaseScorePlus} className='p-[2px] rounded-sm text-romo-100 hover:bg-romo-200/10 mt-1'>
+                    <ChevronRight size={10} strokeWidth={1} />
                 </button>
             </div>
-            <p className='relative flex h-full p-2 justify-center items-center font-thin text-xs text-lagun-500 aspect-square'>
-                {thisAbilityValues.modifier}
-                <div className="absolute h-6 rotate-45  aspect-square border border-lagun-600"></div>
-            </p>
+            <div className='relative flex h-full p-2 justify-center items-center text-xs text-romo-200 font-thin aspect-square'>
+                <p className='z-10'>{thisAbilityValues.modifier}</p>
+                <div className="absolute z-0 h-6 rotate-45  aspect-square border border-romo-200 "></div>
+            </div>
         </div>
     )
 }
