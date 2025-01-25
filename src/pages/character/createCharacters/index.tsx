@@ -3,7 +3,7 @@ import * as Form from "../../../components/form"
 import { ICharacterData } from "../../../interfaces"
 import AbilityPoints from "./abilityPoints"
 import SquareButton from "../../../components/buttons"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { PostData } from "../../../scripts/api/postData"
 import { AppContext } from "../../../AppContext" 
 import { Error } from "../../../components/toasters"
@@ -85,7 +85,8 @@ interface ISubRaces {
 }
 
 export default function CreateCharacter() {
-    const { token } = useContext(AppContext)
+    const {CharacterId} = useParams()
+    const { token, characters} = useContext(AppContext)
     const [characterData, setCharacterData] = useState<ICharacterData>(defaultcharacterData)
     const [selectedSubRacesList, setSelectedSubRacesList] = useState<ISubRaces[] | undefined>()
     const navigate = useNavigate()
@@ -107,24 +108,42 @@ export default function CreateCharacter() {
     }, [characterData.race])
 
     useEffect(() => {
-        setSelectedSubRacesList(CharacterRaceList[0].subRace)
-        setCharacterData({
-            ...characterData,
-            class: CharacterClassList[0].classKey,
-            race: CharacterRaceList[0].raceKey,
-            subRace: CharacterRaceList[0].subRace[0].subRaceKey,
-        })
+        if(CharacterId){
+            console.log(characters)
+            let selectedCharacter = characters.find(element => element.id == CharacterId) 
+            if(!selectedCharacter)return
+            setCharacterData(selectedCharacter)
+        }else{
+            setSelectedSubRacesList(CharacterRaceList[0].subRace)
+            setCharacterData({
+                ...characterData,
+                class: CharacterClassList[0].classKey,
+                race: CharacterRaceList[0].raceKey,
+                subRace: CharacterRaceList[0].subRace[0].subRaceKey,
+            })
+        }
     }, [])
 
     const handleSubmitData = async () => {
         console.log(characterData)
-        const res = await PostData({
-            route: '/createCharacter',
-            data: {
-                token: token,
-                characterData: characterData
-            }
-        })
+        let res = undefined
+        if(CharacterId){
+            res = await PostData({
+                route: '/updateCharacter',
+                data: {
+                    token: token,
+                    characterData: characterData
+                }
+            })
+        }else{
+            res = await PostData({
+                route: '/createCharacter',
+                data: {
+                    token: token,
+                    characterData: characterData
+                }
+            })
+        }
         if (res.data.status == 'success') {
             navigate('../')
         } else {
@@ -144,25 +163,25 @@ export default function CreateCharacter() {
                         <img src={characterData.picture} onErrorCapture={(e) => e.currentTarget.classList.add("opacity-0")} onLoad={(e) => e.currentTarget.classList.remove("opacity-0")} className='object-cover min-w-full min-h-full' />
                     </div>
                     <div className='flex h-72 flex-col justify-between'>
-                        <Form.InputText type='text' label="Nome" name='name' onChange={(e) => setCharacterByKey({ keyName: "name", value: e.target.value })} />
-                        <Form.InputSelect label='Raça' defaultValue='' onChange={(e) => setCharacterByKey({ keyName: "race", value: e.target.value })}>
+                        <Form.InputText type='text' label="Nome" name='name' value={characterData.name} onChange={(e) => setCharacterByKey({ keyName: "name", value: e.target.value })} />
+                        <Form.InputSelect label='Raça' defaultValue='' value={characterData.race} onChange={(e) => setCharacterByKey({ keyName: "race", value: e.target.value })}>
                             {CharacterRaceList.map(element =>
                                 <Form.SelectOption OptionKey={element.raceKey} name={element.raceName.ptbr} />
                             )}
                         </Form.InputSelect>
                         {selectedSubRacesList &&
-                            <Form.InputSelect label='Sub Raça' disabled={selectedSubRacesList.length <= 0} onChange={(e) => setCharacterByKey({ keyName: "subRace", value: e.target.value })}>
+                            <Form.InputSelect label='Sub Raça' disabled={selectedSubRacesList.length <= 0} value={characterData.subRace} onChange={(e) => setCharacterByKey({ keyName: "subRace", value: e.target.value })}>
                                 {selectedSubRacesList?.map(element =>
                                     <Form.SelectOption OptionKey={element.subRaceKey} name={element.subRaceName.ptbr} />
                                 )}
                             </Form.InputSelect>
                         }
-                        <Form.InputSelect label='Classe' onChange={(e) => setCharacterByKey({ keyName: "class", value: e.target.value })}>
+                        <Form.InputSelect label='Classe' value={characterData.subClass} onChange={(e) => setCharacterByKey({ keyName: "class", value: e.target.value })}>
                             {CharacterClassList.map(element =>
-                                <Form.SelectOption OptionKey={element.classKey} name={element.className.ptbr} />
+                                <Form.SelectOption OptionKey={element.classKey} name={element.className.ptbr}  />
                             )}
                         </Form.InputSelect>
-                        <Form.InputText type='text' label="Link da Imagem" onChange={(e) => setCharacterByKey({ keyName: 'picture', value: e.target.value })} />
+                        <Form.InputText type='text' label="Link da Imagem" value={characterData.picture} onChange={(e) => setCharacterByKey({ keyName: 'picture', value: e.target.value })} />
                     </div>
                 </section>
                 <div className='flex flex-row justify-between h-full'>
@@ -177,7 +196,11 @@ export default function CreateCharacter() {
                 </div>
                     <section className='flex flex-row w-full items-end justify-end gap-2'>
                         <SquareButton size="md" type="button" variant="default" onClick={() => navigate('../')}>Cancelar</SquareButton>
+                        {CharacterId?(
+                            <SquareButton size="md" type="button" variant="secondary" onClick={handleSubmitData}>Salvar</SquareButton>
+                        ):(
                         <SquareButton size="md" type="button" variant="secondary" onClick={handleSubmitData}>Criar</SquareButton>
+                        )}
                     </section>
             </Form.Container>
         </main>

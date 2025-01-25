@@ -42,6 +42,9 @@ export default function AbilityPoints({ label, AbilityKey, characterData, setCha
             modifier: modifierValue
         })
     }
+    useEffect(()=>{
+        setThisAbilityValues(characterData.abilityScores[AbilityKey])
+    },[characterData])
 
 
     useEffect(() => {

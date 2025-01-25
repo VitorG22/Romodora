@@ -57,6 +57,10 @@ export const router = createBrowserRouter([
                         element: <MyCharacters/>
                     },
                     {
+                        path:'editCharacter/:CharacterId',
+                        element: <CreateCharacter/>
+                    },
+                    {
                         path:'createCharacter',
                         element: <CreateCharacter/>
                     }
