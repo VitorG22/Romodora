@@ -14,6 +14,7 @@ import MyMaps from "./pages/maps/myMaps";
 import CreateMap from "./pages/maps/newMap/CreateMap";
 import SettingsPage from "./pages/settings";
 import ProfileSettings from "./pages/settings/profileSettings";
+import ErrorPage from "./pages/error/errorPage";
 
 
 export const router = createBrowserRouter([
@@ -86,6 +87,7 @@ export const router = createBrowserRouter([
                     }
                 ]
             }
-        ]
+        ],
+        errorElement:<ErrorPage/>
     }
 ])
