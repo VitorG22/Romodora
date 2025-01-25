@@ -1,16 +1,13 @@
-import { useContext, useEffect, useRef, useState } from "react"
+import { useContext, useState } from "react"
 import PlayerCardInBoard from "./playerCard/playerCard"
 import { AppContext } from "../../../AppContext"
 import { BoardContext } from "./boardContext"
-import { ChevronDown, ChevronUp, Heart, Send, X } from "lucide-react"
+import { Heart, X } from "lucide-react"
 import LeavePartyButton from "../../../components/leavePartyButton"
-import { getMapsFromLocalStorage } from "../../../scripts/localStorage/localStorage"
 import BoardMapCanvas from "./canva/BoardMapCanva"
-import { IMap } from "../../maps"
-import { IPlayerData } from "../../../interfaces"
 import DinamicSectionSpawn from "./dinamicsections/spawn"
 import { Tile } from "../../maps/classes/tileClasses"
-import { BottomSubMenuBar } from "./dinamicsections/subMenuBars"
+import { BottomSubMenuBar } from "./subMenuBar/subMenuBars"
 import { DinamicSectionMaps } from "./dinamicsections/sectionMaps"
 import { LeftChat } from "./chat/chatComponent"
 
@@ -101,6 +98,8 @@ function RightDinamicSection() {
         case "maps":
             return <DinamicSectionMaps />
         case "dice":
+            return <DinamicSectionDefault />
+        case undefined:
             return <DinamicSectionDefault />
     }
 }
