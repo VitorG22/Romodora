@@ -5,6 +5,7 @@ import { useContext } from "react"
 import { AppContext } from "../../../../AppContext"
 import { IPartyData } from "../../../../interfaces"
 import { useNavigate } from "react-router-dom"
+import { PostData } from "../../../../scripts/api/postData"
 
 export interface IJourney {
     name: string,
@@ -12,9 +13,9 @@ export interface IJourney {
     banner: string
 }
 
-export function JourneyCard({ journeyData }: { journeyData: IJourney }) {
+export function JourneyCard({ journeyData, setJourneyList  }: { journeyData: IJourney, setJourneyList:React.Dispatch<React.SetStateAction<IJourney[]>> }) {
     const navigate = useNavigate()
-    const { mainUser, token, socket, setPartyData, partyData } = useContext(AppContext)
+    const { mainUser, token, socket, setPartyData, partyData} = useContext(AppContext)
 
     const handleHostParty = () => {
         if (!socket || !setPartyData) return
@@ -39,6 +40,22 @@ export function JourneyCard({ journeyData }: { journeyData: IJourney }) {
         })
     }
 
+    const deleteJourney = async(journeyData:IJourney)=>{
+        console.log('teste')
+        let res = await PostData({
+            data:{
+                journey_id: journeyData.id,
+                token: token
+            },
+            route: '/deleteJourney'
+        })
+
+        if(res.data.status == 'success'){
+            setJourneyList(res.data.result)
+        }
+        
+    }
+
     return (
         <section className='flex flex-row items-center justify-between border-b border-transparent  hover:border-romo-100 pr-4 p-2'>
             <div className='flex flex-row gap-2'>
@@ -57,7 +74,8 @@ export function JourneyCard({ journeyData }: { journeyData: IJourney }) {
                     <LogIn size={15} strokeWidth={1} />
                 </SquareButton>
 
-                <SquareButton variant="default" size="sm">
+                <SquareButton variant="default" size="sm" 
+                onClick={()=>deleteJourney(journeyData)}>
                     <Trash2 size={15} strokeWidth={1} />
                 </SquareButton>
             </div>

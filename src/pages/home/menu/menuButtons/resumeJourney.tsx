@@ -35,18 +35,18 @@ export default function ResumeJourney() {
                 Start Journey
             </SquareButton>
             {isJourneysModalOpen&&
-                <JourneyModal journeyList={journeyList} setIsJourneysModalOpen={setIsJourneysModalOpen}/>
+                <JourneyModal setJourneyList={setJourneyList} journeyList={journeyList} setIsJourneysModalOpen={setIsJourneysModalOpen}/>
             }
         </>
     )
 }
 
 
-function JourneyModal({ journeyList, setIsJourneysModalOpen }: {journeyList:IJourney[], setIsJourneysModalOpen: React.Dispatch<React.SetStateAction<boolean>> }) {
+function JourneyModal({ journeyList, setIsJourneysModalOpen, setJourneyList }: {journeyList:IJourney[], setIsJourneysModalOpen: React.Dispatch<React.SetStateAction<boolean>>, setJourneyList:React.Dispatch<React.SetStateAction<IJourney[]>> }) {
     
     return (
         <Modal.Container title={'Journeys'} setIsModalOpen={setIsJourneysModalOpen}>
-            {journeyList.map(element => <JourneyCard journeyData={element} />)}
+            {journeyList.map(element => <JourneyCard setJourneyList={setJourneyList} journeyData={element} />)}
         </Modal.Container>
     )
 }
