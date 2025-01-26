@@ -7,13 +7,14 @@ import { tokenVerify } from '../../scripts/token/tokenVerify'
 import { setCookie } from '../../scripts/cookie/cookie'
 import { AppContext } from '../../AppContext'
 import { IMainUser } from '../../interfaces'
-import Loader from '../../components/loader'
+import Loader, { TransparentLoader } from '../../components/loaders/loader'
 
 export default function Register() {
     const [showPasswordError, setShowPasswordError] = useState<boolean>(false)
     const [showEmailError, setShowEmailError] = useState<boolean>(false)
     const { setToken, setMainUser } = useContext(AppContext)
     const [isLoading, setIsLoading] = useState<boolean>(false)
+    const [isInRegisterProgress, setIsInRegisterProgress] = useState<boolean>(false)
 
     const navigate = useNavigate()
 
@@ -25,12 +26,13 @@ export default function Register() {
         email = email.toString().trim()
         password = password.toString().trim()
         confirmPassword = confirmPassword.toString().trim()
-
+        
         if (password != confirmPassword) {
             setShowPasswordError(true)
             return
         }
-
+        
+        setIsInRegisterProgress(true)
         const result = await PostData({
             route: '/register',
             data: {
@@ -42,9 +44,10 @@ export default function Register() {
 
 
         if (result.data.status == 'fail') {
-            if (result.data.result.message == 'Email already registered') {
+            if (result.data.message == 'Email already registered') {
                 setShowEmailError(true)
             }
+            setIsInRegisterProgress(false)
             return
         }
         setIsLoading(true)
@@ -53,6 +56,7 @@ export default function Register() {
             setMainUser: setMainUser,
             setToken: setToken,
             setIsLoading: setIsLoading,
+            setIsInRegisterProgress:setIsInRegisterProgress,
             token: result.data.result.token,
             token_expire: result.data.result.token_expire
         })
@@ -85,17 +89,20 @@ export default function Register() {
                             className='object-cover w-full h-full'
                         />
                     </div>
+                    {isInRegisterProgress &&<TransparentLoader/>}
         </section>
     )
 }
 
-function LoginAfterRegister({ token, token_expire, setMainUser, navigate, setToken, setIsLoading }: {
+function LoginAfterRegister({ token, token_expire, setMainUser, navigate, setToken, setIsLoading, setIsInRegisterProgress }: {
     token: string,
     token_expire: Date,
     navigate: NavigateFunction,
     setToken: React.Dispatch<React.SetStateAction<string>> | undefined,
     setMainUser: React.Dispatch<React.SetStateAction<IMainUser>> | undefined,
-    setIsLoading: React.Dispatch<React.SetStateAction<boolean>>
+    setIsLoading: React.Dispatch<React.SetStateAction<boolean>>,
+    setIsInRegisterProgress: React.Dispatch<React.SetStateAction<boolean>>
+    
 }) {
     setCookie({
         name: 'token',
@@ -114,4 +121,5 @@ function LoginAfterRegister({ token, token_expire, setMainUser, navigate, setTok
             setIsLoading(false)
         }
     })
+    setIsInRegisterProgress(false)
 }

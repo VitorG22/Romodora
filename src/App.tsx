@@ -4,7 +4,7 @@ import {  ICharacterData, IMainUser, IPartyData } from "./interfaces"
 import { ToastContainer } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css';
 import { tokenVerify } from "./scripts/token/tokenVerify";
-import Loader from "./components/loader";
+import Loader, { TransparentLoader } from "./components/loaders/loader";
 import { getCookie } from "./scripts/cookie/cookie";
 import { Socket } from "socket.io-client";
 import { setSocketUserData } from "./pages/connection/socket/socket";
@@ -70,7 +70,7 @@ function App() {
       setSocket: setSocket
     }}>
       <main className='h-screen w-screen overflow-hidden bg-lagun-950'>
-        {isLoading ? <Loader /> : <Outlet />}
+        {isLoading ? <TransparentLoader /> : <Outlet />}
       </main>
       <ToastContainer
         theme="dark"

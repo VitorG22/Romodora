@@ -13,13 +13,14 @@ export interface IJourney {
     banner: string
 }
 
-export function JourneyCard({ journeyData, setJourneyList  }: { journeyData: IJourney, setJourneyList:React.Dispatch<React.SetStateAction<IJourney[]>> }) {
+export function JourneyCard({ journeyData, setJourneyList, setIsLoading  }: { journeyData: IJourney, setJourneyList:React.Dispatch<React.SetStateAction<IJourney[]>>, setIsLoading:React.Dispatch<React.SetStateAction<boolean>>}) {
     const navigate = useNavigate()
     const { mainUser, token, socket, setPartyData, partyData} = useContext(AppContext)
 
     const handleHostParty = () => {
         if (!socket || !setPartyData) return
 
+        setIsLoading(true)
         hostParty({
             journeyId: journeyData.id,
             mainUser: mainUser,
@@ -27,6 +28,7 @@ export function JourneyCard({ journeyData, setJourneyList  }: { journeyData: IJo
             token: token,
             partyData: partyData,
             callBack: (partyData: IPartyData) => {
+                setIsLoading(false)
                 setPartyData(partyData)
                 navigate(`/party/lobby/${partyData.partyCode}`)
                 socket?.off(`connectionRequest_${partyData.partyCode}`)

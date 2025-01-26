@@ -7,20 +7,22 @@ import { useContext, useState } from 'react'
 import { AppContext } from '../../AppContext'
 import { getCookie, setCookie } from '../../scripts/cookie/cookie'
 import { tokenVerify } from '../../scripts/token/tokenVerify'
-import Loader from '../../components/loader'
+import { TransparentLoader } from '../../components/loaders/loader'
 import { setSocketUserData } from '../connection/socket/socket'
 
 export default function Login() {
     const navigate = useNavigate()
     const { setToken, setMainUser, setSocket } = useContext(AppContext)
     const [isLoading, setIsLoading] = useState<boolean>(false)
+    const [isInLoginProgress, setIsInLoginProgress ] = useState<boolean>(false)
 
     async function LoginSubmite({ event }: { event: React.FormEvent<HTMLFormElement> }) {
         event.preventDefault()
+        
         let { email, password } = Form.getFormData(event)
         email = email.toString().trim()
         password = password.toString().trim()
-
+        setIsInLoginProgress(true)
         const result = await PostData({
             route: '/login',
             data: {
@@ -30,6 +32,7 @@ export default function Login() {
         })
         if (result.data.status == 'fail') {
             Toast.Default({ message: result.data.result.message })
+            setIsInLoginProgress(false)
             return
         }
         if (result.data.status == 'success' && setToken) {
@@ -59,13 +62,14 @@ export default function Login() {
                     setIsLoading(false)
                 }
             })
+            setIsInLoginProgress(false)
         }
     }
 
 
     return (
         <main className="flex h-screen w-screen  justify-center items-center">
-            {isLoading ? <Loader /> :
+            {isLoading ? <TransparentLoader /> :
                 <section className='relative flex w-screen h-screen items-center justify-center'>
                     <Form.Container onSubmitCapture={(e) => LoginSubmite({ 'event': e })} className='w-96 flex-col bg-romo-950 z-10'>
                         <Form.Title>Login</Form.Title>
@@ -91,6 +95,7 @@ export default function Login() {
                     </div>
                 </section>
             }
+            {isInLoginProgress && <TransparentLoader/>}
         </main>
     )
 }
