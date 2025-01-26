@@ -43,7 +43,7 @@ export function InputText(props: IinputText) {
                 className="text-romo-200 font-thin text-xs "
             >{props.label}</label>
             <input {...props} id={props.label}
-                className='border-t border-transparent focus:border-romo-200 bg-romo-500 px-2 py-1 rounded-sm outline-none text-romo-200' />
+                className='border-t border-transparent focus:border-romo-200 bg-romo-500 px-2 py-1 outline-none text-romo-200' />
         </div>
 
     )

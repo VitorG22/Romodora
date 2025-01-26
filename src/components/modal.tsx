@@ -15,7 +15,7 @@ export function Container(
             className="fixed flex justify-center items-center top-0 left-0 h-screen w-screen z-50">
             <div
                 onClick={() => (setIsModalOpen(false))}
-                className="absolute z-10 top-0 left-0 h-screen w-screen bg-black/20 backdrop-blur-[1px]"
+                className="absolute top-0 left-0 h-screen w-screen bg-black/20 backdrop-blur-[1px]"
             />
             <section className="flex flex-col  p-4 z-20 rounded-sm bg-romo-950">
                 <div className='flex flex-row gap-8 justify-between items-center text-romo-600'>

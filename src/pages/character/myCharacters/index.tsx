@@ -92,7 +92,7 @@ function CharacterCard({ characterData,setCharacters }: { characterData: ICharac
                 </button>
             </main>
             {isAlertOpen &&
-                <main className='w-screen h-screen absolute bg-black/70 backdrop-blur-sm top-0 left-0 flex justify-center items-center'>
+                <main className='z-50 w-screen h-screen absolute bg-black/70 backdrop-blur-sm top-0 left-0 flex justify-center items-center'>
 
                     <div className='absolute left bg-lagun-900 p-4 rounded-md flex flex-col gap-4'>
 

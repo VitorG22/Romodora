@@ -35,7 +35,8 @@ export default function SquareButton(props: Ibutton) {
                     return (
                         <button {...props} 
                         style={{opacity:`${props.unable?'20%': '100%'}`}}
-                        className='w-fit flex flex-row gap-2 justify-center items-center bg-romo-500 px-8 py-3 text-romo-100 h-fit  hover:brightness-125'
+                        // className='w-fit flex flex-row gap-2 justify-center items-center bg-romo-500 px-8 py-3 text-romo-100 h-fit  hover:brightness-125'
+                        className='w-fit flex flex-row gap-2 justify-center items-center bg-romo-500 px-8 py-3 text-romo-100 h-fit  hover:bg-gradient-to-br from-romo-500 via-romo-400 to-romo-500'
                         disabled={props.unable}>
                             {props.children}
                         </button>

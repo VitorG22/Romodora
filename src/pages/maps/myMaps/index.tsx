@@ -50,7 +50,7 @@ function MapCard({ mapData }: { mapData: IMap }) {
 
     return (
         <>
-            <main className="group relative hover:bg-romo-500">
+            <main className="group relative hover:bg-romo-500 ">
                 <section className='flex flex-col overflow-hidden rounded-md bg-romo-900/20 hover:bg-romo-900/70 hover:cursor-pointer'>
                     <div onClick={() => navigate(`create/${mapData.id}`)} className='h-64 aspect-[3/4] overflow-hidden'>
                         <img src={mapData.picture} className='object-cover min-w-full min-h-full' />
@@ -65,12 +65,12 @@ function MapCard({ mapData }: { mapData: IMap }) {
                         </article>
                     </div>
                 </section>
-                <button onClick={() => setIsAlertOpen(true)} className="absolute right-2 top-2 px-4 py-2 rounded-md font-semibold text-xs bg-red-600 text-white opacity-0 group-hover:opacity-100 ">
+                <button onClick={() => setIsAlertOpen(true)} className="z-10 absolute right-2 top-2 px-4 py-2 rounded-md font-semibold text-xs bg-red-600 text-white opacity-0 group-hover:opacity-100 ">
                     Delete
                 </button>
             </main>
             {isAlertOpen &&
-                <main className='w-screen h-screen absolute bg-black/70 backdrop-blur-sm top-0 left-0 flex justify-center items-center'>
+                <main className='z-50 w-screen h-screen absolute bg-black/70 backdrop-blur-sm top-0 left-0 flex justify-center items-center'>
 
                     <div className='absolute left bg-lagun-900 p-4 rounded-md flex flex-col gap-4'>
 
