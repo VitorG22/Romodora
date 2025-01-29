@@ -6,21 +6,22 @@ import { Heart, X } from "lucide-react"
 import LeavePartyButton from "../../../components/leavePartyButton"
 import BoardMapCanvas from "./canva/BoardMapCanva"
 import DinamicSectionSpawn from "./dinamicsections/spawn"
-import { Tile } from "../../maps/classes/tileClasses"
-import { BottomSubMenuBar } from "./subMenuBar/subMenuBars"
 import { DinamicSectionMaps } from "./dinamicsections/sectionMaps"
 import { LeftChat } from "./chat/chatComponent"
+import { Mob } from "../../maps/classes/mobClasses"
+import { BottomSubMenuBar } from "./subMenuBar/subMenuBars"
 
 
 
 export default function Board() {
     const [selectedSubMenu, setSelectedSubMenu] = useState<'dice' | 'bag' | "spawn" | 'maps'| undefined >('dice')
     const [selectedCharacterInfo, setSelectedCharacterInfo] = useState<any>(undefined)
-    const [selectedTileToMove, SetSelectedTileToMove] = useState<Tile| undefined>(undefined)
+    const [selectedTileToMove, SetSelectedTileToMove] = useState<Mob| undefined>(undefined)
     const { mainUser, partyData } = useContext(AppContext)
 
     const isThisUserHost = mainUser.id == partyData?.hostId
 
+    
     return (
         <BoardContext.Provider value={{
             selectedCharacterInfo: selectedCharacterInfo,

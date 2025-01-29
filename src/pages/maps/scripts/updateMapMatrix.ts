@@ -1,5 +1,6 @@
-import { IMapMatrix } from "../../../interfaces"
+import { IMapMatrix, IPartyData } from "../../../interfaces"
 import { BlocksList } from "../BlocksList"
+import { Mob } from "../classes/mobClasses"
 import { Tile } from "../classes/tileClasses"
 
 interface IDraw {
@@ -14,7 +15,6 @@ interface IDraw {
         floor: React.MutableRefObject<HTMLCanvasElement | null>,
         prop: React.MutableRefObject<HTMLCanvasElement | null>,
         wall: React.MutableRefObject<HTMLCanvasElement | null>,
-        mob: React.MutableRefObject<HTMLCanvasElement | null>,
     }
     blockSize: number
 }
@@ -31,6 +31,33 @@ export function findTileInMapMatrix({ matrix, tilePositionX, tilePositionY }: { 
         }))
 
     return tilesGroup[0]
+}
+
+
+export const findMob=({partyData, tilePositionX, tilePositionY }:{partyData:IPartyData ,tilePositionX: number, tilePositionY: number }):Mob| undefined=>{
+    let selectedMob:Mob| undefined = undefined
+
+    partyData?.players.forEach(playerData => {
+        if(!playerData.characterData?.id)return
+
+        if(playerData.characterData?.position.X == tilePositionX && playerData.characterData?.position.Y == tilePositionY){
+            selectedMob = playerData.characterData
+        }
+    })
+    return selectedMob
+}
+
+export const findMobById=({partyData, mobId }:{partyData:IPartyData ,mobId:string }):Mob| undefined=>{
+    let selectedMob:Mob| undefined = undefined
+
+    partyData?.players.forEach(playerData => {
+        if(!playerData.characterData?.id)return
+
+        if(playerData.characterData?.id == mobId){
+            selectedMob = playerData.characterData
+        }
+    })
+    return selectedMob
 }
 
 
@@ -76,7 +103,7 @@ export const updateMapMatrixAdd = ({ status, canvasList, mapMatrix, tileId, X, Y
 }
 
 export const updateMapMatrixDelete = ({ X, Y, mapMatrix, canva, blockSize }: {
-    blockSize: number, X: number, Y: number, mapMatrix: Tile[][], canvaType: "prop" | "wall" | "mob" | "floor", canva: React.MutableRefObject<HTMLCanvasElement | null>
+    blockSize: number, X: number, Y: number, mapMatrix: Tile[][], canvaType: "prop" | "wall" | "floor", canva: React.MutableRefObject<HTMLCanvasElement | null>
 }):Array<Tile[]>|[] => {
     let newMapMatrix = [...mapMatrix]
     let tile  = findTileInMapMatrix({ matrix: newMapMatrix, tilePositionX: X, tilePositionY: Y})

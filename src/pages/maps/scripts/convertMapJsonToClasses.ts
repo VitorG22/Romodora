@@ -4,11 +4,9 @@ import { Tile } from "../classes/tileClasses";
 export default function convertMapJsonToClasses(JsonMap: IMapMatrix) {
     let newMap: IMapMatrix = {
         floor: [],
-        mob: [],
         prop: [],
         wall: []
     }
-
 
     JsonMap.floor.forEach((row) => {
         let newRow:Tile[] = []
@@ -67,26 +65,6 @@ export default function convertMapJsonToClasses(JsonMap: IMapMatrix) {
         newMap.wall.push(newRow)
     })
 
-    JsonMap.mob.forEach((row, Y) => {
-        let newRow:Tile[] = []
-        row.forEach((tileData) => {
-            newRow.push(new Tile({
-                group: tileData.group,
-                paths: tileData.paths,
-                position: tileData.position,
-                rotate: tileData.rotate,
-                size: tileData.size,
-                status: tileData.status,
-                canvaType: tileData.canvaType,
-                variant: tileData.variant
-            })
-            )
-        }
-        )
-        newMap.mob.push(newRow)
-    })
 
-
-    console.log(newMap)
     return newMap
 }

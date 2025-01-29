@@ -3,11 +3,13 @@ import { AppContext } from "../../../../AppContext"
 import { drawGhostHover } from "../../../maps/scripts/drawInCanva"
 import { IMapMatrix } from "../../../../interfaces"
 import { IIteractiveMenu, Tile } from "../../../maps/classes/tileClasses"
-import { findTileInMapMatrix } from "../../../maps/scripts/updateMapMatrix"
+import { findMob, findMobById, findTileInMapMatrix } from "../../../maps/scripts/updateMapMatrix"
 import { BoardContext } from "../boardContext"
+import { IIteractiveMobMenu, Mob } from "../../../maps/classes/mobClasses"
 
 export default function BoardMapCanvas() {
-    const { partyData } = useContext(AppContext)
+    const { partyData, setPartyData, socket } = useContext(AppContext)
+    const { selectedTileToMove, setSelectedTileToMove } = useContext(BoardContext)
     const blockSize: number = 100
     const canvasCoverRef = useRef<HTMLCanvasElement | null>(null)
     const canvasPropsRef = useRef<HTMLCanvasElement | null>(null)
@@ -23,9 +25,8 @@ export default function BoardMapCanvas() {
     const [canvasZoomValue, setCanvasZoomValue] = useState<number>(100)
     const [tileCountX, setTileCountX] = useState<number>(0)
     const [tileCountY, setTileCountY] = useState<number>(0)
-    const {selectedTileToMove, setSelectedTileToMove} = useContext(BoardContext)
-    
-    
+
+
 
     useEffect(() => {
         let newTileCountX = partyData?.mapData.mapMatrix.floor[0].length || 0
@@ -102,14 +103,6 @@ export default function BoardMapCanvas() {
                 })
             })
 
-        })
-        mapMatrix.mob.forEach(row => {
-            row.forEach(tileData => {
-                tileData.renderTile({
-                    blockSize: blockSize,
-                    canvas: canvasList[tileData.canvaType]
-                })
-            })
         })
         mapMatrix.prop.forEach(row => {
             row.forEach(tileData => {
@@ -264,7 +257,47 @@ export default function BoardMapCanvas() {
             positionY: (e.clientY / window.innerHeight) * 100
         })
     }
-    
+
+    useEffect(() => {
+
+        socket?.off(`mobAction_${partyData?.partyCode}`)
+        socket?.on(`mobAction_${partyData?.partyCode}`, body => mobAction(body))
+
+    }, [partyData])
+
+    const mobAction = (body: {
+        mobId: string,
+        mobOwnerId: string,
+        functionName: 'rotateRight' | 'rotateLeft' | 'teste' | 'tradeStatus' | 'selectThisTile' | 'moveTo',
+        additionalData: any
+    }) => {
+        if (!partyData) return
+
+        let mobOwnerIndex = partyData.players.findIndex(playerData => playerData.id == body.mobOwnerId)
+        if (!mobOwnerIndex) return
+
+        let selectedMob = partyData.players[mobOwnerIndex].characterData
+        if (!selectedMob) return
+
+        let newPlayersData = [...partyData.players]
+
+
+        // if (body.functionName == 'moveTo') {
+        let { newTile } = selectedMob[body.functionName]({
+            canvaRef: canvasMobRef,
+            newPosition: body.additionalData.newPosition
+        })
+        newPlayersData[mobOwnerIndex].characterData = newTile
+        // } else {
+        //     newPlayersData[mobOwnerIndex].characterData =  newTile
+        // }
+        setPartyData?.({
+            ...partyData,
+            players: newPlayersData
+        })
+        setSelectedTileToMove?.(undefined)
+    }
+
     return (
         <main className='absolute flex flex-row justify-between hiddenScroll overflow-hidden h-screen w-full'>
             <section style={{ 'cursor': isDampingActive ? ('move') : ('pointer') }} ref={canvasContainer} className='relative w-full h-full overflow-hidden'>
@@ -280,18 +313,21 @@ export default function BoardMapCanvas() {
 }
 
 
-function IteractiveMenu({ iteractiveMenuPosition, iteractiveMenuSelectedTilePosition, setIteractiveMenuSelectedTilePosition, selectedTileToMove, setSelectedTileToMove }: { iteractiveMenuPosition: { positionX: number, positionY: number } | null, iteractiveMenuSelectedTilePosition: { tilePositionX: number, tilePositionY: number } | null, setIteractiveMenuSelectedTilePosition: React.Dispatch<React.SetStateAction<{ tilePositionX: number, tilePositionY: number } | null>>, selectedTileToMove: Tile | undefined, setSelectedTileToMove: React.Dispatch<React.SetStateAction<Tile | undefined>>| undefined, canvasMobRef?: MutableRefObject<HTMLCanvasElement | null> }) {
+function IteractiveMenu({ iteractiveMenuPosition, iteractiveMenuSelectedTilePosition, setIteractiveMenuSelectedTilePosition, canvasMobRef }: { iteractiveMenuPosition: { positionX: number, positionY: number } | null, iteractiveMenuSelectedTilePosition: { tilePositionX: number, tilePositionY: number } | null, setIteractiveMenuSelectedTilePosition: React.Dispatch<React.SetStateAction<{ tilePositionX: number, tilePositionY: number } | null>>, selectedTileToMove: Mob | undefined, setSelectedTileToMove: React.Dispatch<React.SetStateAction<Mob | undefined>> | undefined, canvasMobRef?: MutableRefObject<HTMLCanvasElement | null> }) {
     const { mainUser, partyData } = useContext(AppContext)
+    const { selectedTileToMove } = useContext(BoardContext)
     const iteractiveMenuContainerRef = useRef<HTMLDivElement | null>(null)
     const iteractiveMenuListRef = useRef<HTMLUListElement | null>(null)
-    const [floorMenuData, setFloorMenuData] = useState<Array<IIteractiveMenu>>()
-    const [propMenuData, setPropMenuData] = useState<Array<IIteractiveMenu>>()
-    const [mobMenuData, setMobMenuData] = useState<Array<IIteractiveMenu>>()
-    const [wallMenuData, setWallMenuData] = useState<Array<IIteractiveMenu>>()
+    const [floorMenuData, setFloorMenuData] = useState<Array<IIteractiveMenu> | undefined>(undefined)
+    const [propMenuData, setPropMenuData] = useState<Array<IIteractiveMenu> | undefined>(undefined)
+    const [wallMenuData, setWallMenuData] = useState<Array<IIteractiveMenu> | undefined>(undefined)
+    const [mobMenuData, setMobMenuData] = useState<Array<IIteractiveMobMenu> | undefined>(undefined)
     const [floorTile, setFloorTile] = useState<Tile | undefined>()
     const [wallTile, setWallTile] = useState<Tile | undefined>()
     const [propTile, setPropTile] = useState<Tile | undefined>()
-    const [mobTile, setMobTile] = useState<Tile | undefined>()
+    const [mobTile, setMobTile] = useState<Mob | undefined>()
+    const [tilePositionX, setTilePositionX] = useState<number>(-999)
+    const [tilePositionY, setTilePositionY] = useState<number>(-999)
 
 
 
@@ -299,15 +335,17 @@ function IteractiveMenu({ iteractiveMenuPosition, iteractiveMenuSelectedTilePosi
         if (!iteractiveMenuPosition || !iteractiveMenuSelectedTilePosition || !partyData?.mapData.mapMatrix || !iteractiveMenuContainerRef.current || !iteractiveMenuListRef.current) return
 
         const { tilePositionX, tilePositionY } = iteractiveMenuSelectedTilePosition
+        setTilePositionX(tilePositionX)
+        setTilePositionY(tilePositionY)
+
 
         let thisPlayerPartydata = partyData?.players.find(playerData => playerData.id == mainUser.id)
         if (thisPlayerPartydata?.permissionType == undefined) return
 
-
         let currentFloorTile = findTileInMapMatrix({ matrix: partyData.mapData.mapMatrix.floor, tilePositionX: tilePositionX, tilePositionY: tilePositionY })
-        let currentMobTile = findTileInMapMatrix({ matrix: partyData.mapData.mapMatrix.mob, tilePositionX: tilePositionX, tilePositionY: tilePositionY })
         let currentPropTile = findTileInMapMatrix({ matrix: partyData.mapData.mapMatrix.prop, tilePositionX: tilePositionX, tilePositionY: tilePositionY })
         let currentWallTile = findTileInMapMatrix({ matrix: partyData.mapData.mapMatrix.wall, tilePositionX: tilePositionX, tilePositionY: tilePositionY })
+        let currentMobTile = findMob({ partyData, tilePositionX, tilePositionY })
         setFloorTile(currentFloorTile)
         setMobTile(currentMobTile)
         setPropTile(currentPropTile)
@@ -315,9 +353,15 @@ function IteractiveMenu({ iteractiveMenuPosition, iteractiveMenuSelectedTilePosi
 
         setFloorMenuData(currentFloorTile?.getIteractiveMenuData(thisPlayerPartydata?.permissionType))
         setPropMenuData(currentPropTile?.getIteractiveMenuData(thisPlayerPartydata?.permissionType))
-        setMobMenuData(currentMobTile?.getIteractiveMenuData(thisPlayerPartydata?.permissionType))
         setWallMenuData(currentWallTile?.getIteractiveMenuData(thisPlayerPartydata?.permissionType))
-
+        if (currentMobTile) {
+            setMobMenuData(currentMobTile?.getIteractiveMenuData(thisPlayerPartydata?.permissionType))
+        } else if (selectedTileToMove) {
+            setMobTile(selectedTileToMove)
+            setMobMenuData([{ text: `Move ${selectedTileToMove.name}`, functionName: 'moveTo' }])
+        } else {
+            setMobMenuData(undefined)
+        }
 
 
         iteractiveMenuListRef.current.style.top = `${iteractiveMenuPosition.positionY}%`
@@ -329,10 +373,10 @@ function IteractiveMenu({ iteractiveMenuPosition, iteractiveMenuSelectedTilePosi
         iteractiveMenuSelectedTilePosition ? (
             <div className='absolute h-screen w-screen border border-sky-500 z-[70]' ref={iteractiveMenuContainerRef} >
                 <ul ref={iteractiveMenuListRef} className='absolute bg-lagun-900 w-fit'>
-                    {floorMenuData?.map(buttonData => <IteractiveMenuButton tile={floorTile} iteractiveButtonData={buttonData} />)}
-                    {mobMenuData?.map(buttonData => <IteractiveMenuButton tile={mobTile} iteractiveButtonData={buttonData} selectedTileToMove={selectedTileToMove} setSelectedTileToMove={setSelectedTileToMove} />)}
-                    {propMenuData?.map(buttonData => <IteractiveMenuButton tile={propTile} iteractiveButtonData={buttonData} />)}
-                    {wallMenuData?.map(buttonData => <IteractiveMenuButton tile={wallTile} iteractiveButtonData={buttonData} />)}
+                    {floorMenuData?.map(buttonData => <IteractiveMenuButton tile={floorTile} iteractiveButtonData={buttonData} setIteractiveMenuSelectedTilePosition={setIteractiveMenuSelectedTilePosition} />)}
+                    {mobMenuData?.map(buttonData => <IteractiveMobMenuButton Mob={mobTile} canvasMobRef={canvasMobRef} iteractiveButtonData={buttonData} blockPosition={{ X: tilePositionX, Y: tilePositionY }} setIteractiveMenuSelectedTilePosition={setIteractiveMenuSelectedTilePosition} />)}
+                    {propMenuData?.map(buttonData => <IteractiveMenuButton tile={propTile} iteractiveButtonData={buttonData} setIteractiveMenuSelectedTilePosition={setIteractiveMenuSelectedTilePosition} />)}
+                    {wallMenuData?.map(buttonData => <IteractiveMenuButton tile={wallTile} iteractiveButtonData={buttonData} setIteractiveMenuSelectedTilePosition={setIteractiveMenuSelectedTilePosition} />)}
                 </ul>
                 <div id='backgroundCloseContainer' onMouseDown={() => setIteractiveMenuSelectedTilePosition(null)}
                     className='w-full h-full'
@@ -344,34 +388,61 @@ function IteractiveMenu({ iteractiveMenuPosition, iteractiveMenuSelectedTilePosi
     )
 }
 
+function IteractiveMobMenuButton({ Mob, iteractiveButtonData, canvasMobRef, blockPosition, setIteractiveMenuSelectedTilePosition }: { Mob: Mob | undefined, iteractiveButtonData: IIteractiveMobMenu, canvasMobRef?: MutableRefObject<HTMLCanvasElement | null>, blockPosition: { X: number, Y: number }, setIteractiveMenuSelectedTilePosition: React.Dispatch<React.SetStateAction<{ tilePositionX: number, tilePositionY: number } | null>> }) {
+    const { partyData, socket } = useContext(AppContext)
+    const { setSelectedTileToMove, setSelectedCharacterInfo } = useContext(BoardContext)
+
+    const executeAction = () => {
+        setIteractiveMenuSelectedTilePosition(null)
+        if (!Mob || !canvasMobRef) return
+        if (iteractiveButtonData.functionName == 'selectThisTile') {
+            setSelectedTileToMove?.(Mob)
+            setSelectedCharacterInfo?.(Mob)
+        } else {
+            socket?.emit('mobAction', {
+                partyCode: partyData?.partyCode,
+                data: {
+                    mobId: Mob.id,
+                    mobOwnerId: Mob.ownerId,
+                    functionName: iteractiveButtonData.functionName,
+                    additionalData: {
+                        newPosition: blockPosition
+                    }
+                }
+            })
+        }
 
 
-function IteractiveMenuButton({ tile, iteractiveButtonData, selectedTileToMove, setSelectedTileToMove }: { tile: Tile | undefined, iteractiveButtonData: IIteractiveMenu, selectedTileToMove?: Tile, setSelectedTileToMove?: React.Dispatch<React.SetStateAction<Tile | undefined>> }) {
+
+    }
+
+    return (
+        <li>
+            <button onClick={executeAction} className='w-full px-4 py-1 hover:bg-lagun-950/80 text-xs text-lagun-200'>
+                {iteractiveButtonData.text}
+            </button>
+        </li>
+    )
+}
+
+function IteractiveMenuButton({ tile, iteractiveButtonData, setIteractiveMenuSelectedTilePosition }: { tile: Tile | undefined, iteractiveButtonData: IIteractiveMenu, setIteractiveMenuSelectedTilePosition: React.Dispatch<React.SetStateAction<{ tilePositionX: number, tilePositionY: number } | null>> }) {
     const { setPartyData, partyData, socket } = useContext(AppContext)
 
 
     const executeAction = () => {
+        setIteractiveMenuSelectedTilePosition(null)
         if (!partyData || !partyData.mapData || !setPartyData || !tile) return console.log('returning', { partyData, setPartyData, tile })
-        let { newTile, lastPosition, nedRefreshMap } = tile[iteractiveButtonData.functionName](selectedTileToMove)
+        let { newTile, nedRefreshMap } = tile[iteractiveButtonData.functionName]({ canvaRef: undefined })
         let newMapMatrix: IMapMatrix = {
             floor: [...partyData.mapData.mapMatrix.floor],
-            mob: [...partyData.mapData.mapMatrix.mob],
             prop: [...partyData.mapData.mapMatrix.prop],
             wall: [...partyData.mapData.mapMatrix.wall],
         }
 
-        if (iteractiveButtonData.functionName == 'selectThisTile' && setSelectedTileToMove) {
-            setSelectedTileToMove(newTile)
-        }
-        if (iteractiveButtonData.functionName == 'moveTo' && selectedTileToMove) {
-            setSelectedTileToMove?.(undefined)
-            try{newMapMatrix[newTile.canvaType][lastPosition.Y][lastPosition.X].deleteThisTile()}
-            catch(err){}
-        }
-
         if (!nedRefreshMap) return
+
         newMapMatrix[newTile.canvaType][newTile.position.Y][newTile.position.X] = newTile
-        
+
         socket?.emit('setMapMatrix', {
             partyCode: partyData?.partyCode,
             newMapData: {

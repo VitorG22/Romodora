@@ -1,3 +1,5 @@
+import { MutableRefObject } from "react"
+
 export interface ITile {
     position: {
         X: number,
@@ -13,7 +15,7 @@ export interface ITile {
         Y: number
     }
     rotate: 'top' | 'right' | 'bottom' | 'left'
-    canvaType: 'prop' | 'wall' | 'mob' | 'floor'
+    canvaType: 'prop' | 'wall'  | 'floor'
     status: number
     blockMatrix?: number[][]
     group?: {
@@ -33,7 +35,7 @@ interface IDrawGhost {
 
 export interface IIteractiveMenu {
     text: string,
-    functionName: 'rotateRight' | 'rotateLeft' | 'teste' | 'moveTo' | 'tradeStatus' | 'selectThisTile'
+    functionName: 'rotateRight' | 'rotateLeft' | 'teste'  | 'tradeStatus' | 'selectThisTile'
 }
 
 export class Tile {
@@ -225,41 +227,12 @@ export class Tile {
         return { newTile: this, lastPosition: { X: this.position.X, Y: this.position.Y }, nedRefreshMap: true }
     }
 
-    moveTo(TileData?: Tile) {
-        if (TileData && this.isVoidBlock) {
-            let MobLastPosition = { X: TileData.position.X, Y: TileData.position.Y }
-            
-            let newGroup: { X: number; Y: number; }[] = []
-            TileData.group.forEach(position => newGroup.push({
-                X: (position.X - MobLastPosition.X) + this.position.X,
-                Y: (position.Y - MobLastPosition.Y) + this.position.Y
-            }))
-            console.log(newGroup)
-
-            this.group = newGroup
-            this.blockMatrix = TileData.blockMatrix
-            this.canvaType = TileData.canvaType
-            this.imageElement = TileData.imageElement
-            this.isVoidBlock = TileData.isVoidBlock 
-            this.paths = TileData.paths
-            this.rotate = TileData.rotate
-            this.size = TileData.size
-            this.status = TileData.status
-            this.variant = TileData.variant
-
-            
-            return { newTile: this, lastPosition: { X: MobLastPosition.X, Y: MobLastPosition.Y }, nedRefreshMap: true }
-
-        }
-        return { newTile: this, lastPosition: { X: this.position.X, Y: this.position.Y }, nedRefreshMap: true }
-    }
-
     teste() {
         console.log(this)
         return { newTile: this, lastPosition: { X: this.position.X, Y: this.position.Y }, nedRefreshMap: false }
     }
 
-    rotateRight() {
+    rotateRight({canvaRef}:{canvaRef?:MutableRefObject<HTMLCanvasElement | null>}) {
         let rotateArray: Array<'top' | 'right' | 'bottom' | 'left'> = ['top', 'right', 'bottom', 'left']
         let rotateIndex: number = rotateArray.findIndex(element => element == this.rotate)
         if (rotateIndex >= 3) {
@@ -273,7 +246,7 @@ export class Tile {
         }
         return { newTile: this, lastPosition: { X: this.position.X, Y: this.position.Y }, nedRefreshMap: true }
     }
-    rotateLeft() {
+    rotateLeft({canvaRef}:{canvaRef?:MutableRefObject<HTMLCanvasElement | null>}) {
         let rotateArray: Array<'top' | 'right' | 'bottom' | 'left'> = ['top', 'right', 'bottom', 'left']
         let rotateIndex: number = rotateArray.findIndex(element => element == this.rotate)
         if (rotateIndex <= 0) {
@@ -307,10 +280,6 @@ export class Tile {
                 case "wall":
                     iteractiveMenuData.push({ text: `teste ${this.canvaType}`, functionName: 'teste' });
                     break
-                case "mob":
-                    this.isVoidBlock == false && iteractiveMenuData.push({ text: `Rotate ${this.canvaType} right`, functionName: 'rotateRight' });
-                    this.isVoidBlock == false && iteractiveMenuData.push({ text: `Rotate ${this.canvaType} left`, functionName: 'rotateLeft' });
-                    break
                 case "floor":
                     iteractiveMenuData.push({ text: `teste ${this.canvaType}`, functionName: 'teste' });
                     break
@@ -320,10 +289,6 @@ export class Tile {
             case "prop":
                 break
             case "wall":
-                break
-            case "mob":
-                this.isVoidBlock && iteractiveMenuData.push({ text: `Move to`, functionName: 'moveTo' });
-                this.isVoidBlock == false && iteractiveMenuData.push({ text: `Select ${this.canvaType}`, functionName: 'selectThisTile' })
                 break
             case "floor":
                 break

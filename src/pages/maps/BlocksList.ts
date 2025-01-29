@@ -8,13 +8,13 @@ export interface IBlock {
 
     }>
     statusCount: number
-    filter: 'floor' | 'wall' | 'chest' | 'door'| 'border'|'mob'
+    filter: 'floor' | 'wall' | 'chest' | 'door'| 'border'
     size: {
         X: number,
         Y: number
     }
     renderLevel: number,
-    type: 'floor' | 'prop' | 'wall'|'mob',
+    type: 'floor' | 'prop' | 'wall'
     group: Array<number[]>
 }
 
@@ -905,29 +905,6 @@ export const BlocksList: IBlock[] = [
         ],
         renderLevel: 0,
         type: 'wall',
-        size: {
-            X:2,
-            Y:2
-        },
-        group:[
-            [1,1],
-            [1,1]
-        ]
-    },
-    {
-        id: 26,
-        statusCount: 1,
-        filter: 'mob',
-        variant: [
-            {
-                name: 'King Of Rats',
-                path: [
-                    'https://i.pinimg.com/736x/5a/bc/55/5abc559179cd4a901d7a15c9616f85c8.jpg'
-                ]
-            }                             
-        ],
-        renderLevel: 0,
-        type: 'mob',
         size: {
             X:2,
             Y:2

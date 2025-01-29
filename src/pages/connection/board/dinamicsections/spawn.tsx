@@ -1,12 +1,12 @@
 import { useContext, useEffect, useRef, useState } from "react"
 import { AppContext } from "../../../../AppContext"
 import { ICharacterData } from "../../../../interfaces"
-import { Tile } from "../../../maps/classes/tileClasses"
 import { BoardContext } from "../boardContext"
+import { Mob } from "../../../maps/classes/mobClasses"
 
 export default function DinamicSectionSpawn() {
     const { partyData } = useContext(AppContext)
-    const [detailedCardData, setDetailedCardData] = useState<ICharacterData| undefined>(undefined)
+    const [detailedCardData, setDetailedCardData] = useState<Mob| undefined>(undefined)
 
     return (
         <section className='flex gap-2 justify-end w-fit z-40 row-start-1 row-end-5 col-start-7 col-end-12 justify-self-end'>
@@ -24,7 +24,7 @@ export default function DinamicSectionSpawn() {
     )
 }
 
-function SpawnCard({ mobData,setDetailedCardData }: { mobData: ICharacterData,setDetailedCardData: React.Dispatch<React.SetStateAction<ICharacterData | undefined>>}) {
+function SpawnCard({ mobData,setDetailedCardData }: { mobData: Mob,setDetailedCardData: React.Dispatch<React.SetStateAction< Mob | undefined>>}) {
     // const [isDetailVisible, setIsDetailVisible] = useState<boolean>(false)
     const {setSelectedTileToMove} = useContext(BoardContext)
     const cardRef = useRef<HTMLElement | null>(null)
@@ -39,17 +39,17 @@ function SpawnCard({ mobData,setDetailedCardData }: { mobData: ICharacterData,se
     }, [cardRef])
 
     const setTileToMove = ()=>{
-        let newTile = new Tile({
-            canvaType:'mob',
-            paths:[{name:mobData.name, path:[mobData.picture]}],
-            position:{X:-999999, Y:-999999},
-            rotate:'top',
-            size:{X:1, Y:1},
-            status: 0,
-            variant: 0,
-            blockMatrix:[[1]],
-        })
-        setSelectedTileToMove?.(newTile)
+        // let newTile = new Tile({
+        //     canvaType:'mob',
+        //     paths:[{name:mobData.name, path:[mobData.picture]}],
+        //     position:{X:-999999, Y:-999999},
+        //     rotate:'top',
+        //     size:{X:1, Y:1},
+        //     status: 0,
+        //     variant: 0,
+        //     blockMatrix:[[1]],
+        // })
+        setSelectedTileToMove?.(mobData)
     }
     
     return (

@@ -1,6 +1,7 @@
 import React from "react";
 import { Socket } from "socket.io-client";
 import { Tile } from "./pages/maps/classes/tileClasses";
+import { Mob } from "./pages/maps/classes/mobClasses";
 
 
 export interface IAppProvider{
@@ -51,7 +52,7 @@ export interface IPlayerData{
         picture: string,
         email: string,
         permissionType: 'host' | 'player',
-        characterData: ICharacterData | undefined
+        characterData: Mob |undefined
     
 }
 
@@ -60,9 +61,9 @@ export interface ICharacterData{
     id:string,
     picture:string,
     class:string
-    subClass?:string,
+    subClass?:string| null| undefined,
     race:string,
-    subRace?:string,
+    subRace:string| undefined| null,
     bag: any,
     health:{
         maxHealthTotal:number,
@@ -96,5 +97,4 @@ export interface IMapMatrix{
     floor:Array<Tile[]>
     prop:Array<Tile[]>
     wall:Array<Tile[]>
-    mob:Array<Tile[]>
 }

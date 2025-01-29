@@ -26,7 +26,6 @@ export default function CreateMap() {
     const canvasCoverRef = useRef<HTMLCanvasElement | null>(null)
     const canvasPropsRef = useRef<HTMLCanvasElement | null>(null)
     const canvasFloorRef = useRef<HTMLCanvasElement | null>(null)
-    const canvasMobRef = useRef<HTMLCanvasElement | null>(null)
     const canvasWallRef = useRef<HTMLCanvasElement | null>(null)
     const canvasContainer = useRef<HTMLElement | null>(null)
     const { mapId } = useParams()
@@ -48,18 +47,6 @@ export default function CreateMap() {
                 floor: Array.from({ length: mapData.sizeY }, (i, row) => {
                     return Array.from({ length: mapData.sizeX }, (e, column) => new Tile({
                         canvaType: 'floor',
-                        paths: [{ name: '', path: [''] }],
-                        position: { X: column, Y: row },
-                        rotate: 'top',
-                        size: { X: 1, Y: 1 },
-                        status: 0,
-                        variant: 0,
-                        blockMatrix: [[0]],
-                    }))
-                }),
-                mob: Array.from({ length: mapData.sizeY }, (i, row) => {
-                    return Array.from({ length: mapData.sizeX }, (e, column) => new Tile({
-                        canvaType: 'mob',
                         paths: [{ name: '', path: [''] }],
                         position: { X: column, Y: row },
                         rotate: 'top',
@@ -108,7 +95,7 @@ export default function CreateMap() {
     }, [selectedTile])
 
     useEffect(() => {
-        if (!canvasCoverRef.current || !canvasFloorRef.current || !canvasPropsRef.current || !canvasMobRef.current || !canvasWallRef.current) return
+        if (!canvasCoverRef.current || !canvasFloorRef.current || !canvasPropsRef.current || !canvasWallRef.current) return
 
 
         canvasCoverRef.current.width = tileCountX * blockSize
@@ -120,16 +107,13 @@ export default function CreateMap() {
         canvasFloorRef.current.width = tileCountX * blockSize
         canvasFloorRef.current.height = tileCountY * blockSize
 
-        canvasMobRef.current.width = tileCountX * blockSize
-        canvasMobRef.current.height = tileCountY * blockSize
-
         canvasWallRef.current.width = tileCountX * blockSize
         canvasWallRef.current.height = tileCountY * blockSize
 
     }, [tileCountX, tileCountY])
 
     useEffect(() => {
-        if (!canvasCoverRef.current || !canvasFloorRef.current || !canvasPropsRef.current || !canvasMobRef.current || !canvasWallRef.current) return
+        if (!canvasCoverRef.current || !canvasFloorRef.current || !canvasPropsRef.current || !canvasWallRef.current) return
         canvasCoverRef.current.addEventListener('click', handleDraw)
         canvasCoverRef.current.addEventListener('mousemove', handleDraw)
 
@@ -139,7 +123,7 @@ export default function CreateMap() {
 
         return () => {
             document.removeEventListener("keydown", handleKeyDown)
-            if (!canvasCoverRef.current || !canvasFloorRef.current || !canvasPropsRef.current || !canvasMobRef.current || !canvasWallRef.current) return
+            if (!canvasCoverRef.current || !canvasFloorRef.current || !canvasPropsRef.current || !canvasWallRef.current) return
             canvasCoverRef.current.removeEventListener('click', handleDraw)
             canvasCoverRef.current.removeEventListener('mousemove', handleDraw)
             canvasCoverRef.current.removeEventListener("contextmenu", handleDraw)
@@ -238,21 +222,6 @@ export default function CreateMap() {
                     }
                     )
                     return
-                case 3:
-                    if (!mapMatrix) return
-                    setMapMatrix({
-                        ...mapMatrix,
-                        mob: updateMapMatrixDelete({
-                            canvaType: 'mob',
-                            X: tileX,
-                            Y: tileY,
-                            mapMatrix: mapMatrix.mob,
-                            canva: canvasMobRef,
-                            blockSize: blockSize
-                        })
-                    }
-                    )
-                    return
             }
 
         }
@@ -264,7 +233,6 @@ export default function CreateMap() {
                 status: tileStatus,
                 canvasList: {
                     floor: canvasFloorRef,
-                    mob: canvasMobRef,
                     prop: canvasPropsRef,
                     wall: canvasWallRef
                 },
@@ -284,23 +252,14 @@ export default function CreateMap() {
 
 
     useEffect(() => {
-        if (!canvasPropsRef.current || !canvasFloorRef.current || !canvasMobRef.current || !canvasWallRef.current) return
+        if (!canvasPropsRef.current || !canvasFloorRef.current || !canvasWallRef.current) return
         let canvasList = {
             floor: canvasFloorRef,
-            mob: canvasMobRef,
             prop: canvasPropsRef,
             wall: canvasWallRef
         }
 
         mapMatrix?.floor.forEach(row => {
-            row.forEach(tileData => {
-                tileData.renderTile({
-                    blockSize: blockSize,
-                    canvas: canvasList[tileData.canvaType]
-                })
-            })
-        })
-        mapMatrix?.mob.forEach(row => {
             row.forEach(tileData => {
                 tileData.renderTile({
                     blockSize: blockSize,
@@ -328,7 +287,7 @@ export default function CreateMap() {
 
 
     const handleGetCanvasMousePosition = (e: MouseEvent) => {
-        if (!canvasCoverRef.current || !canvasFloorRef.current || !canvasPropsRef.current || !canvasMobRef.current || !canvasWallRef.current) return { tileX: -1, tileY: -1 }
+        if (!canvasCoverRef.current || !canvasFloorRef.current || !canvasPropsRef.current || !canvasWallRef.current) return { tileX: -1, tileY: -1 }
         const tilePercentWidth = 100 / tileCountX
         const mousePositionXPercent = (e.offsetX / canvasCoverRef.current.offsetWidth) * 100
         const tileX = Math.floor(mousePositionXPercent / tilePercentWidth)
@@ -345,17 +304,16 @@ export default function CreateMap() {
 
 
     useEffect(() => {
-        if (!canvasCoverRef.current || !canvasFloorRef.current || !canvasPropsRef.current || !canvasMobRef.current || !canvasWallRef.current || !canvasContainer.current) return
+        if (!canvasCoverRef.current || !canvasFloorRef.current || !canvasPropsRef.current || !canvasWallRef.current || !canvasContainer.current) return
 
         canvasContainer.current.addEventListener('wheel', canvasZoom)
 
         canvasCoverRef.current.style.scale = (canvasZoomValue / 100).toString()
         canvasFloorRef.current.style.scale = (canvasZoomValue / 100).toString()
         canvasPropsRef.current.style.scale = (canvasZoomValue / 100).toString()
-        canvasMobRef.current.style.scale = (canvasZoomValue / 100).toString()
         canvasWallRef.current.style.scale = (canvasZoomValue / 100).toString()
         return () => {
-            if (!canvasCoverRef.current || !canvasFloorRef.current || !canvasPropsRef.current || !canvasMobRef.current || !canvasWallRef.current || !canvasContainer.current) return
+            if (!canvasCoverRef.current || !canvasFloorRef.current || !canvasPropsRef.current || !canvasWallRef.current || !canvasContainer.current) return
             canvasContainer.current.removeEventListener('wheel', canvasZoom)
 
         }
@@ -434,11 +392,10 @@ export default function CreateMap() {
     }
 
     useEffect(() => {
-        if (!canvasCoverRef.current || !canvasFloorRef.current || !canvasPropsRef.current || !canvasMobRef.current || !canvasWallRef.current) return
+        if (!canvasCoverRef.current || !canvasFloorRef.current || !canvasPropsRef.current || !canvasWallRef.current) return
         canvasCoverRef.current.style.transform = `translate(${translateX.toString()}%,${translateY.toString()}% )`
         canvasFloorRef.current.style.transform = `translate(${translateX.toString()}%,${translateY.toString()}% )`
         canvasPropsRef.current.style.transform = `translate(${translateX.toString()}%,${translateY.toString()}% )`
-        canvasMobRef.current.style.transform = `translate(${translateX.toString()}%,${translateY.toString()}% )`
         canvasWallRef.current.style.transform = `translate(${translateX.toString()}%,${translateY.toString()}% )`
 
 
@@ -448,7 +405,6 @@ export default function CreateMap() {
         if (!mapMatrix) return
         setTileCountX(tileCountX + 1)
         let newFloorMapMatrix = [...mapMatrix.floor]
-        let newMobMapMatrix = [...mapMatrix.mob]
         let newPropMapMatrix = [...mapMatrix.prop]
         let newWallMapMatrix = [...mapMatrix.wall]
 
@@ -456,19 +412,6 @@ export default function CreateMap() {
         newFloorMapMatrix.map((row, rowIndex) => {
             row.push(new Tile({
                 canvaType: 'floor',
-                paths: [{ name: '', path: [''] }],
-                position: { X: tileCountX + 1, Y: rowIndex },
-                rotate: 'top',
-                size: { X: 1, Y: 1 },
-                status: 0,
-                variant: 0,
-                blockMatrix: [[0]],
-            }))
-        })
-
-        newMobMapMatrix.map((row, rowIndex) => {
-            row.push(new Tile({
-                canvaType: 'mob',
                 paths: [{ name: '', path: [''] }],
                 position: { X: tileCountX + 1, Y: rowIndex },
                 rotate: 'top',
@@ -507,7 +450,6 @@ export default function CreateMap() {
 
         setMapMatrix({
             floor: newFloorMapMatrix,
-            mob: newMobMapMatrix,
             prop: newPropMapMatrix,
             wall: newWallMapMatrix
         })
@@ -518,17 +460,14 @@ export default function CreateMap() {
         setTileCountX(tileCountX - 1)
 
         let newFloorMapMatrix = [...mapMatrix.floor]
-        let newMobMapMatrix = [...mapMatrix.mob]
         let newPropMapMatrix = [...mapMatrix.prop]
         let newWallMapMatrix = [...mapMatrix.wall]
 
         newFloorMapMatrix.forEach(row => row.pop())
-        newMobMapMatrix.forEach(row => row.pop())
         newPropMapMatrix.forEach(row => row.pop())
         newWallMapMatrix.forEach(row => row.pop())
         setMapMatrix({
             floor: newFloorMapMatrix,
-            mob: newMobMapMatrix,
             prop: newPropMapMatrix,
             wall: newWallMapMatrix
         })
@@ -540,7 +479,6 @@ export default function CreateMap() {
         setTileCountY(tileCountY + 1)
 
         let newFloorMapMatrix = [...mapMatrix.floor]
-        let newMobMapMatrix = [...mapMatrix.mob]
         let newPropMapMatrix = [...mapMatrix.prop]
         let newWallMapMatrix = [...mapMatrix.wall]
 
@@ -570,18 +508,6 @@ export default function CreateMap() {
             }))
         )
 
-        newMobMapMatrix.push(
-            Array.from({ length: tileCountX }, (e, column) => new Tile({
-                canvaType: 'mob',
-                paths: [{ name: '', path: [''] }],
-                position: { X: column, Y: tileCountY + 1 },
-                rotate: 'top',
-                size: { X: 1, Y: 1 },
-                status: 0,
-                variant: 0,
-                blockMatrix: [[0]],
-            }))
-        )
 
         newWallMapMatrix.push(
             Array.from({ length: tileCountX }, (e, column) => new Tile({
@@ -598,7 +524,6 @@ export default function CreateMap() {
 
         setMapMatrix({
             floor: newFloorMapMatrix,
-            mob: newMobMapMatrix,
             prop: newPropMapMatrix,
             wall: newWallMapMatrix
         })
@@ -608,18 +533,15 @@ export default function CreateMap() {
         setTileCountY(tileCountY - 1)
 
         let newFloorMapMatrix = [...mapMatrix.floor]
-        let newMobMapMatrix = [...mapMatrix.mob]
         let newPropMapMatrix = [...mapMatrix.prop]
         let newWallMapMatrix = [...mapMatrix.wall]
 
         newFloorMapMatrix.pop()
-        newMobMapMatrix.pop()
         newPropMapMatrix.pop()
         newWallMapMatrix.pop()
 
         setMapMatrix({
             floor: newFloorMapMatrix,
-            mob: newMobMapMatrix,
             prop: newPropMapMatrix,
             wall: newWallMapMatrix
         })
@@ -631,7 +553,6 @@ export default function CreateMap() {
             <section ref={canvasContainer} className='relative w-full h-full overflow-hidden'>
                 <CreateMapHud canvasZoomValue={canvasZoomValue} tileCountX={tileCountX} tileCountY={tileCountY} selectedTile={selectedTile} selectedTileStatus={tileStatus} tileRotate={tileRotate} handleTileCountXMinus={handleTileCountXMinus} handleTileCountXPlus={handleTileCountXPlus} handleTileCountYMinus={handleTileCountYMinus} handleTileCountYPlus={handleTileCountYPlus} />
                 <canvas ref={canvasCoverRef} className="absolute top-0 lef-0 z-40 border border-romo-400 h-screen " />
-                <canvas ref={canvasMobRef} className="absolute top-0 lef-0 z-30 h-screen " />
                 <canvas ref={canvasWallRef} className="absolute top-0 lef-0 z-20 h-screen " />
                 <canvas ref={canvasPropsRef} className="absolute top-0 lef-0 z-10 h-screen " />
                 <canvas ref={canvasFloorRef} className="absolute top-0 lef-0 z-0 h-screen " />
@@ -710,7 +631,6 @@ function CreateMapHud({ canvasZoomValue, tileCountX, tileCountY, selectedTile, s
                 <p><SquareDashedMousePointer size={15} strokeWidth={1} />Ctrl + Mouse Left To Delete Floors</p>
                 <p><SquareDashedMousePointer size={15} strokeWidth={1} />Ctrl + Mouse Right To Delete Walls</p>
                 <p><SquareDashedMousePointer size={15} strokeWidth={1} />Alt + Mouse Left To Delete Props</p>
-                <p><SquareDashedMousePointer size={15} strokeWidth={1} />Alt + Mouse Right To Delete Mobs</p>
             </section>
         </main>
     )
