@@ -281,16 +281,12 @@ export default function BoardMapCanvas() {
 
         let newPlayersData = [...partyData.players]
 
-
-        // if (body.functionName == 'moveTo') {
         let { newTile } = selectedMob[body.functionName]({
             canvaRef: canvasMobRef,
             newPosition: body.additionalData.newPosition
         })
         newPlayersData[mobOwnerIndex].characterData = newTile
-        // } else {
-        //     newPlayersData[mobOwnerIndex].characterData =  newTile
-        // }
+
         setPartyData?.({
             ...partyData,
             players: newPlayersData
