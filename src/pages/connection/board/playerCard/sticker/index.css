@@ -1,0 +1,40 @@
+.stickerElement {
+    animation: stickerAnimationFade 3s forwards ease, stickerAnimationMove 2s infinite ease-in-out ;
+    opacity: 0%;
+}
+
+@keyframes stickerAnimationMove {
+    0% {
+        transform: translate(0,0);
+    }
+    
+    50% {
+        transform: translate(-2px, -2px);
+    }
+
+    100% {
+        transform: translate(0, 0);
+    }
+}
+
+@keyframes stickerAnimationFade {
+    0% {
+        opacity: 0%;
+        scale: 80%;
+    }
+
+    15% {
+        opacity: 100%;
+        scale: 100%;
+    }
+
+    85% {
+        opacity: 100%;
+        scale: 100%;
+    }
+
+    100% {
+        opacity: 0%;
+        scale: 110%;
+    }
+}

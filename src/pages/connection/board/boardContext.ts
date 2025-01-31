@@ -8,9 +8,11 @@ export interface IBoardContext {
     setSelectedCharacterInfo?: React.Dispatch<React.SetStateAction<Mob | undefined>>
     selectedTileToMove: Mob | undefined
     setSelectedTileToMove?: React.Dispatch<React.SetStateAction<Mob | undefined>>
+    stickersList: string[]
 }
 
 export const BoardContext = createContext<IBoardContext>({
+    stickersList: [],
     selectedCharacterInfo: undefined,
     selectedSubMenu: 'dice',
     selectedTileToMove: undefined

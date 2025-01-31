@@ -6,6 +6,7 @@ import { Alert } from "../../components/toasters"
 import convertMapJsonToClasses from "../maps/scripts/convertMapJsonToClasses"
 import { ICharacterData, IPartyData, IPlayerData } from "../../interfaces"
 import { Mob } from "../maps/classes/mobClasses"
+import showSticker from "./board/playerCard/sticker/showSticker"
 
 export default function Party() {
     const { partyData, setPartyData, socket } = useContext(AppContext)
@@ -26,6 +27,14 @@ export default function Party() {
         socket?.off(`partyStart_${partyData?.partyCode}`)
         socket?.on(`partyStart_${partyData?.partyCode}`, () => {
             navigate('/party/board')
+        })
+
+        socket?.off(`sendSticker_${partyData?.partyCode}`)
+        socket?.on(`sendSticker_${partyData?.partyCode}`, (body) => {
+            showSticker({
+                playerId:body.playerId,
+                stickerUrl: body.stickerUrl
+            })
         })
 
 
@@ -143,9 +152,7 @@ function convertPlayersCharactersToMobClass({partyData, characterData, userId }:
 
 function convertAllPlayersCharactersToMobClass(playersDataList: IPlayerData[]){
     let newPlayerDataList:IPlayerData[] = []
-    console.log('converte 1')
     playersDataList.forEach(playerData=> {
-        console.log('convert Player')
         if(!playerData.characterData) {
             newPlayerDataList.push(playerData)
             return

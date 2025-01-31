@@ -2,17 +2,23 @@ import { Coins, Heart } from "lucide-react";
 import { IPlayerData } from "../../../../interfaces";
 import { useContext } from "react";
 import { BoardContext } from "../boardContext";
+import Sticker from "./sticker/sticker";
+import { StickerList } from "./sticker/StikerList";
+import { AppContext } from "../../../../AppContext";
 
 
 export default function PlayerCardInBoard({ playerData }: { playerData: IPlayerData }) {
     if (playerData.permissionType == "host") return
     const characterData = playerData.characterData
     const {setSelectedCharacterInfo} = useContext(BoardContext)
+    const {mainUser} = useContext(AppContext)
 
     return (
         <section 
         onClick={()=>setSelectedCharacterInfo?.(playerData.characterData)}
-        className="flex flex-row gap-2 pl-20 p-2 hover:bg-romo-950">
+        className="flex flex-row gap-2 pl-20 p-2 hover:bg-romo-950 relative">
+            <Sticker playerId={playerData.id} />
+            {playerData.id == mainUser.id && <StickerList/>}
             <article className='flex flex-col justify-between items-end'>
                 <h2 className='first-letter:uppercase text-romo-100'>{characterData?.name}</h2>
                 <p className='font-thin italic text-romo-200 text-xs first-letter:uppercase'>{characterData?.class}</p>

@@ -1,7 +1,7 @@
 import { useContext, useEffect, useRef, useState } from "react"
 import { AppContext } from "../../../../AppContext"
 import { IPlayerData } from "../../../../interfaces"
-import { ChevronDown, ChevronUp, Send } from "lucide-react"
+import { ChevronDown, ChevronUp, Send, Sticker } from "lucide-react"
 
 
 interface IChat {

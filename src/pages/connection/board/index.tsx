@@ -1,4 +1,4 @@
-import { useContext, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import PlayerCardInBoard from "./playerCard/playerCard"
 import { AppContext } from "../../../AppContext"
 import { BoardContext } from "./boardContext"
@@ -11,26 +11,40 @@ import { LeftChat } from "./chat/chatComponent"
 import { Mob } from "../../maps/classes/mobClasses"
 import { BottomSubMenuBar } from "./subMenuBar/subMenuBars"
 import { LeftCharacterInfo } from "./charactersInfoSection/characterInfo"
+import { GetData } from "../../../scripts/api/getData"
 
 
 
 export default function Board() {
-    const [selectedSubMenu, setSelectedSubMenu] = useState<'dice' | 'bag' | "spawn" | 'maps'| undefined >('dice')
+    const [selectedSubMenu, setSelectedSubMenu] = useState<'dice' | 'bag' | "spawn" | 'maps' | undefined>('dice')
     const [selectedCharacterInfo, setSelectedCharacterInfo] = useState<any>(undefined)
-    const [selectedTileToMove, SetSelectedTileToMove] = useState<Mob| undefined>(undefined)
+    const [selectedTileToMove, SetSelectedTileToMove] = useState<Mob | undefined>(undefined)
     const { mainUser, partyData } = useContext(AppContext)
+    const [stickersList, setStickersList] = useState<string[]>([])
 
     const isThisUserHost = mainUser.id == partyData?.hostId
+    useEffect(() => {
 
-    
+        (async () => {
+            const StickersResult = await GetData({
+                route: '/getStickers',
+            })
+            if (StickersResult.data.status == 'success' && setStickersList) {
+                setStickersList(StickersResult.data.result)
+            }
+        })()
+
+    }, [])
+
     return (
         <BoardContext.Provider value={{
+            stickersList: stickersList,
             selectedCharacterInfo: selectedCharacterInfo,
             selectedSubMenu: selectedSubMenu,
             selectedTileToMove: selectedTileToMove,
             setSelectedSubMenu: setSelectedSubMenu,
             setSelectedCharacterInfo: setSelectedCharacterInfo,
-            setSelectedTileToMove:SetSelectedTileToMove
+            setSelectedTileToMove: SetSelectedTileToMove
         }}>
             <main className='relative grid grid-rows-5 grid-cols-11 text-lagun-200 h-screen w-screen overflow-hidden'>
                 {partyData?.mapData?.mapMatrix && <BoardMapCanvas />}
