@@ -45,19 +45,26 @@ export default function CreateMap() {
         if (!mapData.mapMatrix || mapData.mapMatrix == undefined) {
             defaultMatrix = {
                 floor: Array.from({ length: mapData.sizeY }, (i, row) => {
-                    return Array.from({ length: mapData.sizeX }, (e, column) => new Tile({
-                        canvaType: 'floor',
-                        paths: [{ name: '', path: [''] }],
-                        position: { X: column, Y: row },
-                        rotate: 'top',
-                        size: { X: 1, Y: 1 },
-                        status: 0,
-                        variant: 0,
-                        blockMatrix: [[0]],
-                    }))
+                    return Array.from({ length: mapData.sizeX }, (e, column) => {
+                        i = i //solve Vercel Error
+                        e = e
+                        return new Tile({
+                            canvaType: 'floor',
+                            paths: [{ name: '', path: [''] }],
+                            position: { X: column, Y: row },
+                            rotate: 'top',
+                            size: { X: 1, Y: 1 },
+                            status: 0,
+                            variant: 0,
+                            blockMatrix: [[0]],
+                        })
+                    })
                 }),
                 prop: Array.from({ length: mapData.sizeY }, (i, row) => {
-                    return Array.from({ length: mapData.sizeX }, (e, column) => new Tile({
+                    return Array.from({ length: mapData.sizeX }, (e, column) => {
+                        i = i //solve Vercel Error
+                        e = e
+                        return new Tile({
                         canvaType: 'prop',
                         paths: [{ name: '', path: [''] }],
                         position: { X: column, Y: row },
@@ -66,10 +73,14 @@ export default function CreateMap() {
                         status: 0,
                         variant: 0,
                         blockMatrix: [[0]],
-                    }))
+                    })
+                })
                 }),
                 wall: Array.from({ length: mapData.sizeY }, (i, row) => {
-                    return Array.from({ length: mapData.sizeX }, (e, column) => new Tile({
+                    return Array.from({ length: mapData.sizeX }, (e, column) => {
+                        i = i //solve Vercel Error
+                        e = e
+                        return new Tile({
                         canvaType: 'wall',
                         paths: [{ name: '', path: [''] }],
                         position: { X: column, Y: row },
@@ -78,7 +89,8 @@ export default function CreateMap() {
                         status: 0,
                         variant: 0,
                         blockMatrix: [[0]],
-                    }))
+                    })
+                })
                 }),
             }
 

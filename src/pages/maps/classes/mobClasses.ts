@@ -8,7 +8,7 @@ interface IMob extends ITile, ICharacterData {
 
 export interface IIteractiveMobMenu {
     text: string,
-    functionName: 'rotateRight' | 'rotateLeft' | 'teste' | 'tradeStatus' | 'selectThisTile' | 'moveTo'| 'HealthPlus'| 'HealthMinus'
+    functionName: 'rotateRight' | 'rotateLeft' | 'teste' | 'tradeStatus' | 'selectThisTile' | 'moveTo' | 'HealthPlus' | 'HealthMinus'
 }
 
 export class Mob extends Tile {
@@ -125,22 +125,22 @@ export class Mob extends Tile {
         return iteractiveMenuData
     }
 
-    HealthPlus(){
+    HealthPlus() {
         console.log('MOB: vida mais')
-        if(this.health.currentHealth < this.health.maxHealthTotal){
+        if (this.health.currentHealth < this.health.maxHealthTotal) {
             this.health.currentHealth += 1
-        }    
-        return { newTile: this}
+        }
+        return { newTile: this }
     }
 
-    HealthMinus(){
+    HealthMinus() {
         console.log('MOB: vida menos')
-        if(this.health.currentHealth > 0){
+        if (this.health.currentHealth > 0) {
             this.health.currentHealth -= 1
         }
-        return { newTile: this}
+        return { newTile: this }
     }
-    
+
 }
 
 
@@ -152,14 +152,26 @@ const rotateMatrix = (blockMatrix: number[][], rotateDirection: 'top' | 'left' |
             newBlockMatrix = blockMatrix
             break
         case "right":
-            newBlockMatrix = blockMatrix[0].map((val, index) => blockMatrix?.map(row => row[index]).reverse())
+            newBlockMatrix = blockMatrix[0].map((val, index) => {
+                val = val
+                return blockMatrix?.map(row => row[index]).reverse()
+            })
             break
         case "bottom":
-            newBlockMatrix = blockMatrix[0].map((val, index) => blockMatrix?.map(row => row[index]).reverse())
-            newBlockMatrix = newBlockMatrix[0].map((val, index) => newBlockMatrix.map(row => row[index]).reverse())
+            newBlockMatrix = blockMatrix[0].map((val, index) => {
+                val = val
+                return blockMatrix?.map(row => row[index]).reverse()
+            })
+            newBlockMatrix = newBlockMatrix[0].map((val, index) => {
+                val = val
+                return newBlockMatrix.map(row => row[index]).reverse()
+            })
             break
         case "left":
-            newBlockMatrix = blockMatrix[0].map((val, index) => blockMatrix.map(row => row[row.length - 1 - index]));
+            newBlockMatrix = blockMatrix[0].map((val, index) => {
+                val = val
+                return blockMatrix.map(row => row[row.length - 1 - index])
+            });
             break
     }
 

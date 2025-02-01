@@ -27,7 +27,7 @@ export default function convertMapJsonToClasses(JsonMap: IMapMatrix) {
         newMap.floor.push(newRow)
     })
 
-    JsonMap.prop.forEach((row, Y) => {
+    JsonMap.prop.forEach((row) => {
         let newRow:Tile[] = []
         row.forEach((tileData) => {
             newRow.push(new Tile({
@@ -46,7 +46,7 @@ export default function convertMapJsonToClasses(JsonMap: IMapMatrix) {
         newMap.prop.push(newRow)
     })
 
-    JsonMap.wall.forEach((row, Y) => {
+    JsonMap.wall.forEach((row) => {
         let newRow:Tile[] = []
         row.forEach((tileData) => {
             newRow.push(new Tile({

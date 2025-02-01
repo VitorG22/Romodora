@@ -24,52 +24,52 @@ export default function NewMapModal({ setIsModalOpen }: { setIsModalOpen: React.
             name: mapName,
             mapMatrix: {
                 floor: Array.from({ length: 35 }, (i, row) => {
-                    return Array.from({ length: 35 }, (e, column) => new Tile({
-                        canvaType: 'floor',
-                        paths: [{ name: '', path: [''] }],
-                        position: { X: column, Y: row },
-                        rotate: 'top',
-                        size: { X: 1, Y: 1 },
-                        status: 0,
-                        variant: 0,
-                        blockMatrix: [[0]],
-                    }))
-                }),
-                mob: Array.from({ length: 35 }, (i, row) => {
-                    return Array.from({ length: 35 }, (e, column) => new Tile({
-                        canvaType: 'mob',
-                        paths: [{ name: '', path: [''] }],
-                        position: { X: column, Y: row },
-                        rotate: 'top',
-                        size: { X: 1, Y: 1 },
-                        status: 0,
-                        variant: 0,
-                        blockMatrix: [[0]],
-                    }))
+                    return Array.from({ length: 35 }, (e, column) => {
+                        i = i //solve Vercel Error
+                        e = e
+                        return new Tile({
+                            canvaType: 'floor',
+                            paths: [{ name: '', path: [''] }],
+                            position: { X: column, Y: row },
+                            rotate: 'top',
+                            size: { X: 1, Y: 1 },
+                            status: 0,
+                            variant: 0,
+                            blockMatrix: [[0]],
+                        })
+                    })
                 }),
                 prop: Array.from({ length: 35 }, (i, row) => {
-                    return Array.from({ length: 35 }, (e, column) => new Tile({
-                        canvaType: 'prop',
-                        paths: [{ name: '', path: [''] }],
-                        position: { X: column, Y: row },
-                        rotate: 'top',
-                        size: { X: 1, Y: 1 },
-                        status: 0,
-                        variant: 0,
-                        blockMatrix: [[0]],
-                    }))
+                    return Array.from({ length: 35 }, (e, column) => {
+                        i = i //solve Vercel Error
+                        e = e
+                        return new Tile({
+                            canvaType: 'prop',
+                            paths: [{ name: '', path: [''] }],
+                            position: { X: column, Y: row },
+                            rotate: 'top',
+                            size: { X: 1, Y: 1 },
+                            status: 0,
+                            variant: 0,
+                            blockMatrix: [[0]],
+                        })
+                    })
                 }),
                 wall: Array.from({ length: 35 }, (i, row) => {
-                    return Array.from({ length: 35 }, (e, column) => new Tile({
-                        canvaType: 'wall',
-                        paths: [{ name: '', path: [''] }],
-                        position: { X: column, Y: row },
-                        rotate: 'top',
-                        size: { X: 1, Y: 1 },
-                        status: 0,
-                        variant: 0,
-                        blockMatrix: [[0]],
-                    }))
+                    return Array.from({ length: 35 }, (e, column) => {
+                        i = i //solve Vercel Error
+                        e = e
+                        return new Tile({
+                            canvaType: 'wall',
+                            paths: [{ name: '', path: [''] }],
+                            position: { X: column, Y: row },
+                            rotate: 'top',
+                            size: { X: 1, Y: 1 },
+                            status: 0,
+                            variant: 0,
+                            blockMatrix: [[0]],
+                        })
+                    })
                 }),
             },
             picture: imgUrl,

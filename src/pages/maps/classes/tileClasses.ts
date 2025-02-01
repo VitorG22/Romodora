@@ -15,7 +15,7 @@ export interface ITile {
         Y: number
     }
     rotate: 'top' | 'right' | 'bottom' | 'left'
-    canvaType: 'prop' | 'wall'  | 'floor'
+    canvaType: 'prop' | 'wall' | 'floor'
     status: number
     blockMatrix?: number[][]
     group?: {
@@ -35,7 +35,7 @@ interface IDrawGhost {
 
 export interface IIteractiveMenu {
     text: string,
-    functionName: 'rotateRight' | 'rotateLeft' | 'teste'  | 'tradeStatus' | 'selectThisTile'
+    functionName: 'rotateRight' | 'rotateLeft' | 'teste' | 'tradeStatus' | 'selectThisTile'
 }
 
 export class Tile {
@@ -232,7 +232,8 @@ export class Tile {
         return { newTile: this, lastPosition: { X: this.position.X, Y: this.position.Y }, nedRefreshMap: false }
     }
 
-    rotateRight({canvaRef}:{canvaRef?:MutableRefObject<HTMLCanvasElement | null>}) {
+    rotateRight({ canvaRef }: { canvaRef?: MutableRefObject<HTMLCanvasElement | null> }) {
+        canvaRef = canvaRef
         let rotateArray: Array<'top' | 'right' | 'bottom' | 'left'> = ['top', 'right', 'bottom', 'left']
         let rotateIndex: number = rotateArray.findIndex(element => element == this.rotate)
         if (rotateIndex >= 3) {
@@ -246,7 +247,8 @@ export class Tile {
         }
         return { newTile: this, lastPosition: { X: this.position.X, Y: this.position.Y }, nedRefreshMap: true }
     }
-    rotateLeft({canvaRef}:{canvaRef?:MutableRefObject<HTMLCanvasElement | null>}) {
+    rotateLeft({ canvaRef }: { canvaRef?: MutableRefObject<HTMLCanvasElement | null> }) {
+        canvaRef = canvaRef
         let rotateArray: Array<'top' | 'right' | 'bottom' | 'left'> = ['top', 'right', 'bottom', 'left']
         let rotateIndex: number = rotateArray.findIndex(element => element == this.rotate)
         if (rotateIndex <= 0) {
@@ -308,14 +310,26 @@ const rotateMatrix = (blockMatrix: number[][], rotateDirection: 'top' | 'left' |
             newBlockMatrix = blockMatrix
             break
         case "right":
-            newBlockMatrix = blockMatrix[0].map((val, index) => blockMatrix?.map(row => row[index]).reverse())
+            newBlockMatrix = blockMatrix[0].map((val, index) => {
+                val = val
+                return blockMatrix.map(row => row[index]).reverse()
+            })
             break
         case "bottom":
-            newBlockMatrix = blockMatrix[0].map((val, index) => blockMatrix?.map(row => row[index]).reverse())
-            newBlockMatrix = newBlockMatrix[0].map((val, index) => newBlockMatrix.map(row => row[index]).reverse())
+            newBlockMatrix = blockMatrix[0].map((val, index) => {
+                val = val
+                return blockMatrix.map(row => row[index]).reverse()
+            })
+            newBlockMatrix = newBlockMatrix[0].map((val, index) => {
+                val = val
+                return newBlockMatrix.map(row => row[index]).reverse()
+            })
             break
         case "left":
-            newBlockMatrix = blockMatrix[0].map((val, index) => blockMatrix.map(row => row[row.length - 1 - index]));
+            newBlockMatrix = blockMatrix[0].map((val, index) => {
+                val = val
+                return blockMatrix.map(row => row[row.length - 1 - index])
+            });
             break
     }
 
