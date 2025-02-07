@@ -1,39 +1,53 @@
 import { useContext } from "react"
 import { BoardContext } from "../boardContext"
 import { AppContext } from "../../../../AppContext"
+import { IPlayerData } from "../../../../interfaces"
 
 
 export function BottomSubMenuBar({ isThisUserHost }: { isThisUserHost: boolean }) {
     const { selectedSubMenu, setSelectedSubMenu } = useContext(BoardContext)
+    // const { mainUser, partyData } = useContext(AppContext)
+
+    // let colorToFill = partyData?.players.find(playerData => playerData.id == mainUser.id)?.color
+    let colorToFill = "#e0e0e0"
 
     return (
-        <section className='z-[60] flex flex-row justify-center items-center gap-8 row-start-5 row-end-6 col-start-4 col-end-9'>
+        <section className='z-[60] bg-romo- flex flex-row justify-center items-center gap-8 row-start-5 row-end-6 col-start-4 col-end-9'>
             <hr className="w-20 h-[2px] rounded-full bg-lagun-500 border-none" />
             <div style={selectedSubMenu == 'bag' ? { "scale": '1.5', 'filter': 'brightness(1.2)' } : { "scale": '1', 'filter': 'brightness(0.5)' }}
                 onClick={() => setSelectedSubMenu?.(selectedSubMenu == 'bag' ? (undefined) : ('bag'))}
                 className='h-8 overflow-hidden flex w-fit ease duration-300 hover:cursor-pointer'>
-                <img className='object-cover' src='/assets/icons/backpack.png' />
+                <div className='object-cover aspect-square'>
+                    <svg fill={colorToFill} viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg"><path d="M840 651q-6-20-16-43-7-14-21-40.5T783 527q-10-22-15-41-12-40-6-96 4-52 20-95 4-12 23-35 17-22 22-33 9-18 3-34-8-22-39-35-19-8-58-16l-21-5-47-11q-53-13-80-21-43-13-76-30-4-3-18-13-23-18-35-24-20-11-31-5-19 11-21 70-2 35 2 75 8 83 36 131-99 29-173 106T167 592q-16 56-17 105 0 64 28 101 19 26 57 52 22 15 69 40l14 7q87 48 159 62 84 17 171-6 63-18 114-64t72-107q23-66 6-131zm-487 53q-19 0-27-24-7-22-2-53.5t19-52.5q17-23 40-22 26 2 34 26 8 21-.5 51.5T390 682t-37 22zm360-229q-8 21-35 44-16 13-48 35l-8 6q-27 19-47.5 21.5T523 573q-29-10-85-36l-28-12-23-10q-31-12-45-19-24-12-34-25-21-30 5-57 16-16 58-38l13-6q38-21 61-27 31-7 67 2 71 19 128 46 89 43 73 84z" /></svg>
+                </div>
             </div>
 
             <div style={selectedSubMenu == 'dice' ? { "scale": '1.5', 'filter': 'brightness(1.2)' } : { "scale": '1', 'filter': 'brightness(0.5)' }}
                 onClick={() => setSelectedSubMenu?.(selectedSubMenu == 'dice' ? (undefined) : ('dice'))}
-                className='h-8 flex w-fit justify-center ease duration-300 hover:cursor-pointer relative'>
-                <img className='object-cover' src='/assets/icons/d20.png' />
-                {selectedSubMenu == 'dice' && <DiceOpenMenu/>}
+                className=' h-8 flex w-fit justify-center ease duration-300 hover:cursor-pointer relative'>
+                <div className='object-cover aspect-square'>
+                    <svg fill={colorToFill} viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="M248 20.3L72 132.6l176-3.8V20.3zm16 0v108.5l175.7 3.8L264 20.3zm43.1 49.97c2.8.06 5.8.75 9.2 2.08 2.3.91 4.1 1.91 5.6 3.07 1.5 1.15 2.8 2.5 3.7 3.79 1.5 2.06 2.2 4.04 2.6 6.25 2.4-1.77 5.2-2.98 8.2-3.84 3.4-.73 7.2-.35 11.1 1.23 4.6 1.82 8.1 4.19 10.3 7.11 2.2 2.93 3.5 5.97 4 9.13.3 1.71.3 3.41.1 5.01-.1 1.7-.6 3.3-1.2 4.7-.5 1.5-1.2 3-2.3 4.3-1 1.3-2.1 2.6-3.5 3.6-2.5 2-5.5 3.3-9.1 3.9-3.6.6-7.7 0-12.3-1.8-4-1.6-7-3.8-9-6.7-1.6-2.6-2.9-5.5-3.4-8.4-2 1.5-4.2 2.5-6.9 2.9-3 .6-6.5 0-10.7-1.6-2.4-1-4.5-2.1-6.2-3.3-1.8-1.3-3.2-2.61-4.3-4.08-2.1-2.58-3.2-5.37-3.5-8.35-.2-2.9.2-5.65 1.1-8.15.5-1.29 1.3-2.57 2.1-3.92 1-1.1 2-2.21 3.1-3.26 2.4-1.77 5.2-2.97 8.5-3.53.9-.12 1.8-.17 2.8-.14zM208 75.56c4.8.05 10.9 3.57 9 10.04-4 6.9-10.3 12.17-18 14.8-7.4 2.5-15 4.4-22 1.9-3-2.3-13-9.4-15-3.4-1.2 15.3 1 13-11 17.8V92.3c10-3.9 21-4.5 31 1.3 8 4.2 19 1.5 24-5.8 1-6.5-8-4.5-12-3.3-3-8.3 7.8-8.43 13-8.9.3-.03.6-.04 1-.04zm100.5 4.46c-.9.01-1.8.14-2.8.36-2.4.61-4.2 2.17-5.1 4.67-1 2.42-.8 4.74.6 6.88 1.4 2.22 3.3 3.73 6 4.78 2.9 1.15 5.4 1.41 8 .73 2.5-.56 4.3-2.12 5.2-4.54 1-2.5.8-4.82-.7-7.01-1.4-2.14-3.5-3.77-6.4-4.92-1.6-.66-3.2-.96-4.8-.95zm28.9 10.15c-1.1.05-2.2.27-3.2.65-2.7 1.17-4.5 2.96-5.4 5.39-1 2.5-.9 5.09.4 7.59 1.2 2.6 3.6 4.6 7.2 6.1 2.9 1.1 5.8 1.3 8.6.6 2.8-.8 4.7-2.7 5.8-5.6 1.1-2.9 1.1-5.53-.5-8.01-1.5-2.47-3.7-4.37-6.6-5.51-2.3-.9-4.4-1.29-6.3-1.21zM242 144.9L55 149l72 192.9 115-197zm28 0l115.4 197L456.6 149 270 144.9zm-14 7.5L139 352.6h234.1L256 152.4zm116.6 16.4l19.2 42.5 7.2-3.3 4.1 9.2-7.1 3.2 6.3 14-10.4 4.7-6.3-14-30.2 13.6-3.9-8.7c1.4-9.2 4.4-27.8 8.9-55.7l1.8-.8.8-.3 3.1-1.5 6.5-2.9zm-225.9 12.1h1.3c2.9 0 5.5.5 7.8 1.6 6.9 3.2 10.7 8.4 11.7 15.3.9 6.9-1 15.3-5.7 25.1-4.7 9.7-10 16.5-15.8 20.3-6 3.8-12.3 4.1-19.1 1-5.9-2.8-9.4-6.7-10.6-11.9-1.2-5.3-.9-9.7.9-13.5l9.6 4.4c-.9 1.7-1.1 3.8-.8 6.3.3 2.6 1.9 4.5 5 6 3.1 1.4 6.1 1.3 9.2-.2 3.1-1.4 6.3-5.2 9.7-11.3.5-1 1.1-2.1 1.7-3.3-1.8 1.2-3.6 2-5.5 2.6-3.2.9-6.6.5-10.3-1.2-4.3-2-7.5-5.5-9.5-10.6-2.1-5-1.5-10.7 1.6-17.2l.1-.1c1.1-2.3 2.4-4.4 4-6 1.4-1.7 3.1-3.1 4.8-4.2 3.1-1.9 6.4-3 9.9-3.1zM52 186v173.2l62-5.7L52 186zm408 0l-61.9 167.5 61.9 5.7V186zm-91.9.6c-1.6 9.7-3.6 22.5-6.2 38.2l19.6-8.8-8.2-17.9-5.2-11.5zm-219.7 4.1c-1.5.1-2.9.4-4.3 1.1-3 1.4-5.1 3.5-6.5 6.5-1.6 3.4-2.1 6.5-1.2 9.6.9 3 2.7 5.1 5.4 6.4 2.8 1.3 5.7 1.3 8.5 0s5.1-3.6 6.8-7c1.4-2.9 1.7-5.9 1-9-.8-3.1-2.6-5.3-5.4-6.6-1.4-.7-2.9-1-4.3-1zm103.2 47.7h15.6v84.2h-15.6v-70.2c-8.8 5.8-15.3 9.6-19.4 11.2l-6.3 2.8v-14l6.3-2.8c4.1-1.8 10.6-5.4 19.4-11.2zm201.7 6.2h.5c3.6.3 5.7 7 4.7 11.1-.1 18.6 1.1 39.2-9.7 55.3-.9 1.2-2.2 1.9-3.7 2.5-5.8-4.1-3-11.3 1.2-15.5 1 7.3 5.5-2.9 6.6-5.6 1.3-3.2 3.6-17.7-1-10.2.7 4-6.8 13.1-9.3 8.1-5-14.4 0-30.5 7-43.5 1.3-1.4 2.5-2.1 3.7-2.2zm-393.3.9c1 .1 1 1 2 3.6v61.1c-7-7-3-17.4-4-26.4-1-7.6 2-16.3-1-23.2-5-1.7-6-17-3-12.7 4 4.8 4-2.7 6-2.4zm390.9 10.6c-1 0-2 1-2.8 3.7-1.6 5.9-3.3 13.4-.7 19.3 5.1-2 5.4-9.6 6.6-14.5 1.2-3.3-.9-8.4-3.1-8.5zM75 268.2c4-.5 7 7.2 9 10.8 3.28 12.7 4.21 13.9 3 16.8-5-3.7-4.87-7.4-5.36-8.9-1-3-1.64-5.3-3.64-8.4-3.34 2.8-3 9.1-3 13.4 0-1.6 1-2.3 4-.7 7 12.6 12 29.1 7 43.5l-2 1.1c-11-5.8-12-19.4-14-30-1-12.3-1-24.7 2-36.7 1-.6 2-.9 3-.9zm358.2 4.8c4.5.3.8 35.2.8 55l-4.4 6.7v-42.3c-4.6 7.5-9.1 9.1-6.1-.9 4.9-13.4 7.9-18.6 9.7-18.5zM77 299.2c-4 4.7-2 12.8-1 18.4 2 5.5 7 10.2 6 1.6 0-5.7 1-11.8-3-16.4 0-.6-1-1.9-2-3.6zm66 69.4l113 123.1 112.8-123.1H143zm-21 .3l-54 4.9 64 41.1c-2-2.7-5-5.7-7-8.8-5-6.9-10-13.6-19-16.6-9-6.5-4-5.3 3-2.6-1-1.8-1-2.6 0-2.6 2-.2 9 4.2 10 6.3l25 31.6 65 41.7-87-95zm268.2 0l-42.4 46.3c6.4-3.1 11.3-8.5 17-12.4 2.4-1.4 3.7-1.9 4.3-1.9 2.1 0-5.4 7.1-7.7 10.3-9.4 9.8-16 23-28.6 29.1l18.9-24.5c-2.3 1.3-6 3.2-8.2 4.1l-40.3 44 74.5-47.6c5.4-6.7 1.9-5.6-5.7-.9l-11.4 6c11.4-13.7 26.8-23.6 40-35.6 3.2-1.5 9.5-5.6 11-5.7.8-.1.2 1-2.8 4.2l-12.6 16c10-7.6.9 3.9-4.5 5.5-.7 1-1.4 2-2.2 2.9l54.5-34.9-53.8-4.9zm-158.3 16.7c1.4 0 2.7.1 4.1.2v43.4h-13v-30c-5-1.4-11 1.7-16-.3-4-2.9 1-6.8 5-5.9 3-.1 7 .2 9-3.2 3.4-3.1 7-4.2 10.9-4.2zm33.1.7s1 .1 1 .2c4 .8 7 .3 10 .4h25.6c1.5 3 .8 7.8-3.3 7.9-3.9.5-7.8-.4-11.7.2-4.7.2-9.6-1.8-14.6.4-3 1.7-4 8.5 1 6.1 4-1.1 7.3-1.8 10.8-.9 7 1.1 15 2.9 19.1 9.2 2.1 3.1 2.7 7.3.7 10.7-3.6 6.5-11.6 8.4-18.3 9.7-2.4.4-4.7 1.4-7.3 1.2-7-.6-15-1.1-20-7.1-3-2.5-3-7.1 2-6.7 3-.1 8-.4 10 3.5 3 3.7 9 3 13 2 3.6-.5 7.5-2.6 7.6-6.7.6-4.2-3.1-7.2-6.9-7.8-5.7-2.3-11.7 1.4-17.7 1.8-3 1.1-9 .5-9-4.4 1-4.2 3-8.1 3-12.5 0-3 2-7 5-7.2zm133.5 5c-.2-.2-7 5.8-9.9 8.1l-15.8 13.1c8.6-4.4 16.5-9.6 22.3-17.4 2.6-2.6 3.5-3.7 3.4-3.8zM151 405.5c3 0 8 4.6 10 7l26 31.1c-8-2.1-13-7.1-18-13.7-6-7.3-11-16.6-21-19.6-9-5-5-6.4 2-2.2 0-1.9 0-2.6 1-2.6z" /></svg>
+                </div>
+                {selectedSubMenu == 'dice' && <DiceOpenMenu />}
             </div>
 
             {isThisUserHost && <>
                 <div style={selectedSubMenu == 'spawn' ? { "scale": '1.5', 'filter': 'brightness(1.2)' } : { "scale": '1', 'filter': 'brightness(0.5)' }}
                     onClick={() => setSelectedSubMenu?.(selectedSubMenu == 'spawn' ? (undefined) : ('spawn'))}
-                    className='h-8 overflow-hidden flex w-fit ease duration-300 hover:cursor-pointer'>
-                    <img className='object-cover' src='/assets/icons/grimoire.png' />
+                    className='h-8 overflow-hidden flex w-fit ease duration-300 hover:cursor-pointer'
+                    >
+                    <div className='object-cover aspect-square'><svg fill={colorToFill} viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg"><path d="M2.016 28q0 0.832 0.576 1.44t1.408 0.576h14.016v-0.352q-1.792-0.608-2.912-2.176t-1.088-3.488q0-2.016 1.184-3.584t3.072-2.112q0.384-1.216 1.216-2.176t2.016-1.504q0.512-1.376 0.512-2.624v-1.984q0-3.328-2.368-5.664t-5.632-2.336-5.664 2.336-2.336 5.664v1.984q0 2.112 1.024 3.904t2.784 2.912q-1.504 0.544-2.912 1.504t-2.496 2.144-1.76 2.624-0.64 2.912zM18.016 24q0 0.832 0.576 1.44t1.408 0.576h2.016v1.984q0 0.864 0.576 1.44t1.408 0.576 1.408-0.576 0.608-1.44v-1.984h1.984q0.832 0 1.408-0.576t0.608-1.44-0.608-1.408-1.408-0.576h-1.984v-2.016q0-0.832-0.608-1.408t-1.408-0.576-1.408 0.576-0.576 1.408v2.016h-2.016q-0.832 0-1.408 0.576t-0.576 1.408z"></path></svg></div>
                 </div>
                 <div style={selectedSubMenu == 'maps' ? { "scale": '1.5', 'filter': 'brightness(1.2)' } : { "scale": '1', 'filter': 'brightness(0.5)' }}
                     onClick={() => setSelectedSubMenu?.(selectedSubMenu == 'maps' ? (undefined) : ('maps'))}
                     className='h-8 overflow-hidden flex w-fit ease duration-300 hover:cursor-pointer'>
-                    <img className='object-cover' src='/assets/icons/deceive.png' />
+                    <div className='object-cover aspect-square'>
+                        <svg fill={colorToFill} viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg"><path d="M0 25.063l6.875-2.594v-15.531l-6.875 2.594v15.531zM14.656 25.063l-6.906-2.594v-15.531l6.906 2.594v15.531zM15.531 25.063l6.875-2.594v-15.531l-6.875 2.594v15.531z"></path></svg>
+                    </div>
+
                 </div>
-            </>}
+            </>
+        }
             <hr className="w-20 h-[2px] rounded-full bg-lagun-500 border-none" />
 
         </section>
@@ -41,31 +55,39 @@ export function BottomSubMenuBar({ isThisUserHost }: { isThisUserHost: boolean }
 }
 
 function DiceOpenMenu() {
+    let { socket, partyData, mainUser } = useContext(AppContext)
+    let thisUserData = partyData?.players.find(playerData => playerData.id == mainUser.id)
 
-    let {socket, partyData, mainUser} = useContext(AppContext)
-    
-    const TrowDice = (diceType:'d100'|'d20'|'d12'|'d10'|'d8'|'d6'|'d4')=>{
-        if(!socket)return
+    const TrowDice = (diceType: 'd100' | 'd20' | 'd12' | 'd10' | 'd8' | 'd6' | 'd4') => {
+        if (!socket) return
 
 
         socket.emit('trowDice', {
             partyCode: partyData?.partyCode,
-            characterName: partyData?.players.find(playerData =>playerData.id == mainUser.id)?.characterData?.name || 'Dungeon Master',
+            characterName: partyData?.players.find(playerData => playerData.id == mainUser.id)?.characterData?.name || 'Dungeon Master',
             diceType: diceType
         })
     }
-    
+
     return (
-        <div className='flex flex-row scale-50 gap-1 absolute bottom-full  border-b border-romo-400
-        *:px-2 *:py-1 *:text-romo-200'>
-            <button className='hover:bg-romo-400' onClick={()=>TrowDice('d100')}>d100</button>
-            <button className='hover:bg-romo-400' onClick={()=>TrowDice('d20')}>d20</button>
-            <button className='hover:bg-romo-400' onClick={()=>TrowDice('d12')}>d12</button>
-            <button className='hover:bg-romo-400' onClick={()=>TrowDice('d10')}>d10</button>
-            <button className='hover:bg-romo-400' onClick={()=>TrowDice('d8')}>d8</button>
-            <button className='hover:bg-romo-400' onClick={()=>TrowDice('d6')}>d6</button>
-            <button className='hover:bg-romo-400' onClick={()=>TrowDice('d4')}>d4</button>
-            
+        <div 
+        // style={{ color: thisUserData?.color, borderColor: thisUserData?.color }} 
+        className='flex flex-row scale-50 gap-1 absolute bottom-full  border-b border-romo-400
+        *:px-2 *:py-1 '>
+            <DiceButton diceValue={'d100'} TrowDice={TrowDice} key={'diceButton_d100'} />
+            <DiceButton diceValue={'d20'} TrowDice={TrowDice} key={'diceButton_d20'} />
+            <DiceButton diceValue={'d12'} TrowDice={TrowDice} key={'diceButton_d12'} />
+            <DiceButton diceValue={'d10'} TrowDice={TrowDice} key={'diceButton_d10'} />
+            <DiceButton diceValue={'d8'} TrowDice={TrowDice} key={'diceButton_d8'} />
+            <DiceButton diceValue={'d6'} TrowDice={TrowDice} key={'diceButton_d6'} />
+            <DiceButton diceValue={'d4'} TrowDice={TrowDice} key={'diceButton_d4'} />
+
         </div>
+    )
+}
+function DiceButton({ diceValue, TrowDice }: { diceValue: 'd100' | 'd20' | 'd12' | 'd10' | 'd8' | 'd6' | 'd4', TrowDice: (diceType: "d100" | "d20" | "d12" | "d10" | "d8" | "d6" | "d4") => void}) {
+    return (
+        <button 
+            className='hover:bg-romo-400' onClick={() => TrowDice(diceValue)}>{diceValue}</button>
     )
 }

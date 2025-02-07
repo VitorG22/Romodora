@@ -4,6 +4,7 @@ import { IIteractiveMenu, ITile, Tile } from "./tileClasses";
 
 interface IMob extends ITile, ICharacterData {
     ownerId: string,
+    color: string
 }
 
 export interface IIteractiveMobMenu {
@@ -12,12 +13,13 @@ export interface IIteractiveMobMenu {
 }
 
 export class Mob extends Tile {
-    ownerId; health; name; id; picture; class; subClass; race; subRace; bag; abilityScores;
+    ownerId; health; name; id; picture; class; subClass; race; subRace; bag; abilityScores;color;
 
 
     imageElement = new Image();
     constructor(data: IMob) {
         super(data)
+        this.color = data.color
         this.ownerId = data.ownerId
         this.health = data.health
         this.name = data.name
@@ -31,8 +33,57 @@ export class Mob extends Tile {
         this.canvaType = 'prop'
         this.abilityScores = data.abilityScores
         this.imageElement.src = this.picture
+        
     }
 
+    renderTile({ canvas, blockSize }: { canvas: React.MutableRefObject<HTMLCanvasElement | null>, blockSize: number }) {
+        if (this.isVoidBlock) return
+
+        let canvasCtx = canvas.current?.getContext('2d')
+        if (!canvasCtx) return
+
+        let tileWidth = blockSize * this.size.X
+        let tileHeight = blockSize * this.size.Y
+        let tileLeft = this.position.X * blockSize
+        let tileTop = this.position.Y * blockSize
+
+        canvasCtx.save();
+        switch (this.rotate) {
+            case 'top':
+                canvasCtx.clearRect(tileLeft, tileTop, tileWidth, tileHeight)
+                canvasCtx.translate(tileLeft + tileWidth / 2, tileTop + tileHeight / 2);
+                canvasCtx.rotate(0 * Math.PI / 180.0);
+                canvasCtx.translate(-tileLeft - tileWidth / 2, -tileTop - tileHeight / 2);
+                canvasCtx.drawImage(this.imageElement, tileLeft, tileTop, tileWidth, tileHeight);
+                break
+            case 'right':
+                canvasCtx.clearRect(tileLeft, tileTop, tileHeight, tileWidth)
+                canvasCtx.translate(tileLeft + tileHeight / 2, tileTop + tileWidth / 2);
+                canvasCtx.rotate(90 * Math.PI / 180.0);
+                canvasCtx.translate(-tileLeft - tileWidth / 2, -tileTop - tileHeight / 2);
+                canvasCtx.drawImage(this.imageElement, tileLeft, tileTop, tileWidth, tileHeight);
+                break
+            case 'left':
+                canvasCtx.clearRect(tileLeft, tileTop, tileHeight, tileWidth)
+                canvasCtx.translate(tileLeft + tileHeight / 2, tileTop + tileWidth / 2);
+                canvasCtx.rotate(270 * Math.PI / 180.0);
+                canvasCtx.translate(-tileLeft - tileWidth / 2, -tileTop - tileHeight / 2);
+                canvasCtx.drawImage(this.imageElement, tileLeft, tileTop, tileWidth, tileHeight);
+                break
+            case 'bottom':
+                canvasCtx.clearRect(tileLeft, tileTop, tileWidth, tileHeight)
+                canvasCtx.translate(tileLeft + tileWidth / 2, tileTop + tileHeight / 2);
+                canvasCtx.rotate(180 * Math.PI / 180.0);
+                canvasCtx.translate(-tileLeft - tileWidth / 2, -tileTop - tileHeight / 2);
+                canvasCtx.drawImage(this.imageElement, tileLeft, tileTop, tileWidth, tileHeight);
+                break
+        }
+        canvasCtx.restore();
+        canvasCtx.strokeStyle = this.color 
+        canvasCtx.lineWidth = 5 
+        canvasCtx.strokeRect(tileLeft, tileTop, blockSize, blockSize)
+
+    }
 
     moveTo({ newPosition, canvaRef }: { newPosition: { X: number, Y: number }, canvaRef: MutableRefObject<HTMLCanvasElement | null> }) {
 

@@ -16,7 +16,10 @@ export default function PlayerCardInBoard({ playerData }: { playerData: IPlayerD
     return (
         <section 
         onClick={()=>setSelectedCharacterInfo?.(playerData.characterData)}
-        className="flex flex-row gap-2 pl-20 p-2 hover:bg-romo-950 relative">
+        onMouseEnter={e => {e.currentTarget.style.backgroundColor = playerData.color + "30"; e.currentTarget.style.boxShadow = `1px 0 0 ${playerData.color}`}}
+        onMouseLeave={e => {e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.boxShadow = "none"}}
+        
+        className="flex flex-row gap-2 pl-20 p-2 relative">
             <Sticker playerId={playerData.id} />
             {playerData.id == mainUser.id && <StickerList/>}
             <article className='flex flex-col justify-between items-end'>

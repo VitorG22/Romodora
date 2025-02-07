@@ -34,21 +34,9 @@ function SpawnCard({ mobData,setDetailedCardData }: { mobData: Mob,setDetailedCa
         if (!cardRef.current) return
         cardRef.current.addEventListener('mouseenter', () => setDetailedCardData(mobData))
         cardRef.current.addEventListener('mouseleave', () => setDetailedCardData(undefined))
-        // cardRef.current.addEventListener('dragstart', (e) => startDrag(e))
-
     }, [cardRef])
 
     const setTileToMove = ()=>{
-        // let newTile = new Tile({
-        //     canvaType:'mob',
-        //     paths:[{name:mobData.name, path:[mobData.picture]}],
-        //     position:{X:-999999, Y:-999999},
-        //     rotate:'top',
-        //     size:{X:1, Y:1},
-        //     status: 0,
-        //     variant: 0,
-        //     blockMatrix:[[1]],
-        // })
         setSelectedTileToMove?.(mobData)
     }
     
@@ -67,14 +55,21 @@ function SpawnCard({ mobData,setDetailedCardData }: { mobData: Mob,setDetailedCa
     )
 }
 
-function DetailedSpawnCard({ mobData }: { mobData: ICharacterData }) {
+function DetailedSpawnCard({ mobData }: { mobData: Mob }) {
+    const {partyData} = useContext(AppContext)
+    
+    let ownerColor = partyData?.players.find(playerData => playerData.id == mobData.ownerId)?.color
     return (
-        <section className='h-fit flex flex-col bg-romo-950 rounded-md overflow-hidden p-2 gap-1'>
+        <section 
+        className='h-fit flex flex-col bg-romo-950 rounded-md overflow-hidden p-2 gap-1'>
             <div className='h-40 w-48 overflow-hidden rounded-sm'>
                 <img src={mobData.picture} />
             </div>
             <article className='flex flex-row items-end gap-2'>
-                    <h1 className='text-romo-100'>{mobData.name}</h1>
+                    <h1 className='text-romo-100 flex flex-row items-center gap-1'>
+                        <div style={{backgroundColor: ownerColor}} className='rounded-full aspect-square w-2 h-2'/>
+                        {mobData.name}
+                    </h1>
                     <p className='text-xs -translate-y-[2px] text-romo-200'>{mobData.race} / {mobData.class}</p>
             </article>
             <ul>

@@ -7,6 +7,7 @@ export function LeftCharacterInfo() {
     const { socket, partyData, mainUser } = useContext(AppContext)
     const { selectedCharacterInfo, setSelectedCharacterInfo } = useContext(BoardContext)
     const [havePermissionToChangeData, setHavePermissionToChangeData] = useState<boolean>(false)
+    let characterOwner= partyData?.players.find((playerData => playerData.id == selectedCharacterInfo?.ownerId)) 
 
     const MobAction = (functionName: 'HealthPlus' | 'HealthMinus') => {
         if (!selectedCharacterInfo) return
@@ -36,11 +37,13 @@ export function LeftCharacterInfo() {
             {selectedCharacterInfo &&
                 <>
 
-                    <div className='h-full aspect-[3/5] rounded-md overflow-hidden'>
+                    <div className='h-full aspect-[3/5] object-cover overflow-hidden'>
                         <img src={selectedCharacterInfo?.picture}
-                            className='object-cover h-full' />
+                            className='object-cover h-full w-full' />
                     </div>
-                    <article className='p-2 bg-romo-500 py-2 border-l border-romo-200 h-fit relative'>
+                    <article 
+                    style={{backgroundColor:  characterOwner?.color + '30', borderLeft:`solid 1px ${characterOwner?.color}`}}
+                    className='p-2 py-2 border-l border-romo-200 h-fit relative'>
                         <h1 className='text-romo-100 text-lg'>{selectedCharacterInfo?.name}</h1>
                         <h1 className='thin italic text-romo-200 text-xs'>{selectedCharacterInfo?.class}</h1>
                         <p className='flex flex-row gap-2 items-center font-thin text-sm w-fit pr-10 group relative'>

@@ -13,16 +13,20 @@ export function PlayerCard({ playerData }: { playerData: IPlayerData }) {
 
     return (
         <div className='h-full flex flex-col gap-2'>
-            <section className='relative h-full aspect-[2/4] flex overflow-hidden border-b border-romo-100'>
+            <section style={{borderColor: playerData.color}} className='relative h-full aspect-[2/4] flex overflow-hidden border-b'>
                 {isThisUserHost ? 
                 <p className='px-4  py-2 z-20 text-romo-100 absolute top-0 left-0 '>Dungeon Master</p>:
                     isThisUserCard && <button  
                     onClick={()=> setIsTradeModalOpen(true)}
-                className="rounded-full absolute z-20 top-2 right-2 text-romo-200 p-2 hover:bg-romo-50/10"><RefreshCw size={17} strokeWidth={1}/></button>}
+                    onMouseEnter={e => e.currentTarget.style.background = playerData.color + 30}
+                    onMouseLeave={e => e.currentTarget.style.background = 'none'}
+                    className="rounded-full absolute z-20 top-2 right-2 text-romo-200 p-2"><RefreshCw size={17} strokeWidth={1}/></button>}
                 <img src={playerData.characterData?.picture || playerData.picture}
                     className='object-cover min-w-full min-h-full [mask-image:radial-gradient(circle,#000_10%,#00000025_90%)]'
                 />
-                <p className='absolute flex items-center justify-center bottom-0 left-0 bg-romo-950/50 text-romo-100 w-full py-4 '>
+                <p 
+                style={{backgroundColor: playerData.color + 30}}
+                className='absolute flex items-center justify-center bottom-0 left-0   text-romo-100 w-full py-4 '>
                     {playerData.characterData?.name || playerData.name}
                 </p>
                 

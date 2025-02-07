@@ -51,9 +51,9 @@ export interface IPlayerData{
         id: string,
         picture: string,
         email: string,
-        permissionType: 'host' | 'player',
+        permissionType: 'host' | 'player'
         characterData: Mob |undefined
-    
+        color: string
 }
 
 export interface ICharacterData{

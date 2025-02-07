@@ -120,6 +120,7 @@ function convertPlayersCharactersToMobClass({partyData, characterData, userId }:
         console.log(characterData)
 
         let newCharacterData = new Mob({
+            color: playerToChange.color,
             ownerId: userId,
             position: { X: -999, Y: -999 },
             paths: [{ name: characterData.name, path: [characterData.picture || ""] }],
@@ -159,6 +160,7 @@ function convertAllPlayersCharactersToMobClass(playersDataList: IPlayerData[]){
         }
 
         let convertedCharacterData = new Mob({
+            color:playerData.color,
             ownerId: playerData.id,
             position: { X: -999, Y: -999 },
             paths: [{ name: playerData.characterData.name, path: [playerData.characterData.picture || ""] }],
