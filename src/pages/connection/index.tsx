@@ -37,7 +37,6 @@ export default function Party() {
             })
         })
 
-
     }, [])
 
     useEffect(() => {
@@ -99,6 +98,8 @@ export default function Party() {
         })
 
     }, [partyData])
+
+    
 
     return (
         <section className='text-romo-100'>

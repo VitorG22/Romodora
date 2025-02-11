@@ -29,7 +29,6 @@ interface IDrawGhost {
     MouseX: number,
     MouseY: number,
     canvas: HTMLCanvasElement,
-    blockSize: number,
     rotate: 'top' | 'right' | 'left' | 'bottom'
 }
 
@@ -40,8 +39,9 @@ export interface IIteractiveMenu {
 
 export class Tile {
     position; paths; variant; size; rotate; canvaType; group; status; isVoidBlock; blockMatrix;
-
+    blockSize = 100
     imageElement = new Image();
+    canvasId = ''
 
     constructor(data: ITile) {
         this.paths = data.paths
@@ -52,7 +52,6 @@ export class Tile {
         this.canvaType = data.canvaType
         this.position = data.position
         this.imageElement.src = this.paths[this.variant].path[this.status],
-
             // define the tile group 
             (() => {
                 if (data.blockMatrix) {
@@ -75,6 +74,21 @@ export class Tile {
             }
         })();
 
+        // define the Canva ID
+        (() => {
+            switch (data.canvaType) {
+                case "prop":
+                    this.canvasId = 'canvasProps'
+                    break
+                case "wall":
+                    this.canvasId = 'canvasWall'
+                    break
+                case "floor":
+                    this.canvasId = 'canvasFloor'
+                    break
+            }
+
+        })();
     }
 
     // updateTile({ data, canvas, blockSize }: { data: ITile, canvas: React.MutableRefObject<HTMLCanvasElement | null>, blockSize: number }) {
@@ -121,50 +135,57 @@ export class Tile {
 
 
 
-    drawGhost({ MouseX, MouseY, canvas, blockSize }: IDrawGhost) {
+    drawGhost({ MouseX, MouseY }: IDrawGhost) {
+        const canvas:HTMLCanvasElement|null = document.getElementById(this.canvasId) as HTMLCanvasElement
+        if(!canvas)return
+
         let canvasCtx = canvas.getContext("2d")
         if (!canvasCtx) return
 
-        canvasCtx.clearRect(0, 0, this.size.X * blockSize, this.size.Y * blockSize)
+        canvasCtx.clearRect(0, 0, this.size.X * this.blockSize, this.size.Y * this.blockSize)
 
-        let ghostBlockWidth = this.size.X * blockSize
-        let ghostBlockHeight = this.size.X * blockSize
+        let ghostBlockWidth = this.size.X * this.blockSize
+        let ghostBlockHeight = this.size.X * this.blockSize
 
 
         if (this.rotate == "top" || this.rotate == 'bottom') {
             canvasCtx.fillStyle = '#00d67d10'
-            canvasCtx.fillRect(MouseX * blockSize, MouseY * blockSize, ghostBlockWidth, ghostBlockHeight)
+            canvasCtx.fillRect(MouseX * this.blockSize, MouseY * this.blockSize, ghostBlockWidth, ghostBlockHeight)
             canvasCtx.strokeStyle = '#00d67d'
-            canvasCtx.strokeRect(MouseX * blockSize, MouseY * blockSize, ghostBlockWidth, ghostBlockHeight)
+            canvasCtx.strokeRect(MouseX * this.blockSize, MouseY * this.blockSize, ghostBlockWidth, ghostBlockHeight)
 
         } else if (this.rotate == "left" || this.rotate == 'right') {
             canvasCtx.fillStyle = '#00d67d10'
-            canvasCtx.fillRect(MouseX * blockSize, MouseY * blockSize, ghostBlockHeight, ghostBlockWidth)
+            canvasCtx.fillRect(MouseX * this.blockSize, MouseY * this.blockSize, ghostBlockHeight, ghostBlockWidth)
             canvasCtx.strokeStyle = '#00d67d'
-            canvasCtx.strokeRect(MouseX * blockSize, MouseY * blockSize, ghostBlockHeight, ghostBlockWidth)
+            canvasCtx.strokeRect(MouseX * this.blockSize, MouseY * this.blockSize, ghostBlockHeight, ghostBlockWidth)
         }
     }
 
-    async eraseTile({ canvas, blockSize }: { canvas: React.MutableRefObject<HTMLCanvasElement | null>, blockSize: number }) {
-        let canvasCtx = canvas.current?.getContext("2d")
+    async eraseTile() {
+        const canvas:HTMLCanvasElement|null = document.getElementById(this.canvasId) as HTMLCanvasElement
+        if(!canvas)return
+        
+        let canvasCtx = canvas.getContext("2d")
         if (!canvasCtx) return new Error('Canvas Not Exist')
         this.group?.forEach(elementInRow => {
-            canvasCtx.clearRect(elementInRow.X * blockSize, elementInRow.Y * blockSize, blockSize, blockSize)
+            canvasCtx.clearRect(elementInRow.X * this.blockSize, elementInRow.Y * this.blockSize, this.blockSize, this.blockSize)
         })
 
         return
     }
 
-    renderTile({ canvas, blockSize }: { canvas: React.MutableRefObject<HTMLCanvasElement | null>, blockSize: number }) {
-        if (this.isVoidBlock) return
+    renderTile() {
+        const canvas:HTMLCanvasElement|null = document.getElementById(this.canvasId) as HTMLCanvasElement
+        if (this.isVoidBlock || !canvas) return
 
-        let canvasCtx = canvas.current?.getContext('2d')
+        let canvasCtx = canvas.getContext('2d')
         if (!canvasCtx) return
 
-        let tileWidth = blockSize * this.size.X
-        let tileHeight = blockSize * this.size.Y
-        let tileLeft = this.position.X * blockSize
-        let tileTop = this.position.Y * blockSize
+        let tileWidth = this.blockSize * this.size.X
+        let tileHeight = this.blockSize * this.size.Y
+        let tileLeft = this.position.X * this.blockSize
+        let tileTop = this.position.Y * this.blockSize
 
         canvasCtx.save();
         switch (this.rotate) {
@@ -232,8 +253,7 @@ export class Tile {
         return { newTile: this, lastPosition: { X: this.position.X, Y: this.position.Y }, nedRefreshMap: false }
     }
 
-    rotateRight({ canvaRef }: { canvaRef?: MutableRefObject<HTMLCanvasElement | null> }) {
-        canvaRef = canvaRef
+    rotateRight() {
         let rotateArray: Array<'top' | 'right' | 'bottom' | 'left'> = ['top', 'right', 'bottom', 'left']
         let rotateIndex: number = rotateArray.findIndex(element => element == this.rotate)
         if (rotateIndex >= 3) {
@@ -247,8 +267,7 @@ export class Tile {
         }
         return { newTile: this, lastPosition: { X: this.position.X, Y: this.position.Y }, nedRefreshMap: true }
     }
-    rotateLeft({ canvaRef }: { canvaRef?: MutableRefObject<HTMLCanvasElement | null> }) {
-        canvaRef = canvaRef
+    rotateLeft() {
         let rotateArray: Array<'top' | 'right' | 'bottom' | 'left'> = ['top', 'right', 'bottom', 'left']
         let rotateIndex: number = rotateArray.findIndex(element => element == this.rotate)
         if (rotateIndex <= 0) {

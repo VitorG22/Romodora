@@ -1,6 +1,5 @@
 import { useContext, useEffect, useRef, useState } from "react"
 import { AppContext } from "../../../../AppContext"
-import { ICharacterData } from "../../../../interfaces"
 import { BoardContext } from "../boardContext"
 import { Mob } from "../../../maps/classes/mobClasses"
 
@@ -26,7 +25,7 @@ export default function DinamicSectionSpawn() {
 
 function SpawnCard({ mobData,setDetailedCardData }: { mobData: Mob,setDetailedCardData: React.Dispatch<React.SetStateAction< Mob | undefined>>}) {
     // const [isDetailVisible, setIsDetailVisible] = useState<boolean>(false)
-    const {setSelectedTileToMove} = useContext(BoardContext)
+    const {setSelectedTileToMove, selectedTileToMove} = useContext(BoardContext)
     const cardRef = useRef<HTMLElement | null>(null)
     const pictureRef = useRef<HTMLImageElement | null>(null)
 
@@ -42,6 +41,7 @@ function SpawnCard({ mobData,setDetailedCardData }: { mobData: Mob,setDetailedCa
     
     return (
         <section ref={cardRef} draggable='true' onClick={setTileToMove}
+        style={{backgroundColor: selectedTileToMove?.id == mobData.id ? "#222526": "transparent"}}
         className='hover:bg-romo-950 hover:cursor-pointer flex flex-row gap-2 justify-end h-12 w-60 p-1 '>
             <article className='flex flex-col justify-start h-full text-end'>
                 <h1 className='text-romo-100 text-base font-semibold'>{mobData.name}</h1>

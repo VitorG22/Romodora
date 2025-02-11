@@ -1,4 +1,3 @@
-import { MutableRefObject } from "react";
 import { ICharacterData } from "../../../interfaces";
 import { IIteractiveMenu, ITile, Tile } from "./tileClasses";
 
@@ -9,12 +8,13 @@ interface IMob extends ITile, ICharacterData {
 
 export interface IIteractiveMobMenu {
     text: string,
-    functionName: 'rotateRight' | 'rotateLeft' | 'teste' | 'tradeStatus' | 'selectThisTile' | 'moveTo' | 'HealthPlus' | 'HealthMinus'
+    functionName: 'rotateRight' | 'rotateLeft' | 'teste' | 'tradeStatus' | 'selectThisTile' | 'moveTo' | 'ChangeScore' | 'ChangeHealth'
 }
 
 export class Mob extends Tile {
-    ownerId; health; name; id; picture; class; subClass; race; subRace; bag; abilityScores;color;
-
+    ownerId; health; name; id; picture; class; subClass; race; subRace; bag; abilityScores; color;
+    blockSize = 100;
+    canvasId = 'canvasMob'
 
     imageElement = new Image();
     constructor(data: IMob) {
@@ -33,19 +33,20 @@ export class Mob extends Tile {
         this.canvaType = 'prop'
         this.abilityScores = data.abilityScores
         this.imageElement.src = this.picture
-        
+
     }
 
-    renderTile({ canvas, blockSize }: { canvas: React.MutableRefObject<HTMLCanvasElement | null>, blockSize: number }) {
-        if (this.isVoidBlock) return
+    renderTile() {
+        const canvas: HTMLCanvasElement | null = document.getElementById(this.canvasId) as HTMLCanvasElement
+        if (this.isVoidBlock || canvas == null) return
 
-        let canvasCtx = canvas.current?.getContext('2d')
+        let canvasCtx = canvas.getContext('2d')
         if (!canvasCtx) return
 
-        let tileWidth = blockSize * this.size.X
-        let tileHeight = blockSize * this.size.Y
-        let tileLeft = this.position.X * blockSize
-        let tileTop = this.position.Y * blockSize
+        let tileWidth = this.blockSize * this.size.X
+        let tileHeight = this.blockSize * this.size.Y
+        let tileLeft = this.position.X * this.blockSize
+        let tileTop = this.position.Y * this.blockSize
 
         canvasCtx.save();
         switch (this.rotate) {
@@ -79,17 +80,15 @@ export class Mob extends Tile {
                 break
         }
         canvasCtx.restore();
-        canvasCtx.strokeStyle = this.color 
-        canvasCtx.lineWidth = 5 
-        canvasCtx.strokeRect(tileLeft, tileTop, blockSize, blockSize)
+        canvasCtx.strokeStyle = this.color
+        canvasCtx.lineWidth = 6
+        canvasCtx.strokeRect(tileLeft + 3, tileTop + 3, this.blockSize - 6, this.blockSize -6)
 
     }
 
-    moveTo({ newPosition, canvaRef }: { newPosition: { X: number, Y: number }, canvaRef: MutableRefObject<HTMLCanvasElement | null> }) {
+    moveTo({ newPosition }: { newPosition: { X: number, Y: number } }) {
 
-        this.eraseTile({ canvas: canvaRef, blockSize: 100 })
-
-
+        this.eraseTile()
         let newGroup: { X: number; Y: number; }[] = []
         // this.group.forEach(position => {
         //     if (position.X < 0 || position.Y < 0) {
@@ -112,17 +111,15 @@ export class Mob extends Tile {
         }]
 
         this.position = newPosition
-
-        this.renderTile({ canvas: canvaRef, blockSize: 100 })
+        this.renderTile()
         return { newTile: this }
     }
 
-    rotateRight({ canvaRef }: { canvaRef?: MutableRefObject<HTMLCanvasElement | null> }) {
+    rotateRight() {
         let rotateArray: Array<'top' | 'right' | 'bottom' | 'left'> = ['top', 'right', 'bottom', 'left']
         let rotateIndex: number = rotateArray.findIndex(element => element == this.rotate)
 
-        if (!canvaRef) return { newTile: this, lastPosition: { X: this.position.X, Y: this.position.Y }, nedRefreshMap: true }
-        this.eraseTile({ blockSize: 100, canvas: canvaRef })
+        this.eraseTile()
 
         if (rotateIndex >= 3) {
             this.rotate = 'top'
@@ -133,16 +130,15 @@ export class Mob extends Tile {
         if (this.blockMatrix) {
             this.group = rotateMatrix(this.blockMatrix, this.rotate, { X: this.position.X, Y: this.position.Y })
         }
-        this.renderTile({ blockSize: 100, canvas: canvaRef })
+        this.renderTile()
 
         return { newTile: this, lastPosition: { X: this.position.X, Y: this.position.Y }, nedRefreshMap: true }
     }
-    rotateLeft({ canvaRef }: { canvaRef?: MutableRefObject<HTMLCanvasElement | null> }) {
+    rotateLeft() {
         let rotateArray: Array<'top' | 'right' | 'bottom' | 'left'> = ['top', 'right', 'bottom', 'left']
         let rotateIndex: number = rotateArray.findIndex(element => element == this.rotate)
 
-        if (!canvaRef) return { newTile: this, lastPosition: { X: this.position.X, Y: this.position.Y }, nedRefreshMap: true }
-        this.eraseTile({ blockSize: 100, canvas: canvaRef })
+        this.eraseTile()
 
         if (rotateIndex <= 0) {
             this.rotate = 'left'
@@ -152,7 +148,7 @@ export class Mob extends Tile {
         if (this.blockMatrix) {
             this.group = rotateMatrix(this.blockMatrix, this.rotate, { X: this.position.X, Y: this.position.Y })
         }
-        this.renderTile({ blockSize: 100, canvas: canvaRef })
+        this.renderTile()
 
         return { newTile: this, lastPosition: { X: this.position.X, Y: this.position.Y }, nedRefreshMap: true }
     }
@@ -162,9 +158,6 @@ export class Mob extends Tile {
         let iteractiveMenuData: Array<IIteractiveMenu> = []
 
         if (permissionType == 'host') {
-            // this.paths[this.variant].path.length > 1 && iteractiveMenuData.push({ text: `Change ${this.canvaType} status`, functionName: 'tradeStatus' });
-            // iteractiveMenuData.push({ text: `teste ${this.canvaType}`, functionName: 'teste' });
-
             iteractiveMenuData.push({ text: `teste ${this.canvaType}`, functionName: 'teste' });
         }
 
@@ -176,19 +169,48 @@ export class Mob extends Tile {
         return iteractiveMenuData
     }
 
-    HealthPlus() {
-        console.log('MOB: vida mais')
-        if (this.health.currentHealth < this.health.maxHealthTotal) {
-            this.health.currentHealth += 1
+    ChangeHealth({ operator, type }: { operator: "plus" | "minus", type: 'currentHealth' | 'currentHealthBonus' | 'maxHealthBase' | 'maxHealthBonus' }) {
+        
+        if (type == "currentHealth") {
+            switch (operator) {
+                case "plus":
+                    if (this.health.currentHealth < this.health.maxHealthTotal) {
+                        this.health.currentHealth += 1
+                    }
+                    break
+                case "minus":
+                    if (this.health.currentHealth > 0) {
+                        this.health.currentHealth -= 1
+                    }
+                    break
+            }
+        } else {
+            switch (operator) {
+                case "plus":
+                    this.health[type] += 1
+                    break
+                case "minus":
+                    this.health[type] -= 1
+                    break
+            }
+            this.health.maxHealthTotal == this.health.maxHealthBonus + this.health.maxHealthBase
         }
+
         return { newTile: this }
     }
 
-    HealthMinus() {
-        console.log('MOB: vida menos')
-        if (this.health.currentHealth > 0) {
-            this.health.currentHealth -= 1
+    ChangeScore({ AbilityScoreName, operator, type }: { AbilityScoreName: "charisma" | "constitution" | "dexterity" | "intelligence" | "strength" | "wisdom", operator: "plus" | "minus", type: 'totalScore' | 'modifier' | 'baseScore' | 'bonus' | 'setScore' | 'stackingBonus' }) {
+        console.log('change score')
+        switch (operator) {
+            case "plus":
+                this.abilityScores[AbilityScoreName][type] += 1
+                break
+            case "minus":
+                this.abilityScores[AbilityScoreName][type] -= 1
+                break
         }
+
+        this.abilityScores[AbilityScoreName].totalScore = this.abilityScores[AbilityScoreName].baseScore + this.abilityScores[AbilityScoreName].bonus
         return { newTile: this }
     }
 
