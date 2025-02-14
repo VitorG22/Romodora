@@ -15,6 +15,7 @@ import CreateMap from "./pages/maps/newMap/CreateMap";
 import SettingsPage from "./pages/settings";
 import ProfileSettings from "./pages/settings/profileSettings";
 import ErrorPage from "./pages/error/errorPage";
+import ForgotPassword from "./pages/forgotPassword/indes";
 
 
 export const router = createBrowserRouter([
@@ -33,6 +34,10 @@ export const router = createBrowserRouter([
             {
                 path:'/register',
                 element:<Register/>,
+            },
+            {
+                path:'/password',
+                element:<ForgotPassword/>,
             },
             {
                 path: '/party',

@@ -4,11 +4,15 @@ import * as Form from '../../../components/form'
 import SquareButton from "../../../components/buttons"
 import { PostData } from "../../../scripts/api/postData"
 import { Alert } from "../../../components/toasters"
+import { deleteCookie } from "../../../scripts/cookie/cookie"
+import { useNavigate } from "react-router-dom"
 
 export default function ProfileSettings() {
     const { mainUser, setMainUser, token } = useContext(AppContext)
     const [newUserImage, setNewUserImage] = useState<string>(mainUser.picture)
     const [newUserName, setNewUserName] = useState<string>(mainUser.name)
+    const navigate = useNavigate()
+    
 
     const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -21,7 +25,7 @@ export default function ProfileSettings() {
             },
             route: '/changeUserData'
         })
-        if(PostResult.data.status == 'success'){
+        if (PostResult.data.status == 'success') {
             setMainUser?.({
                 email: PostResult.data.result.email,
                 id: PostResult.data.result.id,
@@ -30,12 +34,17 @@ export default function ProfileSettings() {
                 token: mainUser.token,
                 token_expire: mainUser.token_expire,
             })
-        }else{
-            Alert({message:PostResult.data.message})
+        } else {
+            Alert({ message: PostResult.data.message })
         }
 
     }
 
+
+    function disconnectUser() {
+        deleteCookie('token')
+        navigate('/')
+    }
 
     return (
         <section className='w-full flex flex-col p-6 gap-2'>
@@ -44,15 +53,20 @@ export default function ProfileSettings() {
                     className="w-64 aspect-square"
                 />
                 <article className='p-2'>
-                    <h1 className='text-lagun-200 text-xl'>{newUserName}</h1>
+                    <h1 className='text-romo-200 text-xl'>{newUserName}</h1>
                 </article>
             </div>
             <Form.Container className="flex flex-col bg-transparent gap-2 w-full max-w-96 p-0" onSubmit={(e) => handleFormSubmit(e)}>
                 <Form.InputText name="imageUrl" label="Image Url" type="text" defaultValue={mainUser.picture} onChange={(e) => setNewUserImage(e.target.value)} />
                 <Form.InputText name="name" label="Name" type="text" defaultValue={newUserName} onChange={(e) => setNewUserName(e.target.value)} />
-                <SquareButton type="submit" size="md" variant="ghost">
-                    Save
-                </SquareButton>
+                <div className="flex flex-row gap-1">
+                    <SquareButton type="button" size="md" variant="ghost" onClick={disconnectUser}>
+                        Disconnect
+                    </SquareButton>
+                    <SquareButton type="submit" size="md" variant="secondary">
+                        Save
+                    </SquareButton>
+                </div>
             </Form.Container>
         </section>
     )

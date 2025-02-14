@@ -71,12 +71,12 @@ export default function Login() {
         <main className="flex h-screen w-screen  justify-center items-center">
             {isLoading ? <TransparentLoader /> :
                 <section className='relative flex w-screen h-screen items-center justify-center'>
-                    <Form.Container onSubmitCapture={(e) => LoginSubmite({ 'event': e })} className='w-96 flex-col bg-romo-950 z-10'>
+                    <Form.Container onSubmitCapture={(e) => LoginSubmite({ 'event': e })} className='w-96 flex-col bg-romo-950 z-10 p-4'>
                         <Form.Title>Login</Form.Title>
                         <Form.InputText required name='email' label='Email' type='email' placeholder='YourEmail@gmail.com' />
                         <Form.InputText required name='password' label='Password' type='password' />
                         <p
-                            onClick={() => navigate('forgotPassword')}
+                            onClick={() => navigate('password')}
                             className='text-romo-200 font-thin text-xs italic hover:text-romo-100 hover:cursor-pointer'
                         >Forget password</p>
                         <div className='flex flex-row gap-2 justify-end'>

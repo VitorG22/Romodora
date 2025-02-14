@@ -21,7 +21,7 @@ export function getFormData(event: React.FormEvent<HTMLFormElement>) {
 
 export function Container(props: IForm) {
     return (
-        <form {...props} className={`${props.className} p-4 flex gap-2`}>
+        <form {...props} className={`flex gap-2 ${props.className}`}>
             <input type="submit" hidden />
             {props.children}
         </form>

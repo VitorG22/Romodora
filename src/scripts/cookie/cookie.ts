@@ -1,4 +1,4 @@
-export function setCookie({name,value,expire}:{name: String, value: string, expire: string}) {
+export function setCookie({name,value,expire}:{name: String, value: string| undefined, expire: string}) {
     try {
         let dateExpire = new Date(expire).toUTCString()
 
