@@ -61,7 +61,7 @@ function NewJourneyModal({ setIsCreateJourneyModalOpen }: { setIsCreateJourneyMo
 
     return (
         <Modal.Container key='newJourneyModal' title="Nova Jornada" setIsModalOpen={setIsCreateJourneyModalOpen} >
-            <Form.Container onSubmit={(e: React.FormEvent<HTMLFormElement>) => handleSubmite(e)} className='flex-col'>
+            <Form.Container onSubmit={(e: React.FormEvent<HTMLFormElement>) => handleSubmite(e)} className='flex-col w-80 max-w-screen-xl'>
                 <Form.InputText name='name' type="text" label="Nome da Jornada" />
                 <div className="flex flex-row gap-2">
                     <Form.InputText name='banner' type="text" label="Banner" placeholder="Url da Imagem" onChange={(e) => setBannerPath(e.target.value)} />

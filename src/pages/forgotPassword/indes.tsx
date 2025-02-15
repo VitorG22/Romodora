@@ -3,7 +3,7 @@ import * as Form from '../../components/form'
 import SquareButton from '../../components/buttons'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { PostData } from '../../scripts/api/postData'
-import Loader, { TransparentLoader } from '../../components/loaders/loader'
+import { TransparentLoader } from '../../components/loaders/loader'
 import { useNavigate } from 'react-router-dom'
 
 export default function ForgotPassword() {

@@ -265,34 +265,20 @@ export default function CreateMap() {
 
     useEffect(() => {
         if (!canvasPropsRef.current || !canvasFloorRef.current || !canvasWallRef.current) return
-        let canvasList = {
-            floor: canvasFloorRef,
-            prop: canvasPropsRef,
-            wall: canvasWallRef
-        }
 
         mapMatrix?.floor.forEach(row => {
             row.forEach(tileData => {
-                tileData.renderTile({
-                    blockSize: blockSize,
-                    canvas: canvasList[tileData.canvaType]
-                })
+                tileData.renderTile()
             })
         })
         mapMatrix?.prop.forEach(row => {
             row.forEach(tileData => {
-                tileData.renderTile({
-                    blockSize: blockSize,
-                    canvas: canvasList[tileData.canvaType]
-                })
+                tileData.renderTile()
             })
         })
         mapMatrix?.wall.forEach(row => {
             row.forEach(tileData => {
-                tileData.renderTile({
-                    blockSize: blockSize,
-                    canvas: canvasList[tileData.canvaType]
-                })
+                tileData.renderTile()
             })
         })
     }, [readyToRender])

@@ -4,7 +4,7 @@ import { AppContext } from "../../../../../AppContext"
 import { BoardContext } from "../../boardContext"
 
 export function StickerList() {
-    const [isStickerContainerOpen, setIsStickerContainerOpen] = useState<boolean>(true)
+    const [isStickerContainerOpen, setIsStickerContainerOpen] = useState<boolean>(false)
     const {socket, partyData, mainUser} = useContext(AppContext)
     const {stickersList} = useContext(BoardContext)
 

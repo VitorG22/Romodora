@@ -157,7 +157,7 @@ export default function CreateCharacter() {
 
     return (
         <main className='w-full h-full overflow-y-scroll'>
-            <Form.Container className='bg-transparent h-full flex flex-col'>
+            <Form.Container className='bg-transparent h-full flex flex-col p-4'>
                 <section className='flex flex-row gap-2 h-full'>
                     <div className='h-72 aspect-[3/4] overflow-hidden border border-romo-500 bg-romo-500'>
                         <img src={characterData.picture} onErrorCapture={(e) => e.currentTarget.classList.add("opacity-0")} onLoad={(e) => e.currentTarget.classList.remove("opacity-0")} className='object-cover min-w-full min-h-full' />
@@ -170,13 +170,13 @@ export default function CreateCharacter() {
                             )}
                         </Form.InputSelect>
                         {selectedSubRacesList &&
-                            <Form.InputSelect label='Sub Raça' disabled={selectedSubRacesList.length <= 0} value={characterData.subRace} onChange={(e) => setCharacterByKey({ keyName: "subRace", value: e.target.value })}>
+                            <Form.InputSelect label='Sub Raça' disabled={selectedSubRacesList.length <= 0} value={characterData.subRace || undefined} onChange={(e) => setCharacterByKey({ keyName: "subRace", value: e.target.value })}>
                                 {selectedSubRacesList?.map(element =>
                                     <Form.SelectOption OptionKey={element.subRaceKey} name={element.subRaceName.ptbr} />
                                 )}
                             </Form.InputSelect>
                         }
-                        <Form.InputSelect label='Classe' value={characterData.subClass} onChange={(e) => setCharacterByKey({ keyName: "class", value: e.target.value })}>
+                        <Form.InputSelect label='Classe' value={characterData.subClass || undefined} onChange={(e) => setCharacterByKey({ keyName: "class", value: e.target.value })}>
                             {CharacterClassList.map(element =>
                                 <Form.SelectOption OptionKey={element.classKey} name={element.className.ptbr}  />
                             )}

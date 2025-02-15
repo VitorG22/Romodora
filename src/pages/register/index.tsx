@@ -67,7 +67,7 @@ export default function Register() {
     return (
         <section className="flex h-screen w-screen  justify-center items-center relative">
             {isLoading ? <Loader /> :
-                <Form.Container onSubmit={(e) => RegisterSubmite({ 'event': e })} className='w-96 flex-col bg-romo-950'>
+                <Form.Container onSubmit={(e) => RegisterSubmite({ 'event': e })} className='w-96 flex-col bg-romo-950 p-4'>
                     <Form.Title>Register</Form.Title>
                     <Form.InputText required name='name' label='Name' type='text' placeholder='User Name' />
                     <Form.InputText required name='email' label='Email' type='email' placeholder='YourEmail@gmail.com' onChange={() => setShowEmailError(false)} />

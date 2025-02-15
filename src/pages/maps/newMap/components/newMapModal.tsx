@@ -87,7 +87,7 @@ export default function NewMapModal({ setIsModalOpen }: { setIsModalOpen: React.
 
     return (
         <Modal.Container setIsModalOpen={() => setIsModalOpen(false)} title='Novo Mapa'>
-            <Form.Container onSubmit={(e: React.FormEvent<HTMLFormElement>) => createNewMap(e)} className='flex-col'>
+            <Form.Container onSubmit={(e: React.FormEvent<HTMLFormElement>) => createNewMap(e)} className='flex-col p-4'>
                 <div className='h-72 aspect-[3/4] overflow-hidden rounded-md border border-romo-900 bg-romo-900'>
                     <img src={imgUrl} onErrorCapture={(e) => e.currentTarget.classList.add("opacity-0")} onLoad={(e) => e.currentTarget.classList.remove("opacity-0")} className='object-cover min-w-full min-h-full' />
                 </div>

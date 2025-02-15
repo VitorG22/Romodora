@@ -55,7 +55,7 @@ function ConnectionModal({ setIsConnectionModalOpen, setIsLoading }: { setIsConn
 
     return (
             <Modal.Container title="Conecte-se a uma Jornada" setIsModalOpen={setIsConnectionModalOpen}>
-                <Form.Container onSubmit={(e) => handleSubmite(e)} className='flex flex-row items-end'>
+                <Form.Container onSubmit={(e) => handleSubmite(e)} className='flex flex-row items-end p-4 '>
                     <Form.InputText
                         type='text'
                         label='Codigo da Sala'
