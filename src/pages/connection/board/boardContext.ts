@@ -1,5 +1,5 @@
 import { createContext } from "react"
-import { Mob } from "../../maps/classes/mobClasses"
+import { Mob } from "../../../classes/mobClasses"
 
 export interface IBoardContext {
     selectedCharacterInfo: Mob | undefined

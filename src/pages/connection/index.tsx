@@ -5,7 +5,7 @@ import { AppContext } from "../../AppContext"
 import { Alert } from "../../components/toasters"
 import convertMapJsonToClasses from "../maps/scripts/convertMapJsonToClasses"
 import { ICharacterData, IPartyData, IPlayerData } from "../../interfaces"
-import { Mob } from "../maps/classes/mobClasses"
+import { Mob } from "../../classes/mobClasses"
 import showSticker from "./board/playerCard/sticker/showSticker"
 
 export default function Party() {

@@ -1,7 +1,7 @@
 import { IMapMatrix, IPartyData } from "../../../interfaces"
 import { BlocksList } from "../BlocksList"
-import { Mob } from "../classes/mobClasses"
-import { Tile } from "../classes/tileClasses"
+import { Mob } from "../../../classes/mobClasses"
+import { Tile } from "../../../classes/tileClasses"
 
 interface IDraw {
     tileId: number

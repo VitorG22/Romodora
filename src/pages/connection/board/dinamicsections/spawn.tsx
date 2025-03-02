@@ -1,7 +1,7 @@
 import { useContext, useEffect, useRef, useState } from "react"
 import { AppContext } from "../../../../AppContext"
 import { BoardContext } from "../boardContext"
-import { Mob } from "../../../maps/classes/mobClasses"
+import { Mob } from "../../../../classes/mobClasses"
 
 export default function DinamicSectionSpawn() {
     const { partyData } = useContext(AppContext)

@@ -1,7 +1,7 @@
 import React from "react";
 import { Socket } from "socket.io-client";
-import { Tile } from "./pages/maps/classes/tileClasses";
-import { Mob } from "./pages/maps/classes/mobClasses";
+import { Tile } from "./classes/tileClasses";
+import { Mob } from "./classes/mobClasses";
 
 
 export interface IAppProvider{

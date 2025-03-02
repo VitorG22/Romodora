@@ -1,4 +1,4 @@
-import { ICharacterData } from "../../../interfaces";
+import { ICharacterData } from "../interfaces";
 import { IIteractiveMenu, ITile, Tile } from "./tileClasses";
 
 interface IMob extends ITile, ICharacterData {

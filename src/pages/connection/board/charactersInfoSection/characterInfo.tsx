@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react"
 import { BoardContext } from "../boardContext"
 import { ChevronDown, ChevronUp, Coins, Heart, X } from "lucide-react"
 import { AppContext } from "../../../../AppContext"
-import { Mob } from "../../../maps/classes/mobClasses"
+import { Mob } from "../../../../classes/mobClasses"
 
 interface IMobActions {
     functionName: 'ChangeHealth' | 'CoinPlus' | 'CoinMinus' | 'ChangeScore' | 'ChangeScore'

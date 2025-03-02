@@ -5,7 +5,7 @@ import { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { MapsContext } from '../..'
 import { saveMapsInLocalStorage } from '../../../../scripts/localStorage/localStorage'
-import { Tile } from '../../classes/tileClasses'
+import { Tile } from '../../../../classes/tileClasses'
 
 export default function NewMapModal({ setIsModalOpen }: { setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>> }) {
     const [mapName, setMapName] = useState('')

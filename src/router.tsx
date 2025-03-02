@@ -16,6 +16,10 @@ import SettingsPage from "./pages/settings";
 import ProfileSettings from "./pages/settings/profileSettings";
 import ErrorPage from "./pages/error/errorPage";
 import ForgotPassword from "./pages/forgotPassword/indes";
+import ItemsPage from "./pages/items";
+import ItemsGallery from "./pages/items/itemsGallery";
+import NewItem from "./pages/items/newItem";
+import ShowItem from "./pages/items/itemsGallery/showItem";
 
 
 export const router = createBrowserRouter([
@@ -93,6 +97,20 @@ export const router = createBrowserRouter([
                     {
                         path:'create/:mapId',
                         element:<CreateMap/>
+                    }
+                ]
+            },
+            {
+                path: '/item',
+                element: <ItemsPage/>,
+                children:[
+                    {
+                        path:'gallery',
+                        element: <ItemsGallery/>
+                    },
+                    {
+                        path:'newItem',
+                        element: <NewItem/>
                     }
                 ]
             }

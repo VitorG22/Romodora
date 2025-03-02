@@ -6,6 +6,7 @@ import ConnectToJourney from "./menuButtons/connectToJournay";
 import CharacterEdit from "./menuButtons/characterEdit";
 import MapEditorButton from "./menuButtons/mapEditor";
 import Settings from "./menuButtons/settings";
+import Items from "./menuButtons/items";
 
 export default function Menu() {
 
@@ -24,10 +25,7 @@ export default function Menu() {
                         <Ghost size={15} strokeWidth={1} />
                         Creatures
                     </SquareButton>
-                    <SquareButton variant="default"  size="lg" unable>
-                        <Box size={15} strokeWidth={1} />
-                        Items
-                    </SquareButton>
+                    <Items/>
                 </div>
                 <div className='flex flex-row gap-2 pt-4 *:w-full'>
                     <Settings/>

@@ -6,7 +6,7 @@ import { useParams } from "react-router-dom"
 import { MapsContext } from ".."
 import { BlocksList } from "../BlocksList"
 import { Minus, Mouse, Move, Plus, RotateCcwSquareIcon, SquareDashedMousePointer, SquareMousePointer } from "lucide-react"
-import { Tile } from "../classes/tileClasses"
+import { Tile } from "../../../classes/tileClasses"
 import convertMapJsonToClasses from "../scripts/convertMapJsonToClasses"
 import { IMapMatrix } from "../../../interfaces"
 

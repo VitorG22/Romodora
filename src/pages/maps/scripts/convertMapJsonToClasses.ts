@@ -1,5 +1,5 @@
 import { IMapMatrix } from "../../../interfaces";
-import { Tile } from "../classes/tileClasses";
+import { Tile } from "../../../classes/tileClasses";
 
 export default function convertMapJsonToClasses(JsonMap: IMapMatrix) {
     let newMap: IMapMatrix = {

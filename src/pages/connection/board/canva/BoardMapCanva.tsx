@@ -2,10 +2,10 @@ import { MutableRefObject, useContext, useEffect, useRef, useState } from "react
 import { AppContext } from "../../../../AppContext"
 import { drawGhostHover } from "../../../maps/scripts/drawInCanva"
 import { IMapMatrix } from "../../../../interfaces"
-import { IIteractiveMenu, Tile } from "../../../maps/classes/tileClasses"
+import { IIteractiveMenu, Tile } from "../../../../classes/tileClasses"
 import { findMob, findTileInMapMatrix } from "../../../maps/scripts/updateMapMatrix"
 import { BoardContext } from "../boardContext"
-import { IIteractiveMobMenu, Mob } from "../../../maps/classes/mobClasses"
+import { IIteractiveMobMenu, Mob } from "../../../../classes/mobClasses"
 
 export default function BoardMapCanvas() {
     const { partyData } = useContext(AppContext)
@@ -246,7 +246,7 @@ export default function BoardMapCanvas() {
         <main className='absolute flex flex-row justify-between hiddenScroll overflow-hidden h-screen w-full'>
             <section style={{ 'cursor': isDampingActive ? ('move') : ('pointer') }} ref={canvasContainer} className='relative w-full h-full overflow-hidden'>
                 <IteractiveMenu iteractiveMenuPosition={iteractiveMenuPosition} iteractiveMenuSelectedTilePosition={iteractiveMenuSelectedTilePosition} setIteractiveMenuSelectedTilePosition={setIteractiveMenuSelectedTilePosition} selectedTileToMove={selectedTileToMove} setSelectedTileToMove={setSelectedTileToMove} canvasMobRef={canvasMobRef} />
-                <canvas style={{ 'zIndex': isDampingActive ? ('50') : ('') }} ref={canvasCoverRef} className="absolute top-0 lef-0 h-screen z-[60]" />
+                <canvas style={{ 'zIndex': isDampingActive ? ('50') : ('') }} ref={canvasCoverRef} id='canvasCover' className="absolute top-0 lef-0 h-screen z-[60]" />
                 <canvas ref={canvasMobRef} id='canvasMob' className="absolute top-0 lef-0 z-30 h-screen border border-romo-400" />
                 <canvas ref={canvasWallRef} id='canvasWall' className="absolute top-0 lef-0 z-20 h-screen " />
                 <canvas ref={canvasPropsRef} id='canvasProps' className="absolute top-0 lef-0 z-10 h-screen " />
