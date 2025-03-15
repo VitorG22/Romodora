@@ -1,6 +1,7 @@
-import { MutableRefObject } from "react"
-
+import { IMapMatrix } from "../interfaces"
 export interface ITile {
+    blockId: string
+    isDynamicTile: boolean
     position: {
         X: number,
         Y: number
@@ -38,12 +39,18 @@ export interface IIteractiveMenu {
 }
 
 export class Tile {
-    position; paths; variant; size; rotate; canvaType; group; status; isVoidBlock; blockMatrix;
+    position; paths; variant; size; rotate; canvaType; group; status; isVoidBlock; blockMatrix; blockId; isDynamicTile; dynamicGridPosition
     blockSize = 100
     imageElement = new Image();
     canvasId = ''
 
     constructor(data: ITile) {
+        this.isDynamicTile = data.isDynamicTile
+        this.blockId = data.blockId
+        this.dynamicGridPosition = {
+            X: -1,
+            Y: -1
+        }
         this.paths = data.paths
         this.variant = data.variant
         this.size = data.size
@@ -89,6 +96,7 @@ export class Tile {
             }
 
         })();
+
     }
 
     // updateTile({ data, canvas, blockSize }: { data: ITile, canvas: React.MutableRefObject<HTMLCanvasElement | null>, blockSize: number }) {
@@ -134,10 +142,20 @@ export class Tile {
     // }
 
 
+    renderTile() {
+        switch (this.isDynamicTile) {
+            case true:
+                this.renderDynamic()
+                break
+            case false:
+                this.renderNormal()
+                break
+        }
+    }
 
     drawGhost({ MouseX, MouseY }: IDrawGhost) {
-        const canvas:HTMLCanvasElement|null = document.getElementById(this.canvasId) as HTMLCanvasElement
-        if(!canvas)return
+        const canvas: HTMLCanvasElement | null = document.getElementById(this.canvasId) as HTMLCanvasElement
+        if (!canvas) return
 
         let canvasCtx = canvas.getContext("2d")
         if (!canvasCtx) return
@@ -162,22 +180,38 @@ export class Tile {
         }
     }
 
-    async eraseTile() {
-        const canvas:HTMLCanvasElement|null = document.getElementById(this.canvasId) as HTMLCanvasElement
-        if(!canvas)return
-        
+    async eraseTile({ mapMatrix }: { mapMatrix?: IMapMatrix }) {
+        const canvas: HTMLCanvasElement | null = document.getElementById(this.canvasId) as HTMLCanvasElement
+        if (!canvas) return
+        console.log(this)
         let canvasCtx = canvas.getContext("2d")
         if (!canvasCtx) return new Error('Canvas Not Exist')
         this.group?.forEach(elementInRow => {
             canvasCtx.clearRect(elementInRow.X * this.blockSize, elementInRow.Y * this.blockSize, this.blockSize, this.blockSize)
         })
 
+        if(!mapMatrix || !this.isDynamicTile)return
+        
+        let thisLayerMapMatrix = mapMatrix[this.canvaType]
+        let tilesInContactGrid: (Tile | null)[][] = [
+            [thisLayerMapMatrix[this.position.Y - 1]?.[this.position.X - 1] || null, thisLayerMapMatrix[this.position.Y - 1]?.[this.position.X] || null, thisLayerMapMatrix[this.position.Y - 1]?.[this.position.X + 1] || null],
+            [thisLayerMapMatrix[this.position.Y]?.[this.position.X - 1] || null, null, thisLayerMapMatrix[this.position.Y]?.[this.position.X + 1] || null],
+            [thisLayerMapMatrix[this.position.Y + 1]?.[this.position.X - 1] || null, thisLayerMapMatrix[this.position.Y + 1]?.[this.position.X] || null, thisLayerMapMatrix[this.position.Y + 1]?.[this.position.X + 1] || null],
+        ]
+        tilesInContactGrid.flat().map(tile => tile?.setDynamicGridPosition({ mapMatrix }))
+
         return
     }
 
-    renderTile() {
-        const canvas:HTMLCanvasElement|null = document.getElementById(this.canvasId) as HTMLCanvasElement
-        if (this.isVoidBlock || !canvas) return
+    renderNormal() {
+        console.log('Rendering Tile')
+        const canvas: HTMLCanvasElement | null = document.getElementById(this.canvasId) as HTMLCanvasElement
+        if (this.isVoidBlock) { return console.log("returning because is void tile") }
+        if (!canvas) {
+            console.log("returning because canvas not existe")
+            console.log(canvas)
+            return
+        }
 
         let canvasCtx = canvas.getContext('2d')
         if (!canvasCtx) return
@@ -220,12 +254,18 @@ export class Tile {
         }
         canvasCtx.restore();
         // canvasCtx.strokeStyle = "#00000050"
-        // canvasCtx.strokeRect(tileLeft, tileTop, blockSize, blockSize)
+        // canvasCtx.strokeRect(tileLeft, tileTop, 100, 100)
 
     }
 
     deleteThisTile() {
-        this.paths = [{ name: '', path: [''] }],
+            this.blockId = '',
+            this.dynamicGridPosition = {
+                X: -1,
+                Y: -1
+            },
+            this.isDynamicTile = false,
+            this.paths = [{ name: '', path: [''] }],
             this.position = this.position,
             this.rotate = 'top',
             this.size = { X: 1, Y: 1 },
@@ -235,6 +275,126 @@ export class Tile {
 
         return this
     }
+
+    // ----- Dynamic Tile Function ----- //
+
+
+    renderDynamic() {
+        const canvas: HTMLCanvasElement | null = document.getElementById(this.canvasId) as HTMLCanvasElement
+        if (this.isVoidBlock) { return console.log("returning because is void tile") }
+        if (!canvas) {
+            console.log("returning because canvas not existe")
+            console.log(canvas)
+            return
+        }
+
+        let canvasCtx = canvas.getContext('2d')
+        if (!canvasCtx) return
+
+        let tileWidth = this.blockSize * this.size.X
+        let tileHeight = this.blockSize * this.size.Y
+        let tileLeft = this.position.X * this.blockSize
+        let tileTop = this.position.Y * this.blockSize
+
+        // console.log(this.imageElement.height)
+        // console.log(this.imageElement.width)
+        let gridBlockSize = this.imageElement.width / 3
+        // console.log(gridBlockSize)
+        let gridLeft = gridBlockSize * this.dynamicGridPosition.X
+        let gridTop = gridBlockSize * this.dynamicGridPosition.Y
+        console.log(this.dynamicGridPosition.X, this.dynamicGridPosition.Y)
+        
+
+        canvasCtx.clearRect(tileLeft, tileTop, tileWidth, tileHeight);
+
+        canvasCtx.drawImage(this.imageElement, gridLeft, gridTop, gridBlockSize, gridBlockSize, tileLeft, tileTop, tileWidth, tileHeight);
+        // canvasCtx.strokeStyle = "#00000050"
+        // canvasCtx.strokeRect(tileLeft, tileTop, 100, 100)
+
+    }
+
+    setDynamicGridPosition({ mapMatrix }: { mapMatrix: IMapMatrix }) {
+        if (!this.isDynamicTile) return
+        let thisLayerMapMatrix = mapMatrix[this.canvaType]
+        let tilesInContactGrid: (Tile | null)[][] = [
+            [thisLayerMapMatrix[this.position.Y - 1]?.[this.position.X - 1] || null, thisLayerMapMatrix[this.position.Y - 1]?.[this.position.X] || null, thisLayerMapMatrix[this.position.Y - 1]?.[this.position.X + 1] || null],
+            [thisLayerMapMatrix[this.position.Y]?.[this.position.X - 1] || null, null, thisLayerMapMatrix[this.position.Y]?.[this.position.X + 1] || null],
+            [thisLayerMapMatrix[this.position.Y + 1]?.[this.position.X - 1] || null, thisLayerMapMatrix[this.position.Y + 1]?.[this.position.X] || null, thisLayerMapMatrix[this.position.Y + 1]?.[this.position.X + 1] || null],
+        ]
+
+
+        let IdsRelationsGrid = tilesInContactGrid.map(row => {
+            return row.map(tile => {
+                if (tile == null || tile.blockId != this.blockId) return false
+                if (tile.blockId == this.blockId) return true
+            })
+        })
+        console.log(IdsRelationsGrid)
+
+        let newDynamicGridPosition = { X: 0, Y: 0 }
+
+        switch (true) {
+            case (IdsRelationsGrid[0][1] && IdsRelationsGrid[1][0] && IdsRelationsGrid[1][2] && IdsRelationsGrid[2][1]):
+                newDynamicGridPosition = { X: 2, Y: 3 }
+                break
+            case (IdsRelationsGrid[1][0] && IdsRelationsGrid[1][2] && IdsRelationsGrid[2][1]):
+                newDynamicGridPosition = { X: 2, Y: 4 }
+                break
+            case (IdsRelationsGrid[0][1] && IdsRelationsGrid[1][2] && IdsRelationsGrid[2][1]):
+                newDynamicGridPosition = { X: 0, Y: 5 }
+                break
+            case (IdsRelationsGrid[0][1] && IdsRelationsGrid[1][0] && IdsRelationsGrid[2][1]):
+                newDynamicGridPosition = { X: 1, Y: 5 }
+                break
+            case (IdsRelationsGrid[0][1] && IdsRelationsGrid[1][0] && IdsRelationsGrid[1][2]):
+                newDynamicGridPosition = { X: 2, Y: 5 }
+                break
+            case (IdsRelationsGrid[1][2] && IdsRelationsGrid[2][1]):
+                newDynamicGridPosition = { X: 0, Y: 0 }
+                break
+            case (IdsRelationsGrid[1][0] && IdsRelationsGrid[2][1]):
+                newDynamicGridPosition = { X: 2, Y: 0 }
+                break
+            case (IdsRelationsGrid[0][1] && IdsRelationsGrid[1][2]):
+                newDynamicGridPosition = { X: 0, Y: 2 }
+                break
+            case (IdsRelationsGrid[0][1] && IdsRelationsGrid[1][0]):
+                newDynamicGridPosition = { X: 2, Y: 2 }
+                break
+            case (IdsRelationsGrid[1][0] && IdsRelationsGrid[1][2]):
+                newDynamicGridPosition = { X: 1, Y: 0 }
+                break
+            case (IdsRelationsGrid[0][1] && IdsRelationsGrid[2][1]):
+                newDynamicGridPosition = { X: 0, Y: 1 }
+                break
+            case (IdsRelationsGrid[2][1]):
+                newDynamicGridPosition = { X: 0, Y: 3 }
+                break
+            case (IdsRelationsGrid[1][2]):
+                newDynamicGridPosition = { X: 1, Y: 3 }
+                break
+            case (IdsRelationsGrid[1][0]):
+                newDynamicGridPosition = { X: 0, Y: 4 }
+                break
+            case (IdsRelationsGrid[0][1]):
+                newDynamicGridPosition = { X: 1, Y: 4 }
+                break
+            default:
+                newDynamicGridPosition = { X: 1, Y: 1 }
+                break
+        }
+
+        if (newDynamicGridPosition.X == this.dynamicGridPosition.X && newDynamicGridPosition.Y == this.dynamicGridPosition.Y) { return }
+        else {
+            this.dynamicGridPosition = newDynamicGridPosition
+            this.renderTile()
+            tilesInContactGrid.flat().map(tile => tile?.setDynamicGridPosition?.({ mapMatrix }))
+        }
+
+    }
+
+
+
 
     // ----- Iteractive Menu Functions ----- //
 

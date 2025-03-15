@@ -9,6 +9,7 @@ import { Minus, Mouse, Move, Plus, RotateCcwSquareIcon, SquareDashedMousePointer
 import { Tile } from "../../../classes/tileClasses"
 import convertMapJsonToClasses from "../scripts/convertMapJsonToClasses"
 import { IMapMatrix } from "../../../interfaces"
+import DynamicBlockImage from "./components/DynamicBlockImage"
 
 
 export default function CreateMap() {
@@ -16,7 +17,7 @@ export default function CreateMap() {
     const blockSize: number = 100
     const [tileCountX, setTileCountX] = useState<number>(35)
     const [tileCountY, setTileCountY] = useState<number>(35)
-    const [selectedTile, setSelectedTileId] = useState<{ tileId: number, variant: number, statusCount: number }>({ tileId: 0, variant: 0, statusCount: 0 })
+    const [selectedTile, setSelectedTileId] = useState<{ tileId: string, variant: number, statusCount: number }>({ tileId: '', variant: 0, statusCount: 0 })
     const [isDampingActive, setIsDampingActive] = useState<boolean>(false)
     const [translateX, setTranslateX] = useState<number>(0)
     const [translateY, setTranslateY] = useState<number>(0)
@@ -37,7 +38,6 @@ export default function CreateMap() {
 
         const mapData = mapList.find(element => element.id == mapId)
         if (!mapData) return
-
         setTileCountX(mapData.sizeX)
         setTileCountY(mapData.sizeY)
 
@@ -49,6 +49,8 @@ export default function CreateMap() {
                         i = i //solve Vercel Error
                         e = e
                         return new Tile({
+                            isDynamicTile: false,
+                            blockId: '',
                             canvaType: 'floor',
                             paths: [{ name: '', path: [''] }],
                             position: { X: column, Y: row },
@@ -65,38 +67,43 @@ export default function CreateMap() {
                         i = i //solve Vercel Error
                         e = e
                         return new Tile({
-                        canvaType: 'prop',
-                        paths: [{ name: '', path: [''] }],
-                        position: { X: column, Y: row },
-                        rotate: 'top',
-                        size: { X: 1, Y: 1 },
-                        status: 0,
-                        variant: 0,
-                        blockMatrix: [[0]],
+                            isDynamicTile: false,
+                            blockId: '',
+                            canvaType: 'prop',
+                            paths: [{ name: '', path: [''] }],
+                            position: { X: column, Y: row },
+                            rotate: 'top',
+                            size: { X: 1, Y: 1 },
+                            status: 0,
+                            variant: 0,
+                            blockMatrix: [[0]],
+                        })
                     })
-                })
                 }),
                 wall: Array.from({ length: mapData.sizeY }, (i, row) => {
                     return Array.from({ length: mapData.sizeX }, (e, column) => {
                         i = i //solve Vercel Error
                         e = e
                         return new Tile({
-                        canvaType: 'wall',
-                        paths: [{ name: '', path: [''] }],
-                        position: { X: column, Y: row },
-                        rotate: 'top',
-                        size: { X: 1, Y: 1 },
-                        status: 0,
-                        variant: 0,
-                        blockMatrix: [[0]],
+                            isDynamicTile: false,
+                            blockId: '',
+                            canvaType: 'wall',
+                            paths: [{ name: '', path: [''] }],
+                            position: { X: column, Y: row },
+                            rotate: 'top',
+                            size: { X: 1, Y: 1 },
+                            status: 0,
+                            variant: 0,
+                            blockMatrix: [[0]],
+                        })
                     })
-                })
                 }),
             }
 
         } else {
             defaultMatrix = convertMapJsonToClasses(mapData.mapMatrix)
         }
+        console.log(defaultMatrix)
         setMapMatrix(defaultMatrix)
         setReadyToRender(true)
 
@@ -192,7 +199,7 @@ export default function CreateMap() {
                             canvaType: 'floor',
                             X: tileX,
                             Y: tileY,
-                            mapMatrix: mapMatrix.floor,
+                            mapMatrix: mapMatrix,
                             canva: canvasFloorRef,
                             blockSize: blockSize
                         })
@@ -207,7 +214,7 @@ export default function CreateMap() {
                             canvaType: 'wall',
                             X: tileX,
                             Y: tileY,
-                            mapMatrix: mapMatrix.wall,
+                            mapMatrix: mapMatrix,
                             canva: canvasWallRef,
                             blockSize: blockSize
                         })
@@ -227,7 +234,7 @@ export default function CreateMap() {
                             canvaType: 'prop',
                             X: tileX,
                             Y: tileY,
-                            mapMatrix: mapMatrix.prop,
+                            mapMatrix: mapMatrix,
                             canva: canvasPropsRef,
                             blockSize: blockSize
                         })
@@ -409,6 +416,8 @@ export default function CreateMap() {
 
         newFloorMapMatrix.map((row, rowIndex) => {
             row.push(new Tile({
+                isDynamicTile: false,
+                blockId: '',
                 canvaType: 'floor',
                 paths: [{ name: '', path: [''] }],
                 position: { X: tileCountX + 1, Y: rowIndex },
@@ -422,6 +431,8 @@ export default function CreateMap() {
 
         newPropMapMatrix.map((row, rowIndex) => {
             row.push(new Tile({
+                isDynamicTile: false,
+                blockId: '',
                 canvaType: 'prop',
                 paths: [{ name: '', path: [''] }],
                 position: { X: tileCountX + 1, Y: rowIndex },
@@ -435,6 +446,8 @@ export default function CreateMap() {
 
         newWallMapMatrix.map((row, rowIndex) => {
             row.push(new Tile({
+                isDynamicTile: false,
+                blockId: '',
                 canvaType: 'wall',
                 paths: [{ name: '', path: [''] }],
                 position: { X: tileCountX + 1, Y: rowIndex },
@@ -482,6 +495,8 @@ export default function CreateMap() {
 
         newFloorMapMatrix.push(
             Array.from({ length: tileCountX }, (e, column) => new Tile({
+                isDynamicTile: false,
+                blockId: "",
                 canvaType: 'floor',
                 paths: [{ name: '', path: [''] }],
                 position: { X: column, Y: tileCountY + 1 },
@@ -495,6 +510,8 @@ export default function CreateMap() {
 
         newPropMapMatrix.push(
             Array.from({ length: tileCountX }, (e, column) => new Tile({
+                isDynamicTile: false,
+                blockId: '',
                 canvaType: 'prop',
                 paths: [{ name: '', path: [''] }],
                 position: { X: column, Y: tileCountY + 1 },
@@ -509,6 +526,8 @@ export default function CreateMap() {
 
         newWallMapMatrix.push(
             Array.from({ length: tileCountX }, (e, column) => new Tile({
+                isDynamicTile: false,
+                blockId: '',
                 canvaType: 'wall',
                 paths: [{ name: '', path: [''] }],
                 position: { X: column, Y: tileCountY + 1 },
@@ -551,9 +570,9 @@ export default function CreateMap() {
             <section ref={canvasContainer} className='relative w-full h-full overflow-hidden'>
                 <CreateMapHud canvasZoomValue={canvasZoomValue} tileCountX={tileCountX} tileCountY={tileCountY} selectedTile={selectedTile} selectedTileStatus={tileStatus} tileRotate={tileRotate} handleTileCountXMinus={handleTileCountXMinus} handleTileCountXPlus={handleTileCountXPlus} handleTileCountYMinus={handleTileCountYMinus} handleTileCountYPlus={handleTileCountYPlus} />
                 <canvas ref={canvasCoverRef} className="absolute top-0 lef-0 z-40 border border-romo-400 h-screen " />
-                <canvas ref={canvasWallRef} className="absolute top-0 lef-0 z-20 h-screen " />
-                <canvas ref={canvasPropsRef} className="absolute top-0 lef-0 z-10 h-screen " />
-                <canvas ref={canvasFloorRef} className="absolute top-0 lef-0 z-0 h-screen " />
+                <canvas id='canvasWall' ref={canvasWallRef} className="absolute top-0 lef-0 z-20 h-screen " />
+                <canvas id='canvasProps' ref={canvasPropsRef} className="absolute top-0 lef-0 z-10 h-screen " />
+                <canvas id='canvasFloor' ref={canvasFloorRef} className="absolute top-0 lef-0 z-0 h-screen " />
             </section>
             <LateralTileMenu selectedTile={selectedTile} setSelectedTileId={setSelectedTileId} mapMatrix={mapMatrix} mapSize={{ X: tileCountX, Y: tileCountY }} />
         </main>
@@ -565,7 +584,7 @@ interface IHud {
     tileCountX: number
     tileCountY: number
     selectedTile: {
-        tileId: number;
+        tileId: string;
         variant: number;
     }
     tileRotate: number
@@ -615,9 +634,14 @@ function CreateMapHud({ canvasZoomValue, tileCountX, tileCountY, selectedTile, s
                 {selectedBlock &&
                     <>
                         <p className='font-thin text-sm italic text-lagun-200'>{selectedBlock.variant[selectedTile.variant].name}</p>
-                        <img style={{ rotate: `${tileRotate * 90}deg` }}
-                            className='border border-lagun-500 aspect-square w-20 rounded-md'
-                            src={selectedBlock.variant[selectedTile.variant].path[selectedTileStatus]} />
+                        {selectedBlock.isDynamicTile ? (
+                            <DynamicBlockImage img={selectedBlock.variant[selectedTile.variant].path[selectedTileStatus]} className='w-20 aspect-square border border-romo-200' />
+                        ) : (
+                            <img style={{ rotate: `${tileRotate * 90}deg` }}
+                                className='border border-lagun-500 aspect-square w-20 rounded-md'
+                                src={selectedBlock.variant[selectedTile.variant].path[selectedTileStatus]} />
+                        )
+                        }
                     </>
                 }
             </section>

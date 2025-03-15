@@ -1,7 +1,7 @@
 
 export interface IBlock {
-
-    id: number
+    isDynamicTile: boolean
+    id: string
     variant: Array<{
         name: string,
         path: string[]
@@ -20,7 +20,8 @@ export interface IBlock {
 
 export const BlocksList: IBlock[] = [
     {
-        id: 0,
+        isDynamicTile: false,
+        id: "0",
         statusCount: 2,
         filter: 'floor',
         variant: [
@@ -48,7 +49,8 @@ export const BlocksList: IBlock[] = [
         group:[[1]]
     },
     {
-        id: 1,
+        isDynamicTile: false,
+        id: "1",
         statusCount: 4,
         filter: 'floor',
         variant: [
@@ -101,7 +103,8 @@ export const BlocksList: IBlock[] = [
     ]
     },
     {
-        id: 2,
+        isDynamicTile: false,
+        id: "2",
         statusCount: 3,
         filter: 'floor',
         variant: [
@@ -147,7 +150,8 @@ export const BlocksList: IBlock[] = [
         group:[[1]]
     },
     {
-        id: 3,
+        isDynamicTile: false,
+        id: "3",
         statusCount: 2,
         filter: 'floor',
         variant: [
@@ -185,7 +189,8 @@ export const BlocksList: IBlock[] = [
     ]
     },
     {
-        id: 4,
+        isDynamicTile: false,
+        id: "4",
         statusCount: 1,
         filter: 'floor',
         variant: [
@@ -208,7 +213,8 @@ export const BlocksList: IBlock[] = [
         ]
     },
     {
-        id: 5,
+        isDynamicTile: false,
+        id: "5",
         statusCount: 4,
         filter: 'floor',
         variant: [
@@ -285,7 +291,8 @@ export const BlocksList: IBlock[] = [
         group:[[1]]
     },
     {
-        id: 6,
+        isDynamicTile: false,
+        id: "6",
         statusCount: 1,
         filter: 'border',
         variant: [
@@ -314,7 +321,8 @@ export const BlocksList: IBlock[] = [
         ]
     },
     {
-        id: 7,
+        isDynamicTile: false,
+        id: "7",
         statusCount: 1,
         filter: 'border',
         variant: [
@@ -343,7 +351,8 @@ export const BlocksList: IBlock[] = [
         ]
     },
     {
-        id: 8,
+        isDynamicTile: false,
+        id: "8",
         statusCount: 1,
         filter: 'border',
         variant: [
@@ -379,7 +388,8 @@ export const BlocksList: IBlock[] = [
         ]
     },
     {
-        id: 9,
+        isDynamicTile: false,
+        id: "9",
         statusCount: 1,
         filter: 'border',
         variant: [
@@ -416,7 +426,8 @@ export const BlocksList: IBlock[] = [
         ]
     },
     {
-        id: 10,
+        isDynamicTile: false,
+        id: "10",
         statusCount: 1,
         filter: 'border',
         variant: [
@@ -454,7 +465,8 @@ export const BlocksList: IBlock[] = [
         ]
     },
     {
-        id: 11,
+        isDynamicTile: false,
+        id: "11",
         statusCount: 1,
         filter: 'floor',
         variant: [
@@ -475,7 +487,8 @@ export const BlocksList: IBlock[] = [
         group:[[1]]
     },
     {
-        id: 12,
+        isDynamicTile: false,
+        id: "12",
         statusCount: 1,
         filter: 'border',
         variant: [
@@ -506,7 +519,8 @@ export const BlocksList: IBlock[] = [
         ]
     },
     {
-        id: 13,
+        isDynamicTile: false,
+        id: "13",
         statusCount: 1,
         filter: 'border',
         variant: [
@@ -542,7 +556,8 @@ export const BlocksList: IBlock[] = [
         ]
     },
     {
-        id: 14,
+        isDynamicTile: false,
+        id: "14",
         statusCount: 1,
         filter: 'border',
         variant: [
@@ -579,7 +594,8 @@ export const BlocksList: IBlock[] = [
         ]
     },
     {
-        id: 15,
+        isDynamicTile: false,
+        id: "15",
         statusCount: 1,
         filter: 'border',
         variant: [
@@ -617,7 +633,8 @@ export const BlocksList: IBlock[] = [
         ]
     },
     {
-        id: 16,
+        isDynamicTile: false,
+        id: "16",
         statusCount: 1,
         filter: 'door',
         variant: [
@@ -654,7 +671,8 @@ export const BlocksList: IBlock[] = [
         ]
     },
     {
-        id: 17,
+        isDynamicTile: false,
+        id: "17",
         statusCount: 1,
         filter: 'door',
         variant: [
@@ -691,7 +709,8 @@ export const BlocksList: IBlock[] = [
         ]
     },
     {
-        id: 18,
+        isDynamicTile: false,
+        id: "18",
         statusCount: 1,
         filter: 'border',
         variant: [
@@ -714,7 +733,8 @@ export const BlocksList: IBlock[] = [
         ]
     },
     {
-        id: 19,
+        isDynamicTile: false,
+        id: "19",
         statusCount: 1,
         filter: 'wall',
         variant: [
@@ -744,7 +764,8 @@ export const BlocksList: IBlock[] = [
         ]
     },
     {
-        id: 20,
+        isDynamicTile: false,
+        id: "20",
         statusCount: 1,
         filter: 'wall',
         variant: [
@@ -794,7 +815,8 @@ export const BlocksList: IBlock[] = [
         group:[[1]]
     },
     {
-        id: 21,
+        isDynamicTile: false,
+        id: "21",
         statusCount: 1,
         filter: 'wall',
         variant: [
@@ -817,7 +839,8 @@ export const BlocksList: IBlock[] = [
         ]
     },
     {
-        id: 22,
+        isDynamicTile: false,
+        id: "22",
         statusCount: 1,
         filter: 'wall',
         variant: [
@@ -840,7 +863,8 @@ export const BlocksList: IBlock[] = [
         ]
     },
     {
-        id: 23,
+        isDynamicTile: false,
+        id: "23",
         statusCount: 1,
         filter: 'wall',
         variant: [
@@ -863,7 +887,8 @@ export const BlocksList: IBlock[] = [
         ]
     },
     {
-        id: 24,
+        isDynamicTile: false,
+        id: "24",
         statusCount: 1,
         filter: 'wall',
         variant: [
@@ -886,7 +911,8 @@ export const BlocksList: IBlock[] = [
         ]
     },
     {
-        id: 25,
+        isDynamicTile: false,
+        id: "25",
         statusCount: 1,
         filter: 'wall',
         variant: [
@@ -915,7 +941,8 @@ export const BlocksList: IBlock[] = [
         ]
     },
     {
-        id: 27,
+        isDynamicTile: false,
+        id: "27",
         statusCount: 1,
         filter: 'border',
         variant: [
@@ -944,7 +971,8 @@ export const BlocksList: IBlock[] = [
         ]
     },
     {
-        id: 28,
+        isDynamicTile: false,
+        id: "28",
         statusCount: 1,
         filter: 'border',
         variant: [
@@ -973,7 +1001,8 @@ export const BlocksList: IBlock[] = [
         ]
     },
     {
-        id: 29,
+        isDynamicTile: false,
+        id: "29",
         statusCount: 1,
         filter: 'border',
         variant: [
@@ -996,7 +1025,8 @@ export const BlocksList: IBlock[] = [
         ]
     },
     {
-        id: 30,
+        isDynamicTile: false,
+        id: "30",
         statusCount: 1,
         filter: 'border',
         variant: [
@@ -1024,7 +1054,8 @@ export const BlocksList: IBlock[] = [
         ]
     },
     {
-        id: 31,
+        isDynamicTile: false,
+        id: "31",
         statusCount: 1,
         filter: 'border',
         variant: [
@@ -1065,7 +1096,8 @@ export const BlocksList: IBlock[] = [
         ]
     },
     {
-        id: 33,
+        isDynamicTile: false,
+        id: "33",
         statusCount: 1,
         filter: 'floor',
         variant: [
@@ -1094,7 +1126,8 @@ export const BlocksList: IBlock[] = [
         ]
     },
     {
-        id: 34,
+        isDynamicTile: false,
+        id: "34",
         statusCount: 1,
         filter: 'floor',
         variant: [
@@ -1123,7 +1156,8 @@ export const BlocksList: IBlock[] = [
         ]
     },
     {
-        id: 35,
+        isDynamicTile: false,
+        id: "35",
         statusCount: 1,
         filter: 'floor',
         variant: [
@@ -1151,7 +1185,8 @@ export const BlocksList: IBlock[] = [
         ]
     },
     {
-        id: 36,
+        isDynamicTile: false,
+        id: "36",
         statusCount: 1,
         filter: 'border',
         variant: [
@@ -1173,7 +1208,8 @@ export const BlocksList: IBlock[] = [
         ]
     },
     {
-        id: 37,
+        isDynamicTile: false,
+        id: "37",
         statusCount: 1,
         filter: 'border',
         variant: [
@@ -1198,7 +1234,8 @@ export const BlocksList: IBlock[] = [
         ]
     },
     {
-        id: 38,
+        isDynamicTile: false,
+        id: "38",
         statusCount: 1,
         filter: 'floor',
         variant: [
@@ -1220,7 +1257,8 @@ export const BlocksList: IBlock[] = [
         ]
     },
     {
-        id: 39,
+        isDynamicTile: false,
+        id: "39",
         statusCount: 1,
         filter: 'floor',
         variant: [
@@ -1246,5 +1284,47 @@ export const BlocksList: IBlock[] = [
         group:[
             [1,1,1]
         ]
+    },
+    {
+        isDynamicTile: true,
+        id: "40",
+        statusCount: 1,
+        filter: 'wall',
+        variant: [
+            {
+                name: 'Wall Test',
+                path: [
+                    '/assets/dynamic/dynamic_teste_1.png'
+                ]
+            },                                            
+        ],
+        renderLevel: 0,
+        type: 'wall',
+        size: {
+            X:1,
+            Y:1
+        },
+        group:[[1]]
+    },
+    {
+        isDynamicTile: true,
+        id: "41",
+        statusCount: 1,
+        filter: 'wall',
+        variant: [
+            {
+                name: 'Wall Test',
+                path: [
+                    '/assets/dynamic/dynamic_teste_2.png'
+                ]
+            },                                            
+        ],
+        renderLevel: 0,
+        type: 'wall',
+        size: {
+            X:1,
+            Y:1
+        },
+        group:[[1]]
     },
 ]

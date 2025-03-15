@@ -9,9 +9,12 @@ export default function convertMapJsonToClasses(JsonMap: IMapMatrix) {
     }
 
     JsonMap.floor.forEach((row) => {
-        let newRow:Tile[] = []
+        let newRow: Tile[] = []
         row.forEach((tileData) => {
-            newRow.push(new Tile({
+            let newTile = new Tile({
+                blockMatrix: tileData.blockMatrix,
+                isDynamicTile: tileData.isDynamicTile,
+                blockId: tileData.blockId,
                 group: tileData.group,
                 paths: tileData.paths,
                 position: tileData.position,
@@ -21,16 +24,20 @@ export default function convertMapJsonToClasses(JsonMap: IMapMatrix) {
                 canvaType: tileData.canvaType,
                 variant: tileData.variant
             })
-            )
+            newTile.setDynamicGridPosition({ mapMatrix: JsonMap })
+            newRow.push(newTile)
         }
         )
         newMap.floor.push(newRow)
     })
 
     JsonMap.prop.forEach((row) => {
-        let newRow:Tile[] = []
+        let newRow: Tile[] = []
         row.forEach((tileData) => {
-            newRow.push(new Tile({
+            let newTile = new Tile({
+                blockId: tileData.blockId,
+                isDynamicTile: tileData.isDynamicTile,
+                blockMatrix: tileData.blockMatrix,
                 group: tileData.group,
                 paths: tileData.paths,
                 position: tileData.position,
@@ -40,16 +47,20 @@ export default function convertMapJsonToClasses(JsonMap: IMapMatrix) {
                 canvaType: tileData.canvaType,
                 variant: tileData.variant
             })
-            )
+            newTile.setDynamicGridPosition({ mapMatrix: JsonMap })
+            newRow.push(newTile)
         }
         )
         newMap.prop.push(newRow)
     })
 
     JsonMap.wall.forEach((row) => {
-        let newRow:Tile[] = []
+        let newRow: Tile[] = []
         row.forEach((tileData) => {
-            newRow.push(new Tile({
+            let newTile = new Tile({
+                blockId: tileData.blockId,
+                isDynamicTile: tileData.isDynamicTile,
+                blockMatrix: tileData.blockMatrix,
                 group: tileData.group,
                 paths: tileData.paths,
                 position: tileData.position,
@@ -59,7 +70,8 @@ export default function convertMapJsonToClasses(JsonMap: IMapMatrix) {
                 canvaType: tileData.canvaType,
                 variant: tileData.variant
             })
-            )
+            newTile.setDynamicGridPosition({ mapMatrix: JsonMap })
+            newRow.push(newTile)
         }
         )
         newMap.wall.push(newRow)

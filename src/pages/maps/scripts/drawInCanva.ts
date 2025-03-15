@@ -9,7 +9,7 @@ interface IDrawGhost {
     tileCountY: number,
     isCtrlActive: boolean,
     isAltActive: boolean,
-    tileId: number,
+    tileId: string,
     rotate: 'top' | 'right' | 'left' | 'bottom'
 }
 

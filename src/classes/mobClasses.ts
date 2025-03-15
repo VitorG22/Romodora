@@ -82,13 +82,22 @@ export class Mob extends Tile {
         canvasCtx.restore();
         canvasCtx.strokeStyle = this.color
         canvasCtx.lineWidth = 6
-        canvasCtx.strokeRect(tileLeft + 3, tileTop + 3, this.blockSize - 6, this.blockSize -6)
+        canvasCtx.strokeRect(tileLeft + 3, tileTop + 3, this.blockSize - 6, this.blockSize - 6)
 
     }
 
+    // clearTile() {
+    //     const canvas: HTMLCanvasElement | null = document.getElementById(this.canvasId) as HTMLCanvasElement
+    //     if (!canvas) return
+    //     console.log(this)
+    //     let canvasCtx = canvas.getContext("2d")
+    //     if (!canvasCtx) return new Error('Canvas Not Exist')
+    //     canvasCtx.clearRect(this.position.X * this.blockSize, this.position.Y * this.blockSize, this.blockSize, this.blockSize)
+    // }
+
     moveTo({ newPosition }: { newPosition: { X: number, Y: number } }) {
 
-        this.eraseTile()
+        this.eraseTile({})
         let newGroup: { X: number; Y: number; }[] = []
         // this.group.forEach(position => {
         //     if (position.X < 0 || position.Y < 0) {
@@ -119,7 +128,7 @@ export class Mob extends Tile {
         let rotateArray: Array<'top' | 'right' | 'bottom' | 'left'> = ['top', 'right', 'bottom', 'left']
         let rotateIndex: number = rotateArray.findIndex(element => element == this.rotate)
 
-        this.eraseTile()
+        this.eraseTile({})
 
         if (rotateIndex >= 3) {
             this.rotate = 'top'
@@ -138,7 +147,7 @@ export class Mob extends Tile {
         let rotateArray: Array<'top' | 'right' | 'bottom' | 'left'> = ['top', 'right', 'bottom', 'left']
         let rotateIndex: number = rotateArray.findIndex(element => element == this.rotate)
 
-        this.eraseTile()
+        this.eraseTile({})
 
         if (rotateIndex <= 0) {
             this.rotate = 'left'
@@ -170,7 +179,7 @@ export class Mob extends Tile {
     }
 
     ChangeHealth({ operator, type }: { operator: "plus" | "minus", type: 'currentHealth' | 'currentHealthBonus' | 'maxHealthBase' | 'maxHealthBonus' }) {
-        
+
         if (type == "currentHealth") {
             switch (operator) {
                 case "plus":
