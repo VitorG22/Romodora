@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom'
 import getFormValues from '../../assets/forms/getFormValues'
 import { getData, PostData } from '../../scripts/axios'
 import { Loader, LoaderContainer } from '../../assets/loader/loader'
+import NavBarTop from '../../assets/navBar/navBarTop'
 
 export default function Configure() {
 
