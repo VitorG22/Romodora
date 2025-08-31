@@ -26,9 +26,9 @@ export interface IPlayer extends IPerson {
     character: ICharacter
 }
 
-interface ITable {
-    players: IPlayer[]
-}
+// interface ITable {
+//     players: IPlayer[]
+// }
 
 export class Game {
     // users;lobbyID;lobbyOwner;socket;tableData;

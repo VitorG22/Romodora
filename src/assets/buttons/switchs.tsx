@@ -1,5 +1,3 @@
-import { useState } from "react"
-
 interface ISwitch extends React.ComponentPropsWithoutRef<'input'> {
     name: string
     id: string

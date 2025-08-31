@@ -1,5 +1,5 @@
+import { Loader, LoaderContainer } from '../../assets/loader/loader'
 import { useContext, useEffect, useState } from "react"
-import { socketContext } from "../home"
 import { GameContext } from "../../scripts/socket"
 import { LockKeyhole, User2, X } from "lucide-react"
 import { useNavigate } from "react-router-dom"
@@ -41,6 +41,11 @@ export default function GamesListDefault({ setIsGamesListOpen }: { setIsGamesLis
 
     return (
         <main className="flex justify-center items-center absolute top-0 left-0 w-full h-full z-30">
+            {isLoadingList &&
+                <LoaderContainer>
+                    <Loader />
+                </LoaderContainer>
+            }
             <div className="absolute top-0 left-0 h-full w-full bg-stone-500/40 backdrop-blur-[1px] z-10"></div>
             <section className='z-20 bg-stone-200 px-4 py-4 max-h-3/4'>
                 <X strokeWidth={1} className="justify-self-end mb-2 hover:bg-purple-500 hover:text-white duration-150 hover:cursor-pointer" onClick={() => setIsGamesListOpen(false)} />
@@ -56,20 +61,20 @@ function GameCard({ gameData }: { gameData: IGameInList }) {
     const game = useContext(GameContext)
     const navigate = useNavigate()
 
-    const joinInGame = ()=>{
-        game?.socket?.emit("joinInGame", {gameId:gameData.id}, (res:{status: 200})=>{
-            if(res.status != 200) return
+    const joinInGame = () => {
+        game?.socket?.emit("joinInGame", { gameId: gameData.id }, (res: { status: 200 }) => {
+            if (res.status != 200) return
             game.isHost = false,
-            game.lobbyId = gameData.id,
-            game.activeSocketListeners()
-            
+                game.lobbyId = gameData.id,
+                game.activeSocketListeners()
+
             navigate('/game/lobby')
-            
+
         })
     }
-    
+
     return (
-        <li onClick={()=>joinInGame()} className='hover:cursor-pointer flex flex-row items-center gap-10 py-4 px-4  bg-linear-45 duration-150
+        <li onClick={() => joinInGame()} className='hover:cursor-pointer flex flex-row items-center gap-10 py-4 px-4  bg-linear-45 duration-150
                         from-stone-500/40 via-stone-500/10 to-stone-500/10
                         hover:from-purple-700 hover:via-purple-600/50 hover:to-purple-500/50 hover:ring-purple-500 hover:text-white hover:ring 
                         hover:translate-x-1

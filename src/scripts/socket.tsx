@@ -1,4 +1,4 @@
-import { io, Socket } from "socket.io-client"
+import { io } from "socket.io-client"
 import { createContext, useEffect, useState, type ReactNode } from 'react'
 import { Game, type IGame } from "../pages/game/gameObject"
 import { useSelector } from "react-redux"
@@ -12,7 +12,7 @@ export const GameContext = createContext<IGame | null>(null)
 
 export function GameContextProvider({ children }: { children: ReactNode }) {
     const accessToken = getCookie('accessToken')
-    const { isLogged, userData } = useSelector((state: RootState) => state.user)
+    const { isLogged } = useSelector((state: RootState) => state.user)
     const [game, setGame] = useState(new Game({
         socket: null,
         isHost: false,

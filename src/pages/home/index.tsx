@@ -1,13 +1,11 @@
 import NavBarTop from "../../assets/navBar/navBarTop";
 import * as Button from '../../assets/buttons/buttons'
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import type { AppDispatch } from "../../redux/store";
 import { createContext, useContext, useState } from "react";
 import { type Socket } from "socket.io-client";
 import { GameContext } from "../../scripts/socket";
 import type { IGame } from "../game/gameObject";
-import { CrownIcon, GlobeIcon, KeyRound, KeyRoundIcon, LogInIcon, MapIcon, UserRoundIcon } from "lucide-react";
+import { CrownIcon, GlobeIcon, KeyRoundIcon, LogInIcon, MapIcon, UserRoundIcon } from "lucide-react";
 import GamesListDefault from "../game/gamesList";
 import { Loader, LoaderContainer } from "../../assets/loader/loader";
 

@@ -1,6 +1,6 @@
 import { useContext } from "react"
 import { GameContext } from "../../../scripts/socket"
-import type { IPerson, IPlayer } from "../gameObject"
+import type { IPerson } from "../gameObject"
 import { LogOutIcon, UserRoundIcon } from "lucide-react"
 import * as Button from '../../../assets/buttons/buttons'
 import { useNavigate } from "react-router-dom"
@@ -8,12 +8,7 @@ import { useNavigate } from "react-router-dom"
 export default function GameLobby() {
     const navigate = useNavigate()
     const game = useContext(GameContext)
-
-
-    const functionTeste = () => {
-        game?.socket?.emit("teste")
-    }
-
+    
     const startGame = ()=>{
 
     }

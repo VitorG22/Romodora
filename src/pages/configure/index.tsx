@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import * as Button from '../../assets/buttons/buttons'
 import * as Input from '../../assets/inputs/inputs'
-import NavBarTop from '../../assets/navBar/navBarTop'
 import { LogOutIcon, Trash } from 'lucide-react'
 import { useDispatch, useSelector } from 'react-redux'
 import type { AppDispatch, RootState } from '../../redux/store'
@@ -61,7 +60,7 @@ function TabUserConfig() {
         PostData({
             endPoint: 'changeUserData',
             data: newDataObject,
-            onSuccess: (result) => {
+            onSuccess: () => {
                 getData({
                     endPoint: 'getUserDataByToken',
                     onSuccess: (res) => {

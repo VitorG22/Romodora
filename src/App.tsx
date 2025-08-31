@@ -30,7 +30,7 @@ function App() {
           navigate('/home')
           setIsLoading(false)
         },
-        onError: (res) => {
+        onError: () => {
           setIsLoading(false)
         }
       })
@@ -45,7 +45,7 @@ function App() {
           dispatch(changeUser(res.data))
           setIsLoading(false)
         },
-        onError: (res) => {
+        onError: () => {
           setIsLoading(false)
           navigate('/')
         }

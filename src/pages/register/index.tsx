@@ -36,7 +36,7 @@ function SendRegisterData({ setCurrentStep, setUserEmail }: { setCurrentStep: Re
         PostData({
             endPoint: "register",
             data: { email, password, name },
-            onSuccess: (res) => {
+            onSuccess: () => {
                 setIsLoading(false)
                 setUserEmail(email.toString())
                 setCurrentStep(1)

@@ -1,5 +1,5 @@
 import { ChevronDown, ChevronLeft, ChevronRight, ChevronUp, Eye, EyeClosed } from "lucide-react"
-import React, { Children, useEffect, useState } from "react"
+import React, { useState } from "react"
 
 interface IContainer extends React.ComponentPropsWithoutRef<'div'> {
     color: "white" | "black"

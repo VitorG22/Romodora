@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Loader, LoaderContainer } from "../../assets/loader/loader";
-import NavBarTop from "../../assets/navBar/navBarTop";
 import type { ICharacter } from "./charactersClass";
 import { ArrowLeftFromLineIcon, Heart, Plus, TrashIcon, UserRound } from "lucide-react";
 import * as Button from '../../assets/buttons/buttons'
