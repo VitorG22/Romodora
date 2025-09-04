@@ -1,7 +1,7 @@
 export interface ICharacter {
     name: string,
     id: string,
-    picture: string|null,
+    picture: string,
     class: string,
     subClass: string,
     race: string,

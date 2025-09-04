@@ -3,15 +3,13 @@ import { useContext, useEffect, useState } from "react"
 import { GameContext } from "../../scripts/socket"
 import { LockKeyhole, User2, X } from "lucide-react"
 import { useNavigate } from "react-router-dom"
+import type { IPerson } from './gameObject'
 
 interface IGameInList {
     id: string
     name: string,
     password: boolean,
-    game_host: {
-        name: string,
-        picture: string
-    }
+    game_host: IPerson
 }
 
 export default function GamesListDefault({ setIsGamesListOpen }: { setIsGamesListOpen: React.Dispatch<React.SetStateAction<boolean>> }) {
@@ -33,7 +31,7 @@ export default function GamesListDefault({ setIsGamesListOpen }: { setIsGamesLis
                 return
             }
             setGamesList(res.activeGamesList)
-            setIsLoadingList(true)
+            setIsLoadingList(false)
         })
     }
 

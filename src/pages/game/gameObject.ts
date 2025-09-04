@@ -8,10 +8,11 @@ export interface IGame {
     isHost: boolean
     setGameFunction: React.Dispatch<React.SetStateAction<Game>> | null
     // lobbyOwner: IPerson
-    // tableData: ITable
+    tableData: ITable
 
     quitGame: ()=>void
     activeSocketListeners: ()=>void
+    changeCharacterData: ({userId, CharacterData}:{userId:string, CharacterData: ICharacter})=>void | (()=>void)
 }
 
 export interface IPerson {
@@ -23,43 +24,39 @@ export interface IPerson {
 }
 
 export interface IPlayer extends IPerson {
-    character: ICharacter
+    character: ICharacter | null
 }
 
-// interface ITable {
-//     players: IPlayer[]
-// }
+interface ITable {
+    players: IPlayer[]
+}
 
 export class Game {
-    // users;lobbyID;lobbyOwner;socket;tableData;
 
-    // constructor({users,lobbyID,lobbyOwner,socket,tableData}:IGame) {
-    //     this.users = users
-    //     this.lobbyID = lobbyID 
-    //     this.lobbyOwner = lobbyOwner 
-    //     this.tableData = tableData 
-    //     this.socket = socket 
-    // }
+    socket;users; lobbyId; isHost;tableData;setGameFunction;
 
-    socket;users; lobbyId; isHost;setGameFunction;
-
-    constructor({ socket,users, lobbyId, isHost,setGameFunction }: IGame) {
+    constructor({ socket,users, lobbyId, isHost,tableData,setGameFunction }: IGame) {
         this.socket = socket
+        this.tableData = tableData
         this.isHost = isHost
         this.users = users
         this.lobbyId = lobbyId
         this.setGameFunction = setGameFunction
     }
 
+    private setGame(newGameData:IGame){
+        this.setGameFunction?.(new Game(newGameData))
+    }
+    
     activeSocketListeners(){
         this.socket?.on('updateGameData', (payload)=>{
             let newGameData = {...this}
             console.log(payload)
-            newGameData.users = payload.users
-            this.setGameFunction?.(new Game(newGameData))
+            newGameData = {...newGameData, ...payload}
+            // this.setGameFunction?.(new Game(newGameData))
+            this.setGame(newGameData)
         })
     }
-
     
     quitGame(){
         this.socket?.emit("quitGame", {gameId: this.lobbyId})
@@ -68,6 +65,20 @@ export class Game {
         newGameData.users = []
         newGameData.isHost = false,
         newGameData.lobbyId = ""
+        newGameData.tableData = {
+            players:[]
+        }
         this.setGameFunction?.(new Game(newGameData))
+    }
+
+    changeCharacterData({userId, CharacterData}:{userId:string, CharacterData: ICharacter}){
+        let newGameData ={...this}
+        let playerIndex = this.tableData.players.findIndex(playerData => playerData.id == userId)
+        
+        if(playerIndex != -1){
+            newGameData.tableData.players[playerIndex].character = CharacterData
+        }
+
+        this.socket?.emit('changePlayerData', {gameId: this.lobbyId ,newPlayerData: newGameData.tableData.players[playerIndex]})
     }
 }

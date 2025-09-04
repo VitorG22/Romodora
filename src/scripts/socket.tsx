@@ -18,9 +18,11 @@ export function GameContextProvider({ children }: { children: ReactNode }) {
         isHost: false,
         lobbyId: '',
         users: [],
+        tableData: {players: []},
         setGameFunction: () => { },
         activeSocketListeners: () => { },
-        quitGame: () => { }
+        quitGame: () => { },
+        changeCharacterData: ()=>{}
     }))
 
     useEffect(() => {
