@@ -12,7 +12,7 @@ export function CharacterList({ setDetailCardData }: { setDetailCardData: React.
 
     return (
         <section id="characterList" className='flex flex-row justify-self-end col-start-8 col-end-10 bg-stone-900 row-start-1 row-end-4 z-10 '>
-            <button className='h-full w-fit hover:bg-stone-400/40 text-stone-400 hover:cursor-pointer' onClick={() => setIsCharacterListOpen(!isCharacterListOpen)}>
+            <button className='h-full w-fit hover:bg-stone-800 text-stone-400 hover:cursor-pointer' onClick={() => setIsCharacterListOpen(!isCharacterListOpen)}>
                 {isCharacterListOpen ? (<ChevronRight strokeWidth={1} />) : (<ChevronLeft strokeWidth={1} />)}
             </button>
             <ul

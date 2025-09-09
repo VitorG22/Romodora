@@ -1,0 +1,22 @@
+.CardData{
+    width: 0px; 
+    overflow: hidden;
+    transition: 600ms ease;
+    transition-delay: 300ms;
+}
+.CardData  >*{
+    transition: 300ms ease;
+    opacity: 0%;
+    transition-delay: 0s;
+}
+
+.isCardOpen{
+    width: 100%;
+    transition-delay: 0s;
+} 
+
+.isCardOpen  > *{
+    opacity: 100%;   
+    transition-delay: 300ms;
+    
+}
