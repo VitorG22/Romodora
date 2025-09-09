@@ -13,7 +13,7 @@ export function getCookie(name: string) {
         .split('; ')
         .find((row) => row.startsWith(`${name}=`))
 
-    return cookies ? cookies.split('=')[1] : '';
+    return cookies ? cookies.split('=')[1] : null;
 }
 
 export function deleteCookie(name: string) {

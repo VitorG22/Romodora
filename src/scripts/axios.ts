@@ -2,7 +2,7 @@ import axios from "axios"
 import { getCookie } from "./cookies"
 
 export async function PostData({data,endPoint,onSuccess, onError}: {data:any, endPoint:string, onSuccess: (res:any)=>void, onError?: (res:any)=>void} ){
-    const token = getCookie('accessToken') || null
+    const token = getCookie('accessToken')
     const baseURL = import.meta.env.VITE_API_URL
 
     try {
