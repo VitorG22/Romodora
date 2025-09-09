@@ -1,8 +1,4 @@
-import { useContext } from "react"
-import { GameContext } from "../../../../scripts/socket"
-
 export function TableCanvas() {
-    const game = useContext(GameContext)
 
     return (
         <section className="flex items-center justify-center absolute top-0 left-0 w-full h-full z-0">

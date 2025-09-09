@@ -12,7 +12,6 @@ export function CharacterList({ setDetailCardData }: { setDetailCardData: React.
 
     return (
         <section id="characterList" className='flex flex-row justify-self-end col-start-8 col-end-10 bg-stone-900 row-start-1 row-end-4 z-10 '>
-            {/* <input type='checkbox' checked={isCharacterListOpen} className='opacity-0 h-0 w-0 absolute top-0 left-0' /> */}
             <button className='h-full w-fit hover:bg-stone-400/40 text-stone-400 hover:cursor-pointer' onClick={() => setIsCharacterListOpen(!isCharacterListOpen)}>
                 {isCharacterListOpen ? (<ChevronRight strokeWidth={1} />) : (<ChevronLeft strokeWidth={1} />)}
             </button>
@@ -32,7 +31,6 @@ function CharacterBanner({ playerData, setDetailCardData, isCharacterListOpen }:
     const CharacterBannerRef = useRef<HTMLLIElement>(null)
 
     useEffect(() => {
-        // CharacterBannerRef.current?.classList.replace('CharacterBannerOpen', 'CharacterBannerClose')
         switch (isCharacterListOpen) {
             case true:
                 CharacterBannerRef.current?.classList.remove('CharacterBannerCollapse')
