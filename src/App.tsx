@@ -7,6 +7,7 @@ import { changeUser } from "./redux/userSlice"
 import { getData } from "./scripts/axios"
 import { Loader, LoaderContainer } from "./assets/loader/loader"
 import { GameContextProvider } from "./scripts/socket"
+import { setNavigator } from "./scripts/navigate"
 
 function App() {
   const location = useLocation().pathname
@@ -15,6 +16,10 @@ function App() {
   const token = getCookie('accessToken')
   const dispatch = useDispatch<AppDispatch>()
   const navigate = useNavigate()
+
+  useEffect(()=>{
+    setNavigator(navigate)
+  },[])
 
   useEffect(() => {
     verifyIfIsValidToken()

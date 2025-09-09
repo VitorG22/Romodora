@@ -35,7 +35,7 @@ export function Container(props: IContainer) {
 export function TextInput(props: ITextInput) {
     return (
         <input {...props} name={props.name} type={props.type} id={props.id}
-            className="w-full border border-current rounded-sm py-2 px-2 outline-0"
+            className="w-full ring ring-current rounded-sm py-2 px-2 outline-0"
         />
     )
 }

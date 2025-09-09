@@ -18,11 +18,13 @@ export function GameContextProvider({ children }: { children: ReactNode }) {
         isHost: false,
         lobbyId: '',
         users: [],
+        chat: [],
         tableData: {players: []},
         setGameFunction: () => { },
         activeSocketListeners: () => { },
         quitGame: () => { },
-        changeCharacterData: ()=>{}
+        changeCharacterData: () => { },
+        startGame: () => { }
     }))
 
     useEffect(() => {
@@ -30,6 +32,10 @@ export function GameContextProvider({ children }: { children: ReactNode }) {
         game.setGameFunction = setGame
         setGame(game)
     }, [])
+
+    useEffect(()=>{
+        game.activeSocketListeners()
+    },[game])
 
     useEffect(() => {
         if (isLogged) { setUserDataInSocket() }

@@ -1,0 +1,56 @@
+.subElements {
+    transition: 500ms ease-in-out;
+    animation: subElementOpen 500ms ease-in-out;
+}
+
+.subElementsCollapse {
+    animation: subElementClose 500ms ease-in-out forwards;
+}
+
+.CharacterBanner {
+    transition: 500ms ease-in-out;
+    width: 15.5rem;
+}
+
+.CharacterBannerCollapse {
+    width: 4.3rem;
+}
+
+
+@keyframes subElementOpen {
+    0% {
+        width: 0px;
+        height: 0px;
+        opacity: 0%;
+    }
+    50% {
+        width: '';
+        height: '';
+        opacity: 0%;
+    }
+    
+    100% {
+        width: '';
+        height: '';
+        opacity: 100%;
+    }
+}
+
+@keyframes subElementClose {
+    0% {
+        width: '';
+        height: '';
+        opacity: 100%;
+    }
+    50% {
+        width: '';
+        height: '';
+        opacity: 0%;
+    }
+    
+    100% {
+        width: 0px;
+        height: 0px;
+        opacity: 0%;
+    }
+}

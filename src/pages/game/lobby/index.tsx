@@ -15,7 +15,7 @@ export default function GameLobby() {
     const game = useContext(GameContext)
 
     const startGame = () => {
-
+        game?.startGame()
     }
 
     const quitGame = () => {
@@ -121,7 +121,7 @@ function ModalChangeCharacter({ setIsModalChangeCharacterOpen }: { setIsModalCha
                 <ul className="flex flex-col gap-2">
                     {userCharacters.map(characterData =>
                         <li onClick={() => { changeUserCharacter(characterData); setIsModalChangeCharacterOpen(false) }} key={"characterSelectCard_" + characterData.id} className='group flex flex-row gap-2 items-center hover:cursor-pointer hover:bg-purple-500 duration-300 px-2 py-2 pr-8 rounded-sm'>
-                            <div className="flex justify-center items-center aspect-square h-18 overflow-hidden rounded-xs overflow-hidden">
+                            <div className="flex justify-center items-center aspect-square h-18 rounded-xs overflow-hidden">
                                 <img src={characterData.picture} className='object-cover' />
                             </div>
                             <article className='flex flex-col'>
