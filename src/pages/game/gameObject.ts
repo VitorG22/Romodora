@@ -15,6 +15,7 @@ export interface IGame {
     quitGame: () => void
     activeSocketListeners: () => void
     changeCharacterData: ({ userId, CharacterData }: { userId: string, CharacterData: ICharacter }) => void | (() => void)
+    rollDice: (DiceValue:number)=> void
 }
 
 export interface IMessage {
@@ -117,5 +118,9 @@ export class Game {
         }
 
         this.socket?.emit('changePlayerData', { gameId: this.lobbyId, newPlayerData: newGameData.tableData.players[playerIndex] })
+    }
+
+    rollDice(DiceValue: number){
+        this.socket?.emit('rollDice', {DiceValue: DiceValue, gameId: this.lobbyId})
     }
 }

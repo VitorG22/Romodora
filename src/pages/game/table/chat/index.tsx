@@ -29,7 +29,7 @@ export function Chat() {
     }
 
     return (
-        <section className="flex flex-col gap-2 justify-end bg-stone-900 py-1 border-t border-stone-400/40 col-start-1 col-end-3 row-start-4 row-end-6 z-20">
+        <section className="flex flex-col gap-2 justify-end bg-stone-900 py-1 border-t border-r border-stone-400/40 col-start-1 col-end-3 row-start-4 row-end-6 z-20">
             <ul ref={chatRef} className="flex flex-col gap-1  h-full overflow-x-scroll">
                 {game?.chat.map(messageData => <MessageComponent messageData={messageData} />)}
             </ul>

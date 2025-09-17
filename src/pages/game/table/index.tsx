@@ -4,6 +4,7 @@ import { CharacterList } from "./charactersList"
 import { DetailsCard } from "./detailsCard"
 import { Chat } from "./chat"
 import { BottomMenu } from "./bottomMenu"
+import { TableCanvas } from "./canvas"
 
 export default function Table() {
     const [detailCardData, setDetailCardData] = useState<ICharacter|null>(null)
@@ -14,6 +15,7 @@ export default function Table() {
             <DetailsCard detailCardData={detailCardData} setDetailCardData={setDetailCardData} />
             <Chat/>
             <BottomMenu/>
+            <TableCanvas/>
         </main>
     )
 }

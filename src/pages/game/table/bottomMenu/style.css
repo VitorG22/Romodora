@@ -1,0 +1,34 @@
+#bottomMenuContainer{
+
+    display: flex;
+    flex-direction: column;
+    align-self: end;
+    justify-content: end;
+}
+
+.isBottomMenuCollapse{
+    height: 1.5rem;
+    transition-delay: 900ms;
+}
+
+#subElementsContainer{
+    height: 100%;
+    transition: ease-in-out 600ms;
+    overflow:hidden;
+}
+.isBottomMenuCollapse > #subElementsContainer{
+    height: 0px;
+    transition-delay: 300ms;
+}
+
+#subElementsContainer > *{
+    transition: ease 300ms;
+    transition-delay: 600ms;
+    opacity: 100%;
+}
+
+.isBottomMenuCollapse > #subElementsContainer *{
+    transition: ease 300ms;
+    transition-delay: 0ms;
+    opacity: 0%;
+}

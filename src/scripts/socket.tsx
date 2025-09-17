@@ -24,7 +24,8 @@ export function GameContextProvider({ children }: { children: ReactNode }) {
         activeSocketListeners: () => { },
         quitGame: () => { },
         changeCharacterData: () => { },
-        startGame: () => { }
+        startGame: () => { },
+        rollDice: () => { }
     }))
 
     useEffect(() => {
