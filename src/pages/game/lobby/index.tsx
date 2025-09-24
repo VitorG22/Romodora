@@ -47,7 +47,6 @@ export default function GameLobby() {
 
 function PlayerCard({ playerData, setIsModalChangeCharacterOpen }: { playerData: IPlayer, setIsModalChangeCharacterOpen: React.Dispatch<React.SetStateAction<boolean>> }) {
     const { userData } = useSelector((state: RootState) => state.user)
-    const game = useContext(GameContext)
 
     return (
         <section className='flex flex-col w-full max-w-60 '>
