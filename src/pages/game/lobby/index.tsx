@@ -47,10 +47,14 @@ export default function GameLobby() {
 
 function PlayerCard({ playerData, setIsModalChangeCharacterOpen }: { playerData: IPlayer, setIsModalChangeCharacterOpen: React.Dispatch<React.SetStateAction<boolean>> }) {
     const { userData } = useSelector((state: RootState) => state.user)
+    const game = useContext(GameContext)
 
     return (
         <section className='flex flex-col w-full max-w-60 '>
-            <h2 className="z-10">{playerData.name}</h2>
+            <div className="z-10 flex flex-row gap-2 items-center">
+                <span className='flex rounded-full h-3 w-3 aspect-square border-[1px] border-stone-900' style={{ backgroundColor: playerData.color }}> </span>
+                <p>{playerData.name}</p>
+            </div>
             <div className="flex flex-col w-full max-w-60 min-w-30 aspect-[3/5] relative rounded-sm overflow-hidden">
                 {playerData.character ? (
                     <div className='flex h-full w-full absolute z-0 overflow-hidden'>
@@ -76,8 +80,8 @@ function PlayerCard({ playerData, setIsModalChangeCharacterOpen }: { playerData:
                 {playerData.character &&
                     <article className='flex flex-col justify-end absolute z-20 bottom-0 left-0 p-2 text-stone-200 w-full  h-fit bg-linear-to-t from-stone-950 to-stone-950/60'>
                         <p>{playerData.character.level} {playerData.character.name} </p>
-                        <p className='italic text-stone-200/80 font-thin'>{playerData.character.class} {playerData.character.subClass !='' &&<span>/ {playerData.character.subClass}</span>} </p>
-                        <p className='italic text-stone-200/80 font-thin'>{playerData.character.race} {playerData.character.subRace !='' &&<span>/ {playerData.character.subRace}</span>}  </p>
+                        <p className='italic text-stone-200/80 font-thin'>{playerData.character.class} {playerData.character.subClass != '' && <span>/ {playerData.character.subClass}</span>} </p>
+                        <p className='italic text-stone-200/80 font-thin'>{playerData.character.race} {playerData.character.subRace != '' && <span>/ {playerData.character.subRace}</span>}  </p>
                     </article>
                 }
             </div>

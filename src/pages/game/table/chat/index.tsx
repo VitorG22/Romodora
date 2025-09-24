@@ -50,13 +50,13 @@ export function Chat() {
 function MessageComponent({ messageData }: { messageData: IMessage }) {
     const game = useContext(GameContext)
     let userCharacter = game?.tableData.players.find(playerData=> playerData.id == messageData.ownerData.id)?.character || null
+    let ownerColor  = game?.users.find(user=> user.id == messageData.ownerData.id)?.color || ''
     
     switch (messageData.type) {
         case "message":
             return (
                 <li className='text-stone-300 px-1'>
-                    {/* <span style={{ color: `${messageData.ownerData.color}` }}>{messageData.ownerData.name} (Character Name) </span> : */}
-                    <span >{messageData.ownerData.name} {userCharacter != null && `(${userCharacter.name})`} </span> :
+                    <span style={{ color:ownerColor}}>{messageData.ownerData.name} {userCharacter != null && `(${userCharacter.name})`} </span> :
                     <span className="italic"> {messageData.message}</span>
                 </li>
             )
@@ -65,7 +65,7 @@ function MessageComponent({ messageData }: { messageData: IMessage }) {
                 // <li style={{ background: `${messageData.ownerData.color}30` }} className='text-stone-300 flex w-full justify-center items-center text-center'>
                 <li className='text-stone-300 flex w-full justify-center items-center text-center'>
                     {/* <span style={{ color: `${messageData.ownerData.color}` }}>{messageData.message} </span> */}
-                    <span >{messageData.message} </span>
+                    <span className='w-full' style={{ color:ownerColor, backgroundColor:ownerColor + '20'}}>{messageData.message} </span>
                 </li>
             )
     }
