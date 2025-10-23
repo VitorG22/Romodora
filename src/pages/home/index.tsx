@@ -66,7 +66,7 @@ export default function Home() {
                     <UserRoundIcon strokeWidth={1} size={70} />
                     <p>Characters</p>
                 </Button.BigSquareButton>
-                <Button.BigSquareButton color='white'>
+                <Button.BigSquareButton color='white' onClick={()=>navigate('/maps')}>
                     <MapIcon strokeWidth={.5} size={240} className="absolute z-10 blur-[2px] -left-[40%] top-[20%]  opacity-10" />
                     <MapIcon strokeWidth={1} size={70} />
                     <p>Maps</p>

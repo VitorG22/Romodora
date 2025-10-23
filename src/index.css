@@ -1,7 +1,35 @@
 @import 'tailwindcss';
 
+body{
+    --sb-track-color: transparent;
+    --sb-thumb-color: #a6a09b;
+}
+
+*::-webkit-scrollbar-track {
+    background: var(--sb-track-color);
+    border-radius: 5px;
+}
+
+*::-webkit-scrollbar-thumb {
+    background: var(--sb-thumb-color);
+    border-radius: 5px;
+}
+
+
+@supports not selector(::-webkit-scrollbar) {
+    *{
+        scrollbar-color: var(--sb-thumb-color)
+        var(--sb-track-color);
+    }
+}
 
 *::-webkit-scrollbar {
     width: 0px;
     height: 0px
+}
+
+.showScroll::-webkit-scrollbar{
+    width: 4px;
+    height: 4px;
+    scroll-behavior: smooth;
 }

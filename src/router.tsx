@@ -9,6 +9,7 @@ import Characters from "./pages/character/index";
 import CreateCharacter from "./pages/character/createCharacter";
 import CharactersList from "./pages/character/charactersListPage";
 import Table from "./pages/game/table";
+import Maps from "./pages/maps";
 
 export const router = createBrowserRouter([
     {
@@ -48,6 +49,16 @@ export const router = createBrowserRouter([
                         element: <CharactersList />
                     }
                 ]    
+            },
+            {
+                path: '/maps',
+                element:<Maps/>
+                // children: [
+                //     {
+                //         path:'lobby',
+                //         element: <GameLobby/>
+                //     }
+                // ]
             },
             {
                 path: '/game',
