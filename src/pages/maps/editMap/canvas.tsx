@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from "react"
 import type { TBlock, TLayerMatrix } from "./mapsClass";
 import type { ITile } from "./tileGallery";
-import { getData } from "../../../scripts/axios";
 
 interface IContainer extends React.ComponentPropsWithoutRef<'div'> {
     z: number,
