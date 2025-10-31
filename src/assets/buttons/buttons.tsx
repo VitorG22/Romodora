@@ -29,8 +29,8 @@ export function Secondary(props: IButton) {
 export function BigSquareButton(props: IButton){
     return(
         <button {...props} 
-            className='border border-stone-500 w-60 h-full flex flex-col justify-center items-center gap-4 relative overflow-hidden duration-150
-            bg-linear-45 from-stone-500/40 via-stone-500/10 to-stone-500/10
+        className='border border-stone-500 w-60 h-full flex flex-col justify-center items-center gap-4 relative overflow-hidden duration-150
+            bg-linear-45 
             hover:from-purple-700 hover:via-purple-600/50 hover:to-purple-500/50 hover:border-purple-500 hover:text-white
             hover:-translate-x-1 hover:-translate-y-1 hover:cursor-pointer
             '

@@ -42,37 +42,39 @@ export default function CharactersList() {
             }
             <section className='flex flex-row gap-4 p-4 pb-0 h-full overflow-hidden'>
                 <Button.Primary color="white" className='max-w-fit' onClick={() => navigate('/home')} ><ArrowLeftFromLineIcon strokeWidth={1} /></Button.Primary>
-                <ul className="flex flex-row justify-start gap-2 h-full flex-wrap overflow-scroll pt-1 pb-10">
-                    <button onClick={() => navigate('../edit')} className='relative w-64 h-[29rem] flex items-center justify-center rounded-sm hover:-translate-y-1 duration-150 bg-linear-45
+                <div className='h-full w-full overflow-scroll'>
+                    <ul className="flex flex-row justify-start gap-2 h-fit flex-wrap overflow-scroll pt-1 pb-10">
+                        <button onClick={() => navigate('../edit')} className='relative w-64 min-h-[29rem] flex items-center justify-center rounded-sm hover:-translate-y-1 duration-150 bg-linear-45
                         from-stone-500/40 via-stone-500/10 to-stone-500/10 border border-stone-500
                         hover:from-purple-700 hover:via-purple-600/50 hover:to-purple-500/50 hover:border-purple-500 hover:text-white'>
-                        <UserRound strokeWidth={.5} size={280} className="absolute z-10 blur-[2px] -left-[40%] top-[20%]  opacity-10" />
-                        <Plus strokeWidth={1} size={50} />
-                    </button>
-                    {characters.map(characterData =>
-                        <CharactersCard getUserCharacters={getUserCharacters} key={`CharacterCard_${characterData.id}`} CharacterData={characterData} />
-                    )
-                    }
-                </ul>
+                            <UserRound strokeWidth={.5} size={280} className="absolute z-10 blur-[2px] -left-[40%] top-[20%]  opacity-10" />
+                            <Plus strokeWidth={1} size={50} />
+                        </button>
+                        {characters.map(characterData =>
+                            <CharactersCard getUserCharacters={getUserCharacters} key={`CharacterCard_${characterData.id}`} CharacterData={characterData} />
+                        )
+                        }
+                    </ul>
+                </div>
             </section>
         </main>
     )
 }
 
-function CharactersCard({ CharacterData, getUserCharacters }: { CharacterData: ICharacter ,getUserCharacters:()=>void }) {
+function CharactersCard({ CharacterData, getUserCharacters }: { CharacterData: ICharacter, getUserCharacters: () => void }) {
     const navigate = useNavigate()
     const [isPopOutOpen, setIsPopOutOpen] = useState<boolean>(false)
 
     const DeleteCharacter = () => {
         setIsPopOutOpen(false)
         PostData({
-            data:{characterId: CharacterData.id},
+            data: { characterId: CharacterData.id },
             endPoint: 'deleteCharacter',
-            onSuccess: ()=>{
+            onSuccess: () => {
                 setIsPopOutOpen(false)
                 getUserCharacters()
             },
-            onError: ()=>{
+            onError: () => {
                 setIsPopOutOpen(false)
             }
         })
@@ -80,7 +82,7 @@ function CharactersCard({ CharacterData, getUserCharacters }: { CharacterData: I
 
     return (
         <>
-            <div onClick={() => navigate(`../edit/${CharacterData.id}`)} className='group hover:-translate-y-1 hover:cursor-pointer duration-150 px-2 rounded-sm h-[29rem] bg-linear-45
+            <div onClick={() => navigate(`../edit/${CharacterData.id}`)} className='group hover:-translate-y-1 hover:cursor-pointer duration-150 px-2 rounded-sm h-fit bg-linear-45
         from-stone-500/40 via-stone-500/10 to-stone-500/10 border border-stone-500
         hover:from-purple-700 hover:via-purple-600/50 hover:to-purple-500/50 hover:border-purple-500 hover:text-white
         '>
@@ -93,7 +95,7 @@ function CharactersCard({ CharacterData, getUserCharacters }: { CharacterData: I
                         <img src={CharacterData.picture} className="w-full h-full object-cover" />
                     </div>
                 }
-                <article className='pb-6 '>
+                <article className=''>
                     <p>{CharacterData.race} / {CharacterData.class}</p>
                     <ul className='grid grid-cols-2 grid-rows-3'>
                         <li className="flex gap-2"><p className='italic first-letter:uppercase'>charisma:</p><span className='font-semibold'>{CharacterData.attributes.charisma}</span></li>
@@ -111,22 +113,26 @@ function CharactersCard({ CharacterData, getUserCharacters }: { CharacterData: I
                         </div>
                     </div>
                 </article>
-                <button onClick={(e) => {e.stopPropagation();setIsPopOutOpen(true)}} className="h-[0px] hidden overflow-hidden flex-row items-center justify-center w-full border-2 rounded-b-md border-t-0  bg-linear-30 from-stone-500 to-stone-600 py-1 text-stone-300 text-sm 
+                <button onClick={(e) => { e.stopPropagation(); setIsPopOutOpen(true) }}
+                    className="flex flex-row gap-2 items-center justify-center w-full mt-2 p-2 hover:cursor-pointer rounded-b-sm">
+                    <TrashIcon strokeWidth={1} size={15} /> Delete Character
+                </button>
+                {/* <button onClick={(e) => {e.stopPropagation();setIsPopOutOpen(true)}} className="h-[0px] hidden overflow-hidden flex-row items-center justify-center w-full border-2 rounded-b-md border-t-0  bg-linear-30 from-stone-500 to-stone-600 py-1 text-stone-300 text-sm 
             group-has-hover:flex group-has-hover:h-auto hover:cursor-pointer">
                     <TrashIcon strokeWidth={1} size={20} />
                     Delete
-                </button>
+                </button> */}
             </div>
-            {isPopOutOpen && 
-            <section className='absolute top-0 left-0 w-screen h-screen bg-stone-900/60 flex justify-center items-center'>
-                <div className='flex flex-col items-end  bg-stone-900 p-4 text-stone-300 w-fit max-w-1/3 gap-2'>
-                    <p>Are you sure you want to delete <span className='text-purple-500 italic'>{CharacterData.name}</span> ? All data will be lost and cannot be recovered.</p>
-                    <div className='flex flex-row gap-2 w-1/2'>
-                    <Button.Secondary color="white" onClick={DeleteCharacter}>Delete</Button.Secondary>
-                    <Button.Primary color='white' onClick={()=> setIsPopOutOpen(false)}>Cancel</Button.Primary>
+            {isPopOutOpen &&
+                <section className='absolute top-0 left-0 w-screen h-screen bg-stone-900/60 flex justify-center items-center'>
+                    <div className='flex flex-col items-end  bg-stone-900 p-4 text-stone-300 w-fit max-w-1/3 gap-2'>
+                        <p>Are you sure you want to delete <span className='text-purple-500 italic'>{CharacterData.name}</span> ? All data will be lost and cannot be recovered.</p>
+                        <div className='flex flex-row gap-2 w-1/2'>
+                            <Button.Secondary color="white" onClick={DeleteCharacter}>Delete</Button.Secondary>
+                            <Button.Primary color='white' onClick={() => setIsPopOutOpen(false)}>Cancel</Button.Primary>
+                        </div>
                     </div>
-                </div>
-            </section>
+                </section>
             }
         </>
     )
