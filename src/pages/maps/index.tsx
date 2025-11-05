@@ -48,8 +48,9 @@ function MapCard({ mapData,reloadMapList }: { mapData: ITableMap,reloadMapList: 
     const handleDeleteMap = (e:React.MouseEvent<HTMLButtonElement, MouseEvent>)=>{ 
         e.preventDefault()
         e.stopPropagation()
-        deleteMap(mapData.id || "")
-        reloadMapList((currentValue:boolean) => !currentValue)
+        deleteMap({mapId: mapData.id || "", callback: ()=>{
+            reloadMapList((currentValue:boolean) => !currentValue)
+        }})
     }
 
     useEffect(()=>{

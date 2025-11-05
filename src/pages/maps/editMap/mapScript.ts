@@ -11,7 +11,12 @@ export function saveMap(mapObject: TableMap, onSuccess: () => void, onError: () 
     })
 }
 
-export function deleteMap(mapId: string) {
+export function deleteMap({mapId,callback}:{mapId: string, callback:()=>void}) {
+    PostData({
+        data:{mapId: mapId},
+        endPoint: 'deleteMap',
+        onSuccess: () => callback()
+    })
 }
 
 export async function getMap(callback: (mapList:TableMap[])=>void) {
@@ -26,8 +31,4 @@ export async function getMap(callback: (mapList:TableMap[])=>void) {
         },
         onError: (res) => {console.log(res)}
     })
-}
-
-export function getMapById(mapId: string) {
-    
 }
