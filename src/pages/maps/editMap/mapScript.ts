@@ -1,42 +1,33 @@
+import { getData, PostData } from "../../../scripts/axios";
 import type { TableMap } from "./mapsClass";
 
-export function saveMap(mapObject:TableMap){
-    mapObject.lastModify = new Date()
-    console.log(mapObject)
+export function saveMap(mapObject: TableMap, onSuccess: () => void, onError: () => void) {
 
-    let mapsList = getMap()
+    PostData({
+        data: mapObject,
+        endPoint: 'saveMap',
+        onSuccess: () => onSuccess(),
+        onError: () => onError(),
+    })
+}
 
-    const currentMapIndex = mapsList.findIndex(mapData => mapData.id == mapObject.id) 
-    if(currentMapIndex == -1){
-        mapsList.push(mapObject)
-    }else{
-        mapsList[currentMapIndex] = mapObject
-    }
+export function deleteMap(mapId: string) {
+}
+
+export async function getMap(callback: (mapList:TableMap[])=>void) {
+    let maps: TableMap[] = []
+
+    getData({
+        endPoint: 'allMaps',
+        onSuccess: (res) => {
+            maps = res.data
+            console.log(maps)
+            callback(maps)
+        },
+        onError: (res) => {console.log(res)}
+    })
+}
+
+export function getMapById(mapId: string) {
     
-    
-    localStorage.setItem('romodora_maps', JSON.stringify(mapsList))
-}
-
-export function deleteMap(mapId:string){
-    let mapsList = getMap()
-    let mapToDeleteIndex =mapsList.findIndex(mapData=> mapData.id == mapId)
-
-    mapsList.splice(mapToDeleteIndex,1)
-    localStorage.setItem('romodora_maps', JSON.stringify(mapsList))
-}
-
-export function getMap(){
-    let maps = localStorage.getItem("romodora_maps") || '[]'
-
-    let mapsList:TableMap[] = JSON.parse(maps)
-    console.log(mapsList)
-    return mapsList
-}
-
-export function getMapById(mapId:string){
-    console.log(mapId)
-    let mapsList = getMap()
-    let selectedMap = mapsList.find(mapData => mapData.id == mapId)
-    console.log(selectedMap)
-    return selectedMap
 }

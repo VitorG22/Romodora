@@ -6,13 +6,15 @@ import { TableMap } from './mapsClass'
 import TileGallery, { type ITile } from './tileGallery'
 import Table from './table'
 import { useEffect, useState } from 'react'
-import { getMapById } from './mapScript'
+import type { RootState } from '../../../redux/store'
+import { useSelector } from 'react-redux'
 
 
 
 
 export default function EditMap() {
     const navigate = useNavigate()
+    const mapsList = useSelector(((state: RootState) => state.maps))
     const [tableObject, setTableObject] = useState<TableMap>()
     const [selectedTile, setSelectedTile] = useState<ITile | null>(null)
     const [tileDirection, setTileDirection] = useState<'top' | 'left' | 'bottom' | 'right'>('top')
@@ -26,25 +28,25 @@ export default function EditMap() {
         try {
             if (!mapId) throw new Error()
 
-            let mapData = getMapById(mapId)
-            if (!mapData) throw new Error()
+            let mapDataCopy = structuredClone(mapsList.find(mapData=> mapData.id == mapId))
+            if (!mapDataCopy) throw new Error()
 
             let newTableObject = new TableMap({
-                ...mapData,
+                ...mapDataCopy,
                 reRender: reRender
             })
-                
+
             setTableObject(newTableObject)
         } catch (error) {
             console.log(error)
             setTableObject(new TableMap({
-            name: 'New Map',
-            sizeX: 30,
-            sizeY: 30,
-            reRender: reRender,
-        }))
+                name: 'New Map',
+                sizeX: 30,
+                sizeY: 30,
+                reRender: reRender,
+            }))
         }
-        
+
     }, [])
 
 

@@ -47,7 +47,7 @@ export class TableMap {
 
     constructor(data: ITableMap) {
         this.image = data.image || ''
-        this.id = data.id || RandomString(40)
+        this.id = data.id || ""
         this.description = data.description || " "
         this.name = data.name
         this.lastModify = data.lastModify || new Date()

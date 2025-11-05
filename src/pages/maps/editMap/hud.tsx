@@ -37,19 +37,20 @@ export function GridOptions({ sizeX, sizeY, addGridColumn, deleteGridColumn, add
 export function SaveMapComponent({ mapObject }: { mapObject: TableMap }) {
     const navigate = useNavigate()
     const canvasRef = useRef<HTMLCanvasElement>(null)
+    const [isButtonsDisabled ,setIsButtonsDisabled] = useState<boolean>(false)
 
     const cancel = () => {
         navigate("/maps")
     }
 
     const save = () => {
+        setIsButtonsDisabled(true)
         if (canvasRef.current) {
             let finalCanvasContext = canvasRef.current.getContext('2d')
 
             mapObject.layers.forEach(layerData => {
                 const canvasElement: HTMLElement | null = document.getElementById(layerData.id)
                 if (canvasElement instanceof HTMLCanvasElement) {
-                    // canvasElement.toBlob(blob=> console.log(blob))
                     finalCanvasContext?.drawImage(canvasElement, 0, 0, mapObject.sizeX * 100, mapObject.sizeY * 100)
                     console.log("teste")
                 }
@@ -59,14 +60,23 @@ export function SaveMapComponent({ mapObject }: { mapObject: TableMap }) {
             mapObject.image = canvasInBase64
         }
 
-        saveMap(mapObject)
-        navigate("/maps")
+        saveMap(mapObject,
+            () => {
+                navigate("/maps")
+                setIsButtonsDisabled(false)
+            },
+            () => {
+                console.log("Error on save Map")
+                setIsButtonsDisabled(false)
+            }
+        )
+        
     }
 
     return (
         <div className="text-stone-600  flex flex-row  z-10 bg-stone-300 border border-stone-900/40 rounded-md w-68">
-            <button onClick={cancel} className="flex flex-row gap-1 items-center justify-center w-full hover:bg-red-500/40 hover:text-stone-800 rounded-l p-2"><Trash className='h-5' strokeWidth={1} />Cancel</button>
-            <button onClick={save} className="flex flex-row gap-1 items-center justify-center w-full hover:bg-emerald-500/40 hover:text-stone-800 rounded-r p-2"><Check className='h-5' strokeWidth={1} />Save</button>
+            <button onClick={cancel} disabled={isButtonsDisabled} className="disabled:opacity-80 flex flex-row gap-1 items-center justify-center w-full hover:bg-red-500/40 hover:text-stone-800 rounded-l p-2"><Trash className='h-5' strokeWidth={1} />Cancel</button>
+            <button onClick={save} disabled={isButtonsDisabled} className="disabled:opacity-80 flex flex-row gap-1 items-center justify-center w-full hover:bg-emerald-500/40 hover:text-stone-800 rounded-r p-2"><Check className='h-5' strokeWidth={1} />Save</button>
             <canvas className="absolute w-0 h-0" ref={canvasRef} width={mapObject.sizeX * 100} height={mapObject.sizeY * 100} />
         </div>
     )

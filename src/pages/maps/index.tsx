@@ -1,19 +1,31 @@
 import { useNavigate } from "react-router-dom"
 import NavBarTop from "../../assets/navBar/navBarTop"
-import { type ITableMap } from "./editMap/mapsClass"
+import { TableMap, type ITableMap } from "./editMap/mapsClass"
 import { deleteMap, getMap } from "./editMap/mapScript"
 import { useEffect, useState } from "react"
 import { ArrowLeftFromLineIcon, MapIcon, Plus, Trash } from "lucide-react"
 import * as Button from '../../assets/buttons/buttons'
+import { useDispatch, useSelector } from "react-redux"
+import type { AppDispatch, RootState } from "../../redux/store"
+import { changeMapsList } from "../../redux/mapsSlice"
 
 export default function SelectMapToEdit() {
-    const [maps, setMaps] = useState<ITableMap[]>([])
+    const maps = useSelector((state: RootState) => state.maps)
+    const dispatch = useDispatch<AppDispatch>()
+
+    
     const [reloadMapListTrigger, reloadMapList ] = useState<boolean>(false)
     const navigate = useNavigate()
 
     useEffect(() => {
-        setMaps(getMap())
+        getMap((mapList:TableMap[])=> dispatch(changeMapsList(mapList)))
     }, [reloadMapListTrigger])
+
+    useEffect(()=>{
+        console.log(maps)
+    },[maps])
+    
+    
 
     return (
         <main className='flex flex-col h-screen w-screen overflow-hidden'>
@@ -22,7 +34,7 @@ export default function SelectMapToEdit() {
                 <Button.Primary color="white" className='max-w-fit' onClick={() => navigate('/home')} ><ArrowLeftFromLineIcon strokeWidth={1} /></Button.Primary>
                 <ul className="flex flex-row flex-wrap h-full overflow-scroll justify-start gap-4 p-4">
                     <NewMapCard />
-                    {maps.map(mapData => <MapCard mapData={mapData} reloadMapList={reloadMapList} />)}
+                    {maps?.map(mapData => <MapCard mapData={mapData} reloadMapList={reloadMapList} />)}
                 </ul>
             </section>
         </main>
@@ -40,13 +52,21 @@ function MapCard({ mapData,reloadMapList }: { mapData: ITableMap,reloadMapList: 
         reloadMapList((currentValue:boolean) => !currentValue)
     }
 
+    useEffect(()=>{
+        new TableMap(mapData).reDrawAll()
+    },[])
+
     
     
     return (
         <li onClick={() => navigate(`/editMap/${mapData.id}`)} className=' w-60 aspect-[3/4]  group hover:-translate-y-1 hover:cursor-pointer duration-150 rounded-sm bg-linear-45 border border-stone-500
         hover:from-purple-700 hover:via-purple-600/50 hover:to-purple-500/50 hover:border-purple-500 hover:text-white'>
-            <div className='p-2'>
-                <img src={mapData.image} />
+            <div className='relative flex items-center justify-center m-2 aspect-square'>
+                {mapData.layers?.map(layerData=>
+                    <canvas id={layerData.id} width={mapData.sizeX * 100} height={mapData.sizeY* 100}
+                    className='max-w-full max-h-full absolute  flex' style={{aspectRatio:mapData.sizeX/mapData.sizeY}}
+                    />
+                )}
             </div>
             <article className='px-2'>
                 <p className="font-semibold">Name: <span className='text-stone-950/70 group-hover:text-white font-normal italic'>{mapData.name}</span></p>
@@ -64,8 +84,6 @@ function MapCard({ mapData,reloadMapList }: { mapData: ITableMap,reloadMapList: 
 
 function NewMapCard() {
     const navigate = useNavigate()
-
-
 
     return (
         <li onClick={() => navigate(`/editMap/newMap`)} className='relative flex items-center justify-center overflow-hidden w-60 aspect-[3/4] group hover:-translate-y-1 hover:cursor-pointer duration-150 p-2 rounded-sm bg-linear-45 border border-stone-500
