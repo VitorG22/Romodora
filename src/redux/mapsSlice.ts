@@ -8,6 +8,7 @@ export const slice = createSlice({
     initialState: initialMapState,
     reducers: {
         changeMapsList(state, { payload }) {
+            state = state
             return payload
         }
     }
