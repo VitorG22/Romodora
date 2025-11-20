@@ -1,12 +1,12 @@
 import { useContext, useEffect, useState } from "react"
 import { GameContext } from "../../../scripts/socket"
-import { type IEntity, type IPlayer } from "../gameObject"
 import { LogOutIcon, RefreshCcwIcon, UserRoundIcon } from "lucide-react"
 import * as Button from '../../../assets/buttons/buttons'
 import { useNavigate } from "react-router-dom"
 import { useSelector } from "react-redux"
 import type { RootState } from "../../../redux/store"
 import { getData } from "../../../scripts/axios"
+import type { IEntity, IPlayer } from "../table/TableControlerClass"
 
 export default function GameLobby() {
     const [isModalChangeCharacterOpen, setIsModalChangeCharacterOpen] = useState<boolean>(false)

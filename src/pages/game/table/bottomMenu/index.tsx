@@ -1,4 +1,4 @@
-import { ChevronDown, ChevronUp, Component, DicesIcon } from "lucide-react"
+import { ChevronDown, ChevronUp } from "lucide-react"
 import { useContext, useEffect, useRef, useState } from "react"
 import { GameContext } from "../../../../scripts/socket"
 import "./style.css"
