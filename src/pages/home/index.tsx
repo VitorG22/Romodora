@@ -8,6 +8,7 @@ import type { IGame } from "../game/gameObject";
 import { CrownIcon, GlobeIcon, KeyRoundIcon, LogInIcon, MapIcon, UserRoundIcon } from "lucide-react";
 import GamesListDefault from "../game/gamesList";
 import { Loader, LoaderContainer } from "../../assets/loader/loader";
+import { TableControl } from "../game/table/TableControlerClass";
 
 export const socketContext = createContext<null | Socket>(null)
 
@@ -27,10 +28,12 @@ export default function Home() {
                 if (status != 200) {
                     return
                 }
+                console.log(gameData)
+                console.log(game)
                 game.isHost = true
                 game.lobbyId = gameData.lobbyId
                 game.users = gameData.users
-                game.tableData = gameData.tableData
+                game.tableControl = new TableControl({...game.tableControl,...gameData.tableControl})
                 game.activeSocketListeners()
 
                 navigate('/game/lobby')

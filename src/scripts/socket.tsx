@@ -1,6 +1,7 @@
 import { io } from "socket.io-client"
 import { createContext, useEffect, useState, type ReactNode } from 'react'
 import { Game, type IGame } from "../pages/game/gameObject"
+import { TableControl } from "../pages/game/table/TableControlerClass"
 import { useSelector } from "react-redux"
 import type { RootState } from "../redux/store"
 import { getCookie } from "./cookies"
@@ -13,30 +14,57 @@ export const GameContext = createContext<IGame | null>(null)
 export function GameContextProvider({ children }: { children: ReactNode }) {
     const accessToken = getCookie('accessToken')
     const { isLogged } = useSelector((state: RootState) => state.user)
-    const [game, setGame] = useState(new Game({
+    const [game, setGame] = useState<Game>(new Game({
         socket: null,
         isHost: false,
         lobbyId: '',
         users: [],
         chat: [],
-        tableData: {players: []},
+        tableControl: new TableControl({
+            lobbyId: "",
+            players: [],
+            tableMap: undefined,
+            socket: null
+        }),
         setGameFunction: () => { },
         activeSocketListeners: () => { },
         quitGame: () => { },
-        changeCharacterData: () => { },
         startGame: () => { },
-        rollDice: () => { }
     }))
 
     useEffect(() => {
         connectSocket()
-        game.setGameFunction = setGame
-        setGame(game)
+        // game.setGameFunction = setGame
+        game.setGameFunction = ({ trigger, newGameData, newTableControlData }: { trigger: "tableControl" | "game", newGameData?: Game, newTableControlData?: TableControl }) => {
+
+
+            switch (trigger) {
+                case "game":
+                    if (!newGameData) return
+                    console.log("trigger Game")
+                    console.log(newGameData)
+
+                    setGame(new Game(newGameData))
+                    break
+
+                case "tableControl":
+                    if (!newTableControlData) return
+                    console.log("trigger tableControl")
+                    console.log(newTableControlData)
+
+                    setGame((currentState) => {
+                        let tempGameCopy = currentState
+                        tempGameCopy.tableControl = new TableControl({ ...game.tableControl, ...newTableControlData })
+                        return new Game(tempGameCopy)
+                    })
+                    break
+            }
+        }
     }, [])
 
-    useEffect(()=>{
+    useEffect(() => {
         game.activeSocketListeners()
-    },[game])
+    }, [game])
 
     useEffect(() => {
         if (isLogged) { setUserDataInSocket() }
@@ -50,8 +78,7 @@ export function GameContextProvider({ children }: { children: ReactNode }) {
 
         try {
             const socket = await io(API_URL)
-            console.log(socket)
-            game.socket = await socket
+            game.changeSocket(socket)
             setUserDataInSocket()
         } catch (error) {
             console.log(error)

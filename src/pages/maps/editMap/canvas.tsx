@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react"
-import type { TBlock, TLayerMatrix } from "./mapsClass";
+import type { TBlock } from "./mapsClass";
 import type { ITile } from "./tileGallery";
+import { getData } from "../../../scripts/axios";
 
 interface IContainer extends React.ComponentPropsWithoutRef<'div'> {
     z: number,
@@ -12,15 +13,19 @@ interface IContainer extends React.ComponentPropsWithoutRef<'div'> {
     rightClickFunction: (x: number, y: number) => void
 }
 
-export function DefaultCanvasElement(data: { tileMatrix: TLayerMatrix, sizeX: number, sizeY: number, id: string }) {
+export function DefaultCanvasElement(data: { sizeX: number, sizeY: number, id: string, onLoad?: () => void }) {
     const canvasRef = useRef<HTMLCanvasElement>(null)
+
+    useEffect(() => {
+        data.onLoad?.()
+    }, [])
 
     return (
         <canvas
             ref={canvasRef}
             id={data.id}
             height={100 * data.sizeY} width={100 * data.sizeX}
-            className='w-full h-full absolute top-0 left-0'
+            className={`w-full h-full absolute top-0 left-0 ${data.id}`}
         />
     )
 }
@@ -226,47 +231,46 @@ export function DefaultGridElement(props: IContainer) {
 }
 
 
-export const drawInCanvas = ({ canvasId, blockData }: {blockData: TBlock, canvasId: string}) => {
-    const baseURL = import.meta.env.VITE_API_URL
-    const canvasElement: HTMLElement | null = document.getElementById(canvasId)
+export const drawInCanvas = ({ canvasId, blockData }: { blockData: TBlock, canvasId: string }) => {
+    const canvasElementsList: Element[] | null = Array.from(document.getElementsByClassName(canvasId))
 
-    if (canvasElement instanceof HTMLCanvasElement) {
-        const canvasContext = canvasElement.getContext('2d')
+    if(blockData.type!= "void"){console.log(canvasId)}
+    for (let canvasElement of canvasElementsList) {
+        if (canvasElement instanceof HTMLCanvasElement) {
+            const canvasContext = canvasElement.getContext('2d')
+            if (!canvasContext || !blockData.tileData) return
+            canvasContext.clearRect(blockData.x * 100, blockData.y * 100, blockData.tileData.size.x * 100, blockData.tileData.size.y * 100)
 
-        if (!canvasContext || !blockData.tileData) return
-        canvasContext.clearRect(blockData.x * 100, blockData.y * 100, blockData.tileData.size.x * 100, blockData.tileData.size.y * 100)
-
-        const img = new Image();
-        img.onload = () => {
-            if (!blockData.tileData) return
-            draw()
-        }
-
-        
-        img.setAttribute('crossorigin', 'anonymous');
-        img.src = baseURL+ "proxy?url=" + encodeURIComponent(blockData.tileData.path)
-
-        const draw = () => {
-            if (!blockData.tileData) return
-            const centerX = blockData.x * 100 + blockData.tileData.size.x * 100 / 2;
-            const centerY = blockData.y * 100 + blockData.tileData.size.y * 100 / 2;
-            const angleInDegrees = { top: 0, right: 270, bottom: 180, left: 90, };
-            const angleInRadians = (angleInDegrees[blockData.direction] * Math.PI) / 180;
-
-            canvasContext.save();
-            canvasContext.translate(centerX, centerY);
-            canvasContext.rotate(angleInRadians);
-            switch (true) {
-                case (blockData.direction == "top" || blockData.direction == "bottom"):
-                    canvasContext.translate(-blockData.tileData.size.x * 100 / 2, -blockData.tileData.size.y * 100 / 2)
-                    canvasContext.drawImage(img, 0, 0, blockData.tileData.size.x * 100, blockData.tileData.size.y * 100);
-                    break
-                case (blockData.direction == "left" || blockData.direction == "right"):
-                    canvasContext.translate(-blockData.tileData.size.y * 100 / 2, -blockData.tileData.size.x * 100 / 2)
-                    canvasContext.drawImage(img, 0, 0, blockData.tileData.size.y * 100, blockData.tileData.size.x * 100);
-                    break
+            const img = new Image();
+            img.onload = () => {
+                if (!blockData.tileData) return
+                draw()
             }
-            canvasContext.restore();
+            
+            img.src =  blockData.tileData.path
+
+            const draw = () => {
+                if (!blockData.tileData) return
+                const centerX = blockData.x * 100 + blockData.tileData.size.x * 100 / 2;
+                const centerY = blockData.y * 100 + blockData.tileData.size.y * 100 / 2;
+                const angleInDegrees = { top: 0, right: 270, bottom: 180, left: 90, };
+                const angleInRadians = (angleInDegrees[blockData.direction] * Math.PI) / 180;
+
+                canvasContext.save();
+                canvasContext.translate(centerX, centerY);
+                canvasContext.rotate(angleInRadians);
+                switch (true) {
+                    case (blockData.direction == "top" || blockData.direction == "bottom"):
+                        canvasContext.translate(-blockData.tileData.size.x * 100 / 2, -blockData.tileData.size.y * 100 / 2)
+                        canvasContext.drawImage(img, 0, 0, blockData.tileData.size.x * 100, blockData.tileData.size.y * 100);
+                        break
+                    case (blockData.direction == "left" || blockData.direction == "right"):
+                        canvasContext.translate(-blockData.tileData.size.y * 100 / 2, -blockData.tileData.size.x * 100 / 2)
+                        canvasContext.drawImage(img, 0, 0, blockData.tileData.size.y * 100, blockData.tileData.size.x * 100);
+                        break
+                }
+                canvasContext.restore();
+            }
         }
     }
 

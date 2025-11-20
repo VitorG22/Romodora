@@ -1,13 +1,12 @@
 import { useContext, useEffect, useState } from "react"
 import { GameContext } from "../../../scripts/socket"
-import type { IPlayer } from "../gameObject"
+import { type IEntity, type IPlayer } from "../gameObject"
 import { LogOutIcon, RefreshCcwIcon, UserRoundIcon } from "lucide-react"
 import * as Button from '../../../assets/buttons/buttons'
 import { useNavigate } from "react-router-dom"
 import { useSelector } from "react-redux"
 import type { RootState } from "../../../redux/store"
 import { getData } from "../../../scripts/axios"
-import type { ICharacter } from "../../character/charactersClass"
 
 export default function GameLobby() {
     const [isModalChangeCharacterOpen, setIsModalChangeCharacterOpen] = useState<boolean>(false)
@@ -28,7 +27,7 @@ export default function GameLobby() {
         <main className="h-full w-full flex flex-col">
             <h1 className='ml-2 mt-2 font-bold'>Code: <span className='uppercase italic font-normal text-stone-800/60'>{game?.lobbyId}</span></h1>
             <ul className="flex flex-row h-full w-full justify-center items-center gap-2 px-2 overflow-hidden">
-                {game?.tableData.players.map(PlayerData =>
+                {game?.tableControl.players.map(PlayerData =>
                     <PlayerCard playerData={PlayerData} key={`playerCard_${PlayerData.id}`} setIsModalChangeCharacterOpen={setIsModalChangeCharacterOpen} />
                 )}
             </ul>
@@ -90,7 +89,7 @@ function PlayerCard({ playerData, setIsModalChangeCharacterOpen }: { playerData:
 }
 
 function ModalChangeCharacter({ setIsModalChangeCharacterOpen }: { setIsModalChangeCharacterOpen: React.Dispatch<React.SetStateAction<boolean>> }) {
-    const [userCharacters, setUserCharacter] = useState<ICharacter[]>([])
+    const [userCharacters, setUserCharacter] = useState<IEntity[]>([])
     const game = useContext(GameContext)
     const { userData } = useSelector((state: RootState) => state.user)
 
@@ -110,11 +109,9 @@ function ModalChangeCharacter({ setIsModalChangeCharacterOpen }: { setIsModalCha
         })
     }
 
-    const changeUserCharacter = (characterData: ICharacter) => {
-        game?.changeCharacterData({
-            userId: userData.id,
-            CharacterData: characterData
-        })
+    const changeUserCharacter = (characterData: IEntity) => {
+        if(!game?.socket)return        
+        game.socket.emit('changePlayerCharacterData', {gameId:game.lobbyId, newCharacterData: characterData, characterOwnerId: userData.id})
     }
 
     return (

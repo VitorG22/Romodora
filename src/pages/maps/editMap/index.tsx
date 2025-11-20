@@ -2,7 +2,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import * as Button from '../../../assets/buttons/buttons'
 import { ArrowLeftFromLineIcon } from 'lucide-react'
 import NavBarTop from '../../../assets/navBar/navBarTop'
-import { TableMap } from './mapsClass'
+import { TableMapEdit, TableMapGame } from './mapsClass'
 import TileGallery, { type ITile } from './tileGallery'
 import Table from './table'
 import { useEffect, useState } from 'react'
@@ -15,13 +15,13 @@ import { useSelector } from 'react-redux'
 export default function EditMap() {
     const navigate = useNavigate()
     const mapsList = useSelector(((state: RootState) => state.maps))
-    const [tableObject, setTableObject] = useState<TableMap>()
+    const [tableObject, setTableObject] = useState<TableMapEdit>()
     const [selectedTile, setSelectedTile] = useState<ITile | null>(null)
     const [tileDirection, setTileDirection] = useState<'top' | 'left' | 'bottom' | 'right'>('top')
     const { mapId } = useParams()
 
-    const reRender = (newObject: TableMap) => {
-        setTableObject(new TableMap(newObject))
+    const reRender = (newObject: TableMapEdit | TableMapGame) => {
+        setTableObject(new TableMapEdit(newObject))
     }
 
     useEffect(() => {
@@ -31,7 +31,7 @@ export default function EditMap() {
             let mapDataCopy = structuredClone(mapsList.find(mapData=> mapData.id == mapId))
             if (!mapDataCopy) throw new Error()
 
-            let newTableObject = new TableMap({
+            let newTableObject = new TableMapEdit({
                 ...mapDataCopy,
                 reRender: reRender
             })
@@ -39,7 +39,7 @@ export default function EditMap() {
             setTableObject(newTableObject)
         } catch (error) {
             console.log(error)
-            setTableObject(new TableMap({
+            setTableObject(new TableMapEdit({
                 name: 'New Map',
                 sizeX: 30,
                 sizeY: 30,

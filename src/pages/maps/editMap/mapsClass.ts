@@ -7,7 +7,7 @@ import type { ITile } from "./tileGallery"
 export type TBlock = {
     x: number
     y: number
-    type: 'void' | 'floor' | "wall"
+    type: 'void' | 'floor' | "wall"| "entity"
     direction: 'top' | 'left' | 'bottom' | 'right'
     tileData: ITile | null
     linkData: {
@@ -35,7 +35,7 @@ export interface ITableMap {
     sizeY: number
     layers?: TLayer[],
     selectedLayer?: string
-    reRender?: (newObject: TableMap) => void
+    reRender?: (newObject: TableMapEdit | TableMapGame) => void
     setMapSize?: React.Dispatch<React.SetStateAction<{
         x: number;
         y: number;
@@ -59,8 +59,6 @@ export class TableMap {
         this.reRender = data.reRender
 
     }
-
-
 
     createDefaultLayers = (sizeX?: number, sizeY?: number): TLayer => {
 
@@ -87,73 +85,6 @@ export class TableMap {
         }
     }
 
-    addGridColumn = () => {
-        let newLayersData = [...this.layers]
-        newLayersData.map(layerData => {
-            layerData.matrix.map((row, Y) => row[row.length] = {
-                x: row.length,
-                y: Y,
-                type: "void",
-                direction: 'top',
-                tileData: null,
-                linkData: {
-                    groupPositions: [],
-                    isMainTile: true,
-                    mainTilePosition: { x: row.length, y: Y }
-                }
-            })
-        })
-        this.sizeX = this.sizeX + 1
-        this.layers = newLayersData
-        this.reDrawAll()
-        this.reRender?.(this)
-    }
-    deleteGridColumn = () => {
-        if (this.sizeX <= 1) return
-        let newLayersData = [...this.layers]
-        newLayersData.map(layerData => layerData.matrix.map(row => row.pop()))
-
-        this.sizeX = this.sizeX - 1
-        this.layers = newLayersData
-        this.reDrawAll()
-        this.reRender?.(this)
-    }
-    addGridRow = () => {
-        let newLayersData = [...this.layers]
-        newLayersData.map(layerData => {
-            layerData.matrix[layerData.matrix.length] = Array.from({ length: this.sizeX }, (i, x) => {
-                i = i //only to fix vercel error
-                return ({
-                    x: x,
-                    y: layerData.matrix.length,
-                    type: "void",
-                    direction: 'top',
-                    tileData: null,
-                    linkData: {
-                        groupPositions: [],
-                        isMainTile: true,
-                        mainTilePosition: { x: x, y: layerData.matrix.length }
-                    }
-                })
-            })
-        })
-
-        this.sizeY = this.sizeY + 1
-        this.layers = newLayersData
-        this.reDrawAll()
-        this.reRender?.(this)
-    }
-    deleteGridRow = () => {
-        if (this.sizeY <= 1) return
-
-        let newLayersData = [...this.layers]
-        newLayersData.map(layerData => layerData.matrix.pop())
-
-        this.sizeY = this.sizeY - 1
-        this.layers = newLayersData
-        this.reDrawAll()
-        this.reRender?.(this)
-    }
 
     AddTileInMatrix = (x: number, y: number, selectedTile: ITile, tileDirection: "top" | "left" | "bottom" | "right") => {
         console.log(tileDirection)
@@ -303,7 +234,83 @@ export class TableMap {
         this.reRender?.(this)
     }
 
+}
 
+export class TableMapEdit extends TableMap {
+    constructor(data: ITableMap) {
+        super(data)
+    }
+
+
+    addGridColumn = () => {
+        let newLayersData = [...this.layers]
+        newLayersData.map(layerData => {
+            layerData.matrix.map((row, Y) => row[row.length] = {
+                x: row.length,
+                y: Y,
+                type: "void",
+                direction: 'top',
+                tileData: null,
+                linkData: {
+                    groupPositions: [],
+                    isMainTile: true,
+                    mainTilePosition: { x: row.length, y: Y }
+                }
+            })
+        })
+        this.sizeX = this.sizeX + 1
+        this.layers = newLayersData
+        this.reDrawAll()
+        this.reRender?.(this)
+    }
+    deleteGridColumn = () => {
+        if (this.sizeX <= 1) return
+        let newLayersData = [...this.layers]
+        newLayersData.map(layerData => layerData.matrix.map(row => row.pop()))
+
+        this.sizeX = this.sizeX - 1
+        this.layers = newLayersData
+        this.reDrawAll()
+        this.reRender?.(this)
+    }
+    addGridRow = () => {
+        let newLayersData = [...this.layers]
+        newLayersData.map(layerData => {
+            layerData.matrix[layerData.matrix.length] = Array.from({ length: this.sizeX }, (i, x) => {
+                i = i //only to fix vercel error
+                return ({
+                    x: x,
+                    y: layerData.matrix.length,
+                    type: "void",
+                    direction: 'top',
+                    tileData: null,
+                    linkData: {
+                        groupPositions: [],
+                        isMainTile: true,
+                        mainTilePosition: { x: x, y: layerData.matrix.length }
+                    }
+                })
+            })
+        })
+
+        this.sizeY = this.sizeY + 1
+        this.layers = newLayersData
+        this.reDrawAll()
+        this.reRender?.(this)
+    }
+    deleteGridRow = () => {
+        if (this.sizeY <= 1) return
+
+        let newLayersData = [...this.layers]
+        newLayersData.map(layerData => layerData.matrix.pop())
+
+        this.sizeY = this.sizeY - 1
+        this.layers = newLayersData
+        this.reDrawAll()
+        this.reRender?.(this)
+    }
+
+    
     addLayer = () => {
         let newLayersData = this.layers
         const newLayer = this.createDefaultLayers()
@@ -322,5 +329,15 @@ export class TableMap {
         this.layers = newLayersData
         this.reRender?.(this)
     }
+    
+}
 
+export class TableMapGame extends TableMap{
+    constructor(data : ITableMap){
+        super(data)
+    }
+
+    // renderEntites(){
+    //     this.
+    // }
 }

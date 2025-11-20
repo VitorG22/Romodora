@@ -49,7 +49,7 @@ export function Chat() {
 
 function MessageComponent({ messageData }: { messageData: IMessage }) {
     const game = useContext(GameContext)
-    let userCharacter = game?.tableData.players.find(playerData=> playerData.id == messageData.ownerData.id)?.character || null
+    let userCharacter = game?.tableControl.players.find(playerData=> playerData.id == messageData.ownerData.id)?.character || null
     let ownerColor  = game?.users.find(user=> user.id == messageData.ownerData.id)?.color || ''
     
     switch (messageData.type) {

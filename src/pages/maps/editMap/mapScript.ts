@@ -26,7 +26,6 @@ export async function getMap(callback: (mapList:TableMap[])=>void) {
         endPoint: 'allMaps',
         onSuccess: (res) => {
             maps = res.data
-            console.log(maps)
             callback(maps)
         },
         onError: (res) => {console.log(res)}

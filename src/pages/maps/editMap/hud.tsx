@@ -1,5 +1,5 @@
 import { Check, Eye, EyeClosed, Layers, Maximize, Minus, MouseIcon, Move, Pen, Plus, RotateCcw, Trash } from "lucide-react";
-import type { TableMap, TLayer } from "./mapsClass";
+import type { TableMap, TableMapEdit, TLayer } from "./mapsClass";
 import { useEffect, useRef, useState } from "react";
 import { saveMap } from "./mapScript";
 import { useNavigate } from "react-router-dom";
@@ -14,6 +14,7 @@ export function Container(props: React.ComponentPropsWithoutRef<'section'>) {
 
 export function Controls() {
     return (
+        
         <div className="text-stone-600 absolute left-4 bottom-4 flex flex-col gap-1 z-10 bg-stone-300 p-2 border border-stone-900/40 rounded-md">
             <p className=" flex flex-row gap-2"><Move strokeWidth={1} />Move : Shift + Mouse Drag</p>
             <p className="flex flex-row gap-2"><Maximize strokeWidth={1} />Zoom : Mouse Scroll</p>
@@ -82,7 +83,7 @@ export function SaveMapComponent({ mapObject }: { mapObject: TableMap }) {
     )
 }
 
-export function LayerOptions({ mapObject }: { mapObject: TableMap }) {
+export function LayerOptions({ mapObject }: { mapObject: TableMapEdit }) {
     const [isEditNameActive, setIsEditNameActive] = useState<boolean>(false)
     const mapNameInputRef = useRef<HTMLInputElement>(null)
 
@@ -138,7 +139,7 @@ export function LayerOptions({ mapObject }: { mapObject: TableMap }) {
     )
 }
 
-function LayerComponent({ mapObject, layerData, isSelectedLayer }: { mapObject: TableMap, layerData: TLayer, isSelectedLayer: boolean }) {
+function LayerComponent({ mapObject, layerData, isSelectedLayer }: { mapObject: TableMapEdit, layerData: TLayer, isSelectedLayer: boolean }) {
     const [isModifyNameActive, setIsModifyNameActive] = useState<boolean>(false)
     const nameInputRef = useRef<HTMLInputElement>(null)
 

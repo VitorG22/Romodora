@@ -1,10 +1,10 @@
 import { useEffect } from "react"
 import { DefaultCanvasElement, DefaultGridElement} from "./canvas"
 import * as HUD from './hud'
-import type { TableMap } from "./mapsClass"
+import type { TableMapEdit } from "./mapsClass"
 import type { ITile } from "./tileGallery"
 
-export default function Table({mapObject, selectedTile ,tileDirection}:{mapObject:TableMap,selectedTile:ITile|null , tileDirection: 'top'|'left'|'right'|'bottom'}) {
+export default function Table({mapObject, selectedTile ,tileDirection}:{mapObject:TableMapEdit,selectedTile:ITile|null , tileDirection: 'top'|'left'|'right'|'bottom'}) {
 
     useEffect(()=>{
         mapObject.reDrawAll()
@@ -26,7 +26,7 @@ export default function Table({mapObject, selectedTile ,tileDirection}:{mapObjec
             <DefaultGridElement tileDirection={tileDirection} selectedTile={selectedTile} z={mapObject.layers.length + 1} rightClickFunction={mapObject.deleteTileFromMatrix} leftClickFunction={mapObject.AddTileInMatrix} sizeX={mapObject.sizeX} sizeY={mapObject.sizeY} 
             style={{height: `${mapObject.sizeY * 2}rem`, width: `${mapObject.sizeX* 2}rem`}}
             className=' absolute border border-stone-950  rounded-md overflow-hidden place-self-center'>
-                {mapObject.layers.map(layerData => <DefaultCanvasElement tileMatrix={layerData.matrix} key={`default_canvas_element_${layerData.id}`} id={layerData.id} sizeX={mapObject.sizeX} sizeY={mapObject.sizeY} />)}
+                {mapObject.layers.map(layerData => <DefaultCanvasElement key={`default_canvas_element_${layerData.id}`} id={layerData.id} sizeX={mapObject.sizeX} sizeY={mapObject.sizeY} />)}
             </DefaultGridElement>
         </>
 

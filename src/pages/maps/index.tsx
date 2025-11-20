@@ -48,9 +48,7 @@ function MapCard({ mapData,reloadMapList }: { mapData: ITableMap,reloadMapList: 
     const handleDeleteMap = (e:React.MouseEvent<HTMLButtonElement, MouseEvent>)=>{ 
         e.preventDefault()
         e.stopPropagation()
-        deleteMap({mapId: mapData.id || "", callback: ()=>{
-            reloadMapList((currentValue:boolean) => !currentValue)
-        }})
+        deleteMap({mapId :mapData.id || "", callback: () => reloadMapList((currentValue:boolean) => !currentValue)})
     }
 
     useEffect(()=>{
@@ -65,7 +63,7 @@ function MapCard({ mapData,reloadMapList }: { mapData: ITableMap,reloadMapList: 
             <div className='relative flex items-center justify-center m-2 aspect-square'>
                 {mapData.layers?.map(layerData=>
                     <canvas id={layerData.id} width={mapData.sizeX * 100} height={mapData.sizeY* 100}
-                    className='max-w-full max-h-full absolute  flex' style={{aspectRatio:mapData.sizeX/mapData.sizeY}}
+                    className={`max-w-full max-h-full absolute flex ${layerData.id}`} style={{aspectRatio:mapData.sizeX/mapData.sizeY}}
                     />
                 )}
             </div>

@@ -1,12 +1,11 @@
 import { useContext, useEffect, useRef, useState } from "react"
 import { GameContext } from "../../../../scripts/socket"
-import type { ICharacter } from "../../../character/charactersClass"
 import { ChevronLeft, ChevronRight, Heart } from "lucide-react"
-import type { IPlayer } from "../../gameObject"
+import type { IPlayer } from "../../table/TableControlerClass"
 import './style.css'
 
 
-export function CharacterList({ setDetailCardData }: { setDetailCardData: React.Dispatch<React.SetStateAction<ICharacter | null>> }) {
+export function CharacterList() {
     const game = useContext(GameContext)
     const [isCharacterListOpen, setIsCharacterListOpen] = useState<boolean>(false)
 
@@ -17,18 +16,20 @@ export function CharacterList({ setDetailCardData }: { setDetailCardData: React.
             </button>
             <ul
                 className='flex flex-col items-end w-fit p-2 gap-1 divide-stone-400/40 divide-y'>
-                {game?.tableData.players.map(playerData =>
-                    <CharacterBanner isCharacterListOpen={isCharacterListOpen} playerData={playerData} setDetailCardData={setDetailCardData} />
+                {game?.tableControl.players.map(playerData =>
+                    // <CharacterBanner isCharacterListOpen={isCharacterListOpen} playerData={playerData} setDetailCardData={setDetailCardData} />
+                    <CharacterBanner isCharacterListOpen={isCharacterListOpen} playerData={playerData} />
                 )}
             </ul>
         </section>
     )
 }
 
-function CharacterBanner({ playerData, setDetailCardData, isCharacterListOpen }: { isCharacterListOpen: boolean, playerData: IPlayer, setDetailCardData: React.Dispatch<React.SetStateAction<ICharacter | null>> }) {
+function CharacterBanner({ playerData, isCharacterListOpen }: { isCharacterListOpen: boolean, playerData: IPlayer}) {
     const LifeBarRef = useRef<HTMLDivElement>(null)
     const ArticleRef = useRef<HTMLElement>(null)
     const CharacterBannerRef = useRef<HTMLLIElement>(null)
+    const game = useContext(GameContext)
 
     useEffect(() => {
         switch (isCharacterListOpen) {
@@ -49,7 +50,7 @@ function CharacterBanner({ playerData, setDetailCardData, isCharacterListOpen }:
 
     return (
         <li ref={CharacterBannerRef}
-            className="CharacterBanner CharacterBannerOpen gap-1 pr-1 py-1 flex flex-col items-end hover:bg-stone-900/10 hover:cursor-pointer" onClick={() => setDetailCardData(playerData.character)} >
+            className="CharacterBanner CharacterBannerOpen gap-1 pr-1 py-1 flex flex-col items-end hover:bg-stone-900/10 hover:cursor-pointer" onClick={() => game?.tableControl.setSelectedObjectOrEntity({entity: playerData.character})} >
             <div className='flex flex-row h-fit w-full justify-end text-end items-end'>
                 <article ref={ArticleRef} className="subElements flex flex-col justify-end pr-2 ">
                     <p className='text-stone-300'>{playerData.character?.name} </p>
