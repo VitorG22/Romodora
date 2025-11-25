@@ -1,6 +1,6 @@
 import type { Socket } from "socket.io-client"
 import { navigate } from "../../scripts/navigate"
-import { Entity, TableControl } from "./table/TableControlerClass"
+import { TableControl } from "./table/TableControlerClass"
 
 export interface IGame {
     socket: Socket | null
