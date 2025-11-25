@@ -67,7 +67,6 @@ export function TableCanvas() {
     }
 
     const closeFloatingMenu = () => {
-        console.log('leftClick')
         setFloatingMenuData({
             isOpen: false,
             x: 0,
@@ -76,7 +75,7 @@ export function TableCanvas() {
     }
 
     return (
-        <section className="flex items-center justify-center absolute top-0 left-0 w-full h-full z-0 overflow-hidden border border-red-500">
+        <section className="flex items-center justify-center absolute top-0 left-0 w-full h-full z-0 overflow-hidden">
             {mapObject &&
                 <>
                     <DefaultGridElement tileDirection={"top"} selectedTile={null} z={mapObject.layers.length + 1} rightClickFunction={onRightClickInGrid} closeFloatingMenu={closeFloatingMenu} leftClickFunction={() => { }} sizeX={mapObject.sizeX} sizeY={mapObject.sizeY}
@@ -92,7 +91,7 @@ export function TableCanvas() {
                 </>
             }
             {floatingMenuData.isOpen &&
-                <div className='absolute border-10 border-blue-500 top-0 left-0'>
+                <div className='absolute top-0 left-0'>
                     <FloatingInteractionMenu dataToFloatingMenuFunction={dataToFloatingMenuFunction} functionList={functionList} floatingMenuData={floatingMenuData} closeFloatingMenu={() => setFloatingMenuData({ x: 0, y: 0, isOpen: false })} />
                 </div>
             }
