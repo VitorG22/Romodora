@@ -8,8 +8,9 @@ interface IContainer extends React.ComponentPropsWithoutRef<'div'> {
     sizeY: number,
     selectedTile: ITile | null
     tileDirection: "top" | "left" | "bottom" | "right"
-    leftClickFunction: (x: number, y: number, selectedTile: ITile, tileDirection: "top" | "left" | "bottom" | "right") => void
-    rightClickFunction: (x: number, y: number) => void
+    leftClickFunction?: (x: number, y: number, selectedTile: ITile, tileDirection: "top" | "left" | "bottom" | "right") => void
+    rightClickFunction: (x: number, y: number, e?:React.MouseEvent<HTMLDivElement, MouseEvent>) => void
+    closeFloatingMenu?: ()=>void
 }
 
 export function DefaultCanvasElement(data: { sizeX: number, sizeY: number, id: string, onLoad?: () => void }) {
@@ -102,11 +103,14 @@ export function DefaultGridElement(props: IContainer) {
         const { x, y } = getMousePosition(e)
         switch (e.buttons) {
             case 1:
-                if (!props.selectedTile) return
-                props.leftClickFunction(x, y, props.selectedTile, props.tileDirection)
+                if (props.selectedTile){
+                    props.leftClickFunction?.(x, y, props.selectedTile, props.tileDirection)
+                }else{
+                    props.closeFloatingMenu?.()
+                }
                 break;
             case 2:
-                props.rightClickFunction(x, y)
+                props.rightClickFunction(x, y, e)
                 break;
         }
     }

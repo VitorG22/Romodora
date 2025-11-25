@@ -17,7 +17,6 @@ export function CharacterList() {
             <ul
                 className='flex flex-col items-end w-fit p-2 gap-1 divide-stone-400/40 divide-y'>
                 {game?.tableControl.players.map(playerData =>
-                    // <CharacterBanner isCharacterListOpen={isCharacterListOpen} playerData={playerData} setDetailCardData={setDetailCardData} />
                     <CharacterBanner isCharacterListOpen={isCharacterListOpen} playerData={playerData} />
                 )}
             </ul>

@@ -4,6 +4,7 @@ import { GameContext } from "../../../../scripts/socket"
 import "./style.css"
 import DicesTab from "./tabs/dices"
 import MapSelectionTab from "./tabs/mapSelection"
+import Inspect from "./tabs/inspect"
 
 const tabsList = [
     {
@@ -17,6 +18,12 @@ const tabsList = [
         id: "mapSelection",
         needPermissionTypeAdmin: true,
         component: <MapSelectionTab />
+    },
+    {
+        title: "Inspect",
+        id: "inspect",
+        needPermissionTypeAdmin: false,
+        component: <Inspect />
     }
 ]
 

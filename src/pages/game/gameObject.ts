@@ -1,6 +1,6 @@
 import type { Socket } from "socket.io-client"
 import { navigate } from "../../scripts/navigate"
-import { TableControl } from "./table/TableControlerClass"
+import { Entity, TableControl } from "./table/TableControlerClass"
 
 export interface IGame {
     socket: Socket | null
@@ -14,6 +14,7 @@ export interface IGame {
     startGame: () => void
     quitGame: () => void
     activeSocketListeners: () => void
+    setGame: ()=>void
 }
 
 export interface IMessage {
@@ -93,6 +94,28 @@ export class Game {
             navigate('game/table')
         })
 
+        this.socket?.on('playerJoin', (newPlayerData)=>{
+            let PlayerAlreadyListed = this.users.findIndex(userData => userData.id == newPlayerData.id)
+            console.log(PlayerAlreadyListed)
+            if(PlayerAlreadyListed != -1)return
+            this.users.push(newPlayerData)
+            this.tableControl.players.push({...newPlayerData,character: undefined })
+            this.setGame()
+        })
+
+        this.socket?.on('playerLeave', (playerId)=>{
+            let playerIndexInUsersList = this.users.findIndex(userData=> userData.id == playerId )
+            if(playerIndexInUsersList != -1){
+                this.users.splice(playerIndexInUsersList, 1)
+            }
+            let playerIndexInTablePlayers = this.tableControl.players.findIndex(playerData=> playerData.id == playerId)
+            if(playerIndexInTablePlayers != -1){
+                this.tableControl.players.splice(playerIndexInTablePlayers, 1)
+            }
+
+            this.setGame()
+        })
+        
     }
 
     startGame() {

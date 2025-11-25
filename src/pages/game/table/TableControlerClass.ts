@@ -87,22 +87,39 @@ export class TableControl {
     }
 
     changeCharacterData({ userId, characterData }: { userId: string, characterData: IEntity }) {
-        console.log(userId, characterData)
-        console.log(this.players)
         let playerIndex = this.players.findIndex(playerData => playerData.id == userId)
 
         if (playerIndex == -1) { console.log('return'); return }
 
         let socket = this.socket
         let lobbyId = this.lobbyId
+        let characterOwnerId = this.players[playerIndex].id
 
-        this.players[playerIndex].character = new Entity({
-            ...this.players[playerIndex].character, ...characterData,
-            emitSocket({ event, data }: { event: string, data: any }) {
-                data.gameId = lobbyId,
+        if (!this.players[playerIndex].character) {
+            this.players[playerIndex].character = new Entity({
+                ...characterData,
+                emitSocket({ event, data }: { event: string, data: any }) {
+                    data.gameId = lobbyId
+                    data.characterOwnerId = characterOwnerId
                     socket?.emit(event, data)
-            },
-        })
+                },
+            })
+        } else {
+            this.players[playerIndex].character.name = characterData.name || this.players[playerIndex].character.name
+            this.players[playerIndex].character.id = characterData.id || this.players[playerIndex].character.id
+            this.players[playerIndex].character.picture = characterData.picture || this.players[playerIndex].character.picture
+            this.players[playerIndex].character.class = characterData.class || this.players[playerIndex].character.class
+            this.players[playerIndex].character.subClass = characterData.subClass || this.players[playerIndex].character.subClass
+            this.players[playerIndex].character.race = characterData.race || this.players[playerIndex].character.race
+            this.players[playerIndex].character.subRace = characterData.subRace || this.players[playerIndex].character.subRace
+            this.players[playerIndex].character.attributes = characterData.attributes || this.players[playerIndex].character.attributes
+            this.players[playerIndex].character.level = characterData.level || this.players[playerIndex].character.level
+            this.players[playerIndex].character.life = characterData.life || this.players[playerIndex].character.life
+            this.players[playerIndex].character.maxLife = characterData.maxLife || this.players[playerIndex].character.maxLife
+            this.players[playerIndex].character.position = characterData.position || this.players[playerIndex].character.position
+            this.players[playerIndex].character.lastPosition = characterData.lastPosition || this.players[playerIndex].character.lastPosition
+        }
+
         this.setGame()
         this.players[playerIndex].character.render()
 
@@ -124,15 +141,15 @@ export class TableControl {
         });
     }
 
-    setSelectedObjectOrEntity({  object, entity }: { object?: any, entity?: Entity }) {
-        if(object){
-            this.selectedObjectOrEntity ={object: object, entity:undefined}
-        }else if(entity){
-            this.selectedObjectOrEntity ={object: undefined, entity: entity}
+    setSelectedObjectOrEntity({ object, entity }: { object?: any, entity?: Entity }) {
+        if (object) {
+            this.selectedObjectOrEntity = { object: object, entity: undefined }
+        } else if (entity) {
+            this.selectedObjectOrEntity = { object: undefined, entity: entity }
         }
         this.setGame()
     }
-    deleteSelectedObjectOrEntity(){
+    deleteSelectedObjectOrEntity() {
         this.selectedObjectOrEntity = undefined
         this.setGame()
     }
@@ -183,17 +200,41 @@ export class Entity {
     }
 
 
-    changePosition(x: number, y: number) {
+    
+    changeCharacterData({ CharacterData }: { CharacterData?: IEntity }) {
+        if (CharacterData != undefined) {
+            this.emitSocket?.({ event: 'changePlayerCharacterData', data: { newCharacterData: CharacterData } })
+        } else {
+            this.emitSocket?.({ event: 'changePlayerCharacterData', data: { newCharacterData: this } })
+        }
+    }
+    
+    changePosition(x: number, y: number ) {
         this.lastPosition = this.position
         this.position = {
-            x: x,
-            y: y
+            x:x,
+            y:y
         }
-        this.emitSocket?.({ event: 'changePlayerCharacterData', data: { newCharacterData: this } })
+        this.changeCharacterData({CharacterData:undefined})
+        console.log(this.emitSocket)
     }
 
-    changeCharacterData({ CharacterData }: { CharacterData: IEntity }) {
-        this.emitSocket?.({ event: 'changePlayerCharacterData', data: { newCharacterData: CharacterData } })
+    heal(healValue:number){
+        if(this.life +healValue >= this.maxLife){
+            this.life = this.maxLife
+        }else{
+            this.life += healValue
+        }
+        this.changeCharacterData({CharacterData:undefined})
+    }
+
+    damage(damageValue:number){
+        if(this.life - damageValue <= 0){
+            this.life = 0
+        }else{
+            this.life -= damageValue
+        }
+        this.changeCharacterData({CharacterData:undefined})
     }
 
     render() {
@@ -225,6 +266,30 @@ export class Entity {
                 y: this.position.y
             }
         })
+    }
+
+    getInteractionTableFunctionsAsPrimaryObject() {
+        return {
+            Title: this.name,
+            list: [
+                {
+                    name: "Move To",
+                    executableFunction:(data:any)=> this.changePosition(data.x, data.y)
+                },
+            ]
+        }
+    }
+
+    getInteractionTableFunctionsAsSecondaryObject(){
+        return {
+            Title: this.name,
+            list: [
+                {
+                    name: "Damage",
+                    executableFunction:(data:any)=> this.damage(data.value || 0)
+                },
+            ]
+        }
     }
 
 }

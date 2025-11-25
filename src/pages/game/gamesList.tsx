@@ -3,7 +3,8 @@ import { useContext, useEffect, useState } from "react"
 import { GameContext } from "../../scripts/socket"
 import { LockKeyhole, User2, X } from "lucide-react"
 import { useNavigate } from "react-router-dom"
-import type { IPerson } from './gameObject'
+import type { Game, IPerson } from './gameObject'
+import { Entity, TableControl, type IPlayer } from './table/TableControlerClass'
 
 interface IGameInList {
     id: string
@@ -60,12 +61,22 @@ function GameCard({ gameData }: { gameData: IGameInList }) {
     const navigate = useNavigate()
 
     const joinInGame = () => {
-        game?.socket?.emit("joinInGame", { gameId: gameData.id }, (res: { status: 200 }) => {
+        game?.socket?.emit("joinInGame", { gameId: gameData.id }, (res: { status: 200, gameData:Game  }) => {
             if (res.status != 200) return
-            game.isHost = false,
-                game.lobbyId = gameData.id,
-                game.activeSocketListeners()
-
+            game.isHost = false
+            game.lobbyId = gameData.id,
+            game.users = res.gameData.users
+            game.tableControl = new TableControl({...game.tableControl ,...res.gameData.tableControl, 
+                players: res.gameData.tableControl.players.map((playerData: IPlayer) => {
+                    let playerObject= {...playerData}
+                    if(playerData.character){
+                        playerObject.character = new Entity(playerData.character)
+                    }
+                    return playerObject
+                })
+            })
+            game.activeSocketListeners()
+            game.setGame()
             navigate('/game/lobby')
 
         })

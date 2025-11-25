@@ -30,6 +30,7 @@ export function GameContextProvider({ children }: { children: ReactNode }) {
         activeSocketListeners: () => { },
         quitGame: () => { },
         startGame: () => { },
+        setGame: ()=>{}
     }))
 
     useEffect(() => {
