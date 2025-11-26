@@ -53,11 +53,9 @@ export function SaveMapComponent({ mapObject }: { mapObject: TableMap }) {
                 const canvasElement: HTMLElement | null = document.getElementById(layerData.id)
                 if (canvasElement instanceof HTMLCanvasElement) {
                     finalCanvasContext?.drawImage(canvasElement, 0, 0, mapObject.sizeX * 100, mapObject.sizeY * 100)
-                    console.log("teste")
                 }
             })
             const canvasInBase64 = canvasRef.current.toDataURL()
-            console.log(canvasInBase64)
             mapObject.image = canvasInBase64
         }
 

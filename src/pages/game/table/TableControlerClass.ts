@@ -264,7 +264,8 @@ export class Entity {
                 type: 'entity',
                 x: this.position.x,
                 y: this.position.y
-            }
+            },
+            needProxy: false
         })
     }
 

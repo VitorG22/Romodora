@@ -234,23 +234,37 @@ export function DefaultGridElement(props: IContainer) {
 }
 
 
-export const drawInCanvas = ({ canvasId, blockData }: { blockData: TBlock, canvasId: string }) => {
+export const drawInCanvas = ({ canvasId, blockData, needProxy = true}: { blockData: TBlock, canvasId: string, needProxy?:boolean }) => {
     const canvasElementsList: Element[] | null = Array.from(document.getElementsByClassName(canvasId))
+    const baseURL = import.meta.env.VITE_API_URL
 
-    if(blockData.type!= "void"){console.log(canvasId)}
     for (let canvasElement of canvasElementsList) {
         if (canvasElement instanceof HTMLCanvasElement) {
             const canvasContext = canvasElement.getContext('2d')
             if (!canvasContext || !blockData.tileData) return
             canvasContext.clearRect(blockData.x * 100, blockData.y * 100, blockData.tileData.size.x * 100, blockData.tileData.size.y * 100)
 
+            // const img = new Image();
+            // img.onload = () => {
+            //     if (!blockData.tileData) return
+            //     draw()
+            // }
+            
+            // img.src =  blockData.tileData.path
+
             const img = new Image();
             img.onload = () => {
                 if (!blockData.tileData) return
                 draw()
+            }  
+
+            if(needProxy){
+                img.setAttribute('crossorigin', 'anonymous');
+                img.src = baseURL+ "proxy?url=" + encodeURIComponent(blockData.tileData.path)
+            }else{
+                img.src = blockData.tileData.path
             }
             
-            img.src =  blockData.tileData.path
 
             const draw = () => {
                 if (!blockData.tileData) return
