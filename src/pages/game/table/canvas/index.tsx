@@ -111,7 +111,7 @@ type TFunctionList = Array<{
 
 function FloatingInteractionMenu({ dataToFloatingMenuFunction, functionList, floatingMenuData, closeFloatingMenu }: { dataToFloatingMenuFunction: any, functionList: TFunctionList, floatingMenuData: { x: number, y: number, isOpen: boolean }, closeFloatingMenu: () => void }) {
     return (
-        <section className='absolute flex flex-col bg-stone-900 text-stone-400 py-2' style={{ left: floatingMenuData.x, top: floatingMenuData.y }}>
+        <section onContextMenu={(e) => e.preventDefault()} className='absolute flex flex-col bg-stone-900 text-stone-400 py-2' style={{ left: floatingMenuData.x, top: floatingMenuData.y }}>
             {functionList.map(functionListObject =>
                 <div>
                     <h2 className="font-semibold px-1 border-b-1 border-stone-400/40">{functionListObject.Title}</h2>

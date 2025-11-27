@@ -1,5 +1,5 @@
 import { useContext } from "react"
-import { GameContext } from "../../../../../scripts/socket"
+import { GameContext } from "../../../../../../scripts/socket"
 import { DicesIcon } from "lucide-react"
 
 export default function DicesTab() {

@@ -244,14 +244,6 @@ export const drawInCanvas = ({ canvasId, blockData, needProxy = true}: { blockDa
             if (!canvasContext || !blockData.tileData) return
             canvasContext.clearRect(blockData.x * 100, blockData.y * 100, blockData.tileData.size.x * 100, blockData.tileData.size.y * 100)
 
-            // const img = new Image();
-            // img.onload = () => {
-            //     if (!blockData.tileData) return
-            //     draw()
-            // }
-            
-            // img.src =  blockData.tileData.path
-
             const img = new Image();
             img.onload = () => {
                 if (!blockData.tileData) return

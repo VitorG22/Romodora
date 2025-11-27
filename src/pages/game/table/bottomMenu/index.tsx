@@ -2,16 +2,16 @@ import { ChevronDown, ChevronUp } from "lucide-react"
 import { useContext, useEffect, useRef, useState } from "react"
 import { GameContext } from "../../../../scripts/socket"
 import "./style.css"
-import DicesTab from "./tabs/dices"
 import MapSelectionTab from "./tabs/mapSelection"
 import Inspect from "./tabs/inspect"
+import Personal from "./tabs/Personal"
 
 const tabsList = [
     {
         title: "Personal",
         id: "playerDataControl",
         needPermissionTypeAdmin: false,
-        component: <DicesTab />
+        component: <Personal />
     },
     {
         title: "Map Selector",
