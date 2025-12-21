@@ -1,5 +1,5 @@
 import rowDices from "../../scripts/rowDice"
-import type { Entity } from "../game/table/TableControlerClass"
+import type { Entity } from "../game/table/entitysClasses"
 
 export type TItems = MeleeWeapon | RangedWeapon | Ammo
 
