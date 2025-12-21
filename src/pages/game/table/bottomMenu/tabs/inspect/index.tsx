@@ -1,7 +1,6 @@
 import { useContext} from "react"
 import { GameContext } from "../../../../../../scripts/socket"
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { Character, type TEntity } from "../../../entitysClasses";
+import { type TEntity } from "../../../entitysClasses";
 import VariableEntityInspector from "./variableEntityInspector";
 
 export default function Inspect() {

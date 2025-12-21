@@ -6,7 +6,8 @@ import { useNavigate } from "react-router-dom"
 import { useSelector } from "react-redux"
 import type { RootState } from "../../../redux/store"
 import { getData } from "../../../scripts/axios"
-import type { IEntity, IPlayer } from "../table/TableControlerClass"
+import type { IPlayer } from "../table/TableControlerClass"
+import type { ICharacter } from "../table/entitysClasses"
 
 export default function GameLobby() {
     const [isModalChangeCharacterOpen, setIsModalChangeCharacterOpen] = useState<boolean>(false)
@@ -89,7 +90,7 @@ function PlayerCard({ playerData, setIsModalChangeCharacterOpen }: { playerData:
 }
 
 function ModalChangeCharacter({ setIsModalChangeCharacterOpen }: { setIsModalChangeCharacterOpen: React.Dispatch<React.SetStateAction<boolean>> }) {
-    const [userCharacters, setUserCharacter] = useState<IEntity[]>([])
+    const [userCharacters, setUserCharacter] = useState<ICharacter[]>([])
     const game = useContext(GameContext)
     const { userData } = useSelector((state: RootState) => state.user)
 
@@ -109,7 +110,7 @@ function ModalChangeCharacter({ setIsModalChangeCharacterOpen }: { setIsModalCha
         })
     }
 
-    const changeUserCharacter = (characterData: IEntity) => {
+    const changeUserCharacter = (characterData: ICharacter) => {
         if(!game?.socket)return        
         game.socket.emit('changePlayerCharacterData', {gameId:game.lobbyId, newCharacterData: characterData, characterOwnerId: userData.id})
     }

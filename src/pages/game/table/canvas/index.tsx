@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react"
 import { GameContext } from "../../../../scripts/socket"
 import { DefaultCanvasElement, DefaultGridElement } from "../../../maps/editMap/canvas"
 import { TableMapGame } from "../../../maps/editMap/mapsClass"
-import type { Entity } from "../TableControlerClass"
+import type { Entity } from "../entitysClasses"
 
 
 interface IDataToFloatingMenuFunction {

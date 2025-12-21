@@ -2,6 +2,7 @@ import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import "./style.css"
 import { useContext, useEffect, useRef, useState } from "react";
 import { GameContext } from "../../../../scripts/socket";
+import { Character } from "../entitysClasses";
 
 export function DetailsCard() {
     const CardDataRef = useRef<HTMLDivElement>(null)
@@ -44,7 +45,7 @@ export function DetailsCard() {
     return (
         <section className="w-fit flex flex-row col-start-1 col-end-4 row-start-1 row-end-4 z-20 ">
             <div ref={CardDataRef} className="CardData flex  flex-row h-full text-stone-300 relative bg-stone-900">
-                {game?.tableControl.selectedEntity &&
+                {game?.tableControl.selectedEntity && (game.tableControl.selectedEntity instanceof Character)  &&
                     <>
                         <div className="flex overflow-hidden rounded-md m-2">
                             <img src={game?.tableControl.selectedEntity.picture} className="object-cover" />
