@@ -4,7 +4,8 @@ import { GameContext } from "../../scripts/socket"
 import { LockKeyhole, User2, X } from "lucide-react"
 import { useNavigate } from "react-router-dom"
 import type { Game, IPerson } from './gameObject'
-import { Entity, TableControl, type IPlayer } from './table/TableControlerClass'
+import {TableControl, type IPlayer } from './table/TableControlerClass'
+import { Character } from './table/entitysClasses'
 
 interface IGameInList {
     id: string
@@ -70,7 +71,7 @@ function GameCard({ gameData }: { gameData: IGameInList }) {
                 players: res.gameData.tableControl.players.map((playerData: IPlayer) => {
                     let playerObject= {...playerData}
                     if(playerData.character){
-                        playerObject.character = new Entity(playerData.character)
+                        playerObject.character = new Character(playerData.character)
                     }
                     return playerObject
                 })

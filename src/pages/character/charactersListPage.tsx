@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Loader, LoaderContainer } from "../../assets/loader/loader";
-import type { ICharacter } from "./charactersClass";
+import type { ICharacter } from "../game/table/entitysClasses"; 
 import { ArrowLeftFromLineIcon, Heart, Plus, TrashIcon, UserRound } from "lucide-react";
 import * as Button from '../../assets/buttons/buttons'
 import { useNavigate } from "react-router-dom";
@@ -117,11 +117,6 @@ function CharactersCard({ CharacterData, getUserCharacters }: { CharacterData: I
                     className="flex flex-row gap-2 items-center justify-center w-full mt-2 p-2 hover:cursor-pointer rounded-b-sm">
                     <TrashIcon strokeWidth={1} size={15} /> Delete Character
                 </button>
-                {/* <button onClick={(e) => {e.stopPropagation();setIsPopOutOpen(true)}} className="h-[0px] hidden overflow-hidden flex-row items-center justify-center w-full border-2 rounded-b-md border-t-0  bg-linear-30 from-stone-500 to-stone-600 py-1 text-stone-300 text-sm 
-            group-has-hover:flex group-has-hover:h-auto hover:cursor-pointer">
-                    <TrashIcon strokeWidth={1} size={20} />
-                    Delete
-                </button> */}
             </div>
             {isPopOutOpen &&
                 <section className='absolute top-0 left-0 w-screen h-screen bg-stone-900/60 flex justify-center items-center'>

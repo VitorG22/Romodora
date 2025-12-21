@@ -11,6 +11,9 @@ import CharactersList from "./pages/character/charactersListPage";
 import Table from "./pages/game/table";
 import EditMap from "./pages/maps/editMap/index";
 import SelectMapToEdit from "./pages/maps";
+import Items from "./pages/items";
+import CreateItem from "./pages/items/subPages/createItem";
+import ItemsList from "./pages/items/subPages/itemsList";
 
 export const router = createBrowserRouter([
     {
@@ -52,24 +55,30 @@ export const router = createBrowserRouter([
                 ]    
             },
             {
+                path: '/items',
+                element: <Items />,
+                children: [
+                    {
+                        path: 'edit',
+                        element: <CreateItem />
+                    },
+                    {
+                        path: 'edit/:itemId',
+                        element: <CreateItem />
+                    },
+                    {
+                        path: 'list',
+                        element: <ItemsList />
+                    }
+                ]    
+            },
+            {
                 path: '/maps',
                 element:<SelectMapToEdit/>
-                // children: [
-                //     {
-                //         path:'lobby',
-                //         element: <GameLobby/>
-                //     }
-                // ]
             },
             {
                 path: '/editMap/:mapId',
                 element:<EditMap/>
-                // children: [
-                //     {
-                //         path:'lobby',
-                //         element: <GameLobby/>
-                //     }
-                // ]
             },
             {
                 path: '/game',

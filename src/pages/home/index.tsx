@@ -5,7 +5,7 @@ import { createContext, useContext, useState } from "react";
 import { type Socket } from "socket.io-client";
 import { GameContext } from "../../scripts/socket";
 import type { IGame } from "../game/gameObject";
-import { CrownIcon, GlobeIcon, KeyRoundIcon, LogInIcon, MapIcon, UserRoundIcon } from "lucide-react";
+import { CrownIcon, FlaskConicalIcon, GlobeIcon, LogInIcon, MapIcon, UserRoundIcon } from "lucide-react";
 import GamesListDefault from "../game/gamesList";
 import { Loader, LoaderContainer } from "../../assets/loader/loader";
 import { TableControl } from "../game/table/TableControlerClass";
@@ -74,9 +74,9 @@ export default function Home() {
                     <MapIcon strokeWidth={1} size={70} />
                     <p>Maps</p>
                 </Button.BigSquareButton>
-                <Button.BigSquareButton color='white'>
-                    <KeyRoundIcon strokeWidth={.5} size={240} className="absolute z-10 blur-[2px] -left-[40%] top-[20%]  opacity-10" />
-                    <KeyRoundIcon strokeWidth={1} size={70} />
+                <Button.BigSquareButton color='white' onClick={()=>navigate('/items/list')} >
+                    <FlaskConicalIcon strokeWidth={.5} size={240} className="absolute z-10 blur-[2px] -left-[40%] top-[20%]  opacity-10" />
+                    <FlaskConicalIcon strokeWidth={1} size={70} />
                     <p>Items</p>
                 </Button.BigSquareButton>
                 <Button.BigSquareButton color='white'>

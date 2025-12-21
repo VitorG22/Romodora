@@ -7,10 +7,10 @@ export default function DicesTab() {
 
     return (
 
-        <div className='w-40 flex flex-col gap-1 h-full'>
+        <div className='w-52 flex flex-col gap-1 h-full'>
             <h1 className="flex gap-1 w-full justify-center mt-1 "><DicesIcon strokeWidth={1} />Roll Dices</h1>
             <div id='DicesRoll' className='grid grid-rows-4 grid-cols-2 w-full h-full
-                            *:w-full *:h-full *:hover:bg-stone-800 *:duration-300 *:flex *:items-center *:justify-center *:hover:cursor-pointer'>
+                            *:px-2 *:w-full *:h-full *:hover:bg-stone-800 *:duration-300 *:flex *:items-center *:justify-center *:hover:cursor-pointer'>
                 <button onClick={() => game?.tableControl.rollDice(4)}>D4</button>
                 <button onClick={() => game?.tableControl.rollDice(6)}>D6</button>
                 <button onClick={() => game?.tableControl.rollDice(8)}>D8</button>

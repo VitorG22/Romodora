@@ -1,15 +1,5 @@
-import { getData, PostData } from "../../scripts/axios"
-import * as Input from '../../assets/inputs/inputs'
-import * as Button from '../../assets/buttons/buttons'
-import { useEffect, useState } from "react"
-import { Trash } from "lucide-react"
-import { useNavigate, useParams } from "react-router-dom"
-import type { ICharacter } from "../game/table/entitysClasses"
-import AttributesTab from "./tabs/AttributesTab"
-import InventoryTab from "./tabs/inventoryTab"
-import type { TItems } from "../items/itemsClass"
-
-
+import type { ICharacter } from "../../game/table/entitysClasses"
+import * as Input from '../../../assets/inputs/inputs'
 
 const classesValues = [
     {
@@ -393,128 +383,85 @@ const racesValues = [
     }
 ]
 
-const defaultCharacterData: ICharacter = {
-    name: '',
-    id: '',
-    picture: '',
-    class: 'Barbarian',
-    subClass: 'Path of the Ancestral Guardian',
-    race: 'Aarakocra',
-    subRace: '',
-    attributes: {
-        strength: 0,
-        dexterity: 0,
-        constitution: 0,
-        intelligence: 0,
-        wisdom: 0,
-        charisma: 0,
-    },
-    level: 1,
-    life: 1,
-    maxLife: 1,
-    position: { x: -1, y: -1 },
-    lastPosition: { x: -1, y: -1 },
-    inventory: []
-}
-
-export default function CreateCharacter() {
-    const { characterId } = useParams()
-    const navigate = useNavigate()
-    const [CharacterData, setCharacterData] = useState<ICharacter>(defaultCharacterData)
-    const [currentSubClassList, setCurrentSubClassList] = useState<string[]>([])
-    const [currentSubRaceList, setCurrentSubRaceList] = useState<string[]>([])
-    const [currentTab, setCurrentTab] = useState<"inventory" | "attributes">("attributes")
-
-    useEffect(() => {
-        if (characterId) {
-            setCharacterToEdit()
-        }
-    }, [])
-
-    useEffect(() => {
-        const newSubClassList = classesValues.find(classData => classData.name == CharacterData.class)?.subclasses || []
-        setCurrentSubClassList(newSubClassList)
-        setCharacterSingleData({ subClass: newSubClassList[0] || '' })
-    }, [CharacterData.class])
-
-    useEffect(() => {
-        const newSubRaceList = racesValues.find(raceData => raceData.name == CharacterData.race)?.subraces || []
-        setCurrentSubRaceList(newSubRaceList)
-        setCharacterSingleData({ subRace: newSubRaceList[0] || '' })
-
-    }, [CharacterData.race])
-
-    const setCharacterToEdit = () => {
-        getData({
-            endPoint: `getCharacterById/${characterId}`,
-            onSuccess: (res) => {
-                console.log(res)
-                setCharacterData(res.data)
-                setCurrentSubClassList(classesValues.find(classData => classData.name == res.data.class)?.subclasses || [])
-                setCurrentSubRaceList(racesValues.find(raceData => raceData.name == res.data.race)?.subraces || [])
-            },
-            onError: (res) => {
-                if (res.status == 403) { navigate('/characters/list') }
-            }
-        })
-    }
-
+export default function AttributesTab({ CharacterData, setCharacterData, currentSubClassList, currentSubRaceList }: { CharacterData: ICharacter, setCharacterData: React.Dispatch<React.SetStateAction<ICharacter>>, currentSubClassList: string[], currentSubRaceList: string[] }) {
 
     const setCharacterSingleData = (data: object) => {
         setCharacterData({ ...CharacterData, ...data })
     }
 
-
-    const handleSubmitForm = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
-
-        
-
-        let characterInventory = CharacterData.inventory.map((item:TItems) => { return { id: item.id, amount: item.amount } })
-
-        PostData({
-            endPoint: "editCharacter",
-            onSuccess: () => {
-                navigate('/characters/list')
-            },
-            data: {...CharacterData, inventory: characterInventory}
-        })
+    const setCharacterSingleAttribute = (data: object) => {
+        setCharacterData({ ...CharacterData, attributes: { ...CharacterData.attributes, ...data } })
     }
 
+
     return (
-
-        <form onSubmit={(e) => handleSubmitForm(e)} className="flex flex-row w-full h-full p-6 gap-4 overflow-hidden">
-            <section className='flex w-fit flex-col h-full justify-between'>
-                <div className='flex flex-col h-5/6  justify-between gap-2'>
-                    {CharacterData.picture && CharacterData.picture != '' ? (
-                        <div className='bg-stone-900  aspect-[3/4] h-4/5 flex rounded-sm '>
-                            <img src={CharacterData.picture} className=' rounded-sm object-cover flex w-full h-full' />
-                        </div>
-                    ) : (
-                        <div className='bg-stone-900  aspect-[3/4] h-4/5 flex rounded-sm'> </div>
-                    )}
-                    <div className='flex flex-col h-1/5 gap-2'>
-                        <Input.Image setImageFunction={(value: string) => setCharacterSingleData({ picture: value })}>
-                            <Button.Primary type='button' color='black'>Select Image</Button.Primary>
-                        </Input.Image>
-                        <Button.Secondary type='button' className="flex flex-row gap-2 justify-center items-center" color='black' onClick={() => setCharacterSingleData({ picture: "" })}>Remove Image <Trash size={20} strokeWidth={1} /></Button.Secondary>
-                    </div>
-                </div>
-                <hr className='border-stone-900 m-2' />
-                <div className='flex flex-col gap-2 justify-end h-1/6'>
-                    <Button.Secondary onClick={() => navigate('/characters/list')} color="black" type='button' className="gap-1 col-start-4 col-end-5 row-start-2 row-end-3 self-end">Cancel</Button.Secondary>
-                    <Button.Primary color="black" type='submit' className="col-start-5 col-end-6 row-start-2 row-end-3 self-end">Save</Button.Primary>
-                </div>
+        <section className='flex flex-col gap-6 p-2 h-full overflow-hidden'>
+            <section className="grid grid-cols-2 gap-2 h-full">
+                <Input.Container color="white" className='col-span-2'>
+                    <Input.Label inputId="CharacterName">Name</Input.Label>
+                    <Input.TextInput required id="CharacterName" name="CharacterName" type="text" defaultValue={CharacterData.name} onChange={(e) => setCharacterSingleData({ name: e.target.value })} />
+                </Input.Container>
+                <Input.Container color="white">
+                    <Input.Label inputId="CharacterClass">Class</Input.Label>
+                    <Input.DropMenu inputId="CharacterClass" name="CharacterClass" value={CharacterData.class} setInputValueFunction={(value: string) => setCharacterSingleData({ class: value })} valuesList={classesValues.map(classData => classData.name)} />
+                </Input.Container>
+                <Input.Container color="white">
+                    <Input.Label inputId="CharacterSubClass">Sub Class</Input.Label>
+                    <Input.DropMenu inputId="CharacterSubClass" name="CharacterSubClass" value={CharacterData.subClass} setInputValueFunction={(value: string) => setCharacterSingleData({ subClass: value })} valuesList={currentSubClassList} />
+                </Input.Container>
+                <Input.Container color="white">
+                    <Input.Label inputId="CharacterRace">Race</Input.Label>
+                    <Input.DropMenu inputId="CharacterRace" name="CharacterRace" value={CharacterData.race} setInputValueFunction={(value: string) => setCharacterSingleData({ race: value })} valuesList={racesValues.map(raceData => raceData.name)} />
+                </Input.Container>
+                <Input.Container color="white">
+                    <Input.Label inputId="CharacterSubRace">Sub Race</Input.Label>
+                    <Input.DropMenu inputId="CharacterSubRace" name="CharacterSubRace" value={CharacterData.subRace} setInputValueFunction={(value: string) => setCharacterSingleData({ subRace: value })} valuesList={currentSubRaceList} />
+                </Input.Container>
             </section>
-            <section className='flex flex-col justify-start h-full w-full rounded-sm overflow-hidden bg-stone-900 text-stone-200 '>
-                <nav className="flex flex-row w-full">
-                    <button type="button" onClick={() => setCurrentTab('attributes')} style={{ "borderBottomColor": currentTab == "attributes" ? ("#ad46ff") : ("#292524") }} className="duration-150 py-1 w-1/2 border-b-2 text-stone-200 hover:cursor-pointer hover:bg-stone-800">Attributes</button>
-                    <button type="button" onClick={() => setCurrentTab('inventory')} style={{ "borderBottomColor": currentTab == "inventory" ? ("#ad46ff") : ("#292524") }} className="duration-150 py-1 w-1/2 border-b-2 hover:cursor-pointer hover:bg-stone-800">Inventory</button>
-                </nav>
-                {currentTab == 'attributes' && <AttributesTab currentSubClassList={currentSubClassList} currentSubRaceList={currentSubRaceList} CharacterData={CharacterData} setCharacterData={setCharacterData} />}
-                {currentTab == 'inventory' && <InventoryTab inventory={CharacterData.inventory} setInventory={(inventoryData: Array<TItems>) => setCharacterSingleData({ inventory: inventoryData })} />}
-            </section>
-        </form >
+            <ul className="grid grid-cols-2 gap-x-2 h-full justify-between">
+                <li>
+                    <Input.Container color="white">
+                        <Input.Number min={0} id="Charisma" name="charisma" defaultValue={CharacterData.attributes.charisma} setValueFunction={(value) => setCharacterSingleAttribute({ charisma: value })} currentValue={CharacterData.attributes.charisma} />
+                    </Input.Container>
+                </li>
+                <li>
+                    <Input.Container color='white'>
+                        <Input.Number min={0} id="Constitution" name="constitution" defaultValue={CharacterData.attributes.constitution} setValueFunction={(value) => setCharacterSingleAttribute({ constitution: value })} currentValue={CharacterData.attributes.constitution} />
+                    </Input.Container>
+                </li>
+                <li>
+                    <Input.Container color='white'>
+                        <Input.Number min={0} id="Dexterity" name="dexterity" defaultValue={CharacterData.attributes.dexterity} setValueFunction={(value) => setCharacterSingleAttribute({ dexterity: value })} currentValue={CharacterData.attributes.dexterity} />
+                    </Input.Container>
+                </li>
+                <li>
+                    <Input.Container color='white'>
+                        <Input.Number min={0} id="Intelligence" name="intelligence" defaultValue={CharacterData.attributes.intelligence} setValueFunction={(value) => setCharacterSingleAttribute({ intelligence: value })} currentValue={CharacterData.attributes.intelligence} />
+                    </Input.Container>
+                </li>
+                <li>
+                    <Input.Container color='white'>
+                        <Input.Number min={0} id="Strength" name="strength" defaultValue={CharacterData.attributes.strength} setValueFunction={(value) => setCharacterSingleAttribute({ strength: value })} currentValue={CharacterData.attributes.strength} />
+                    </Input.Container>
+                </li>
+                <li>
+                    <Input.Container color='white'>
+                        <Input.Number min={0} id="Wisdom" name="wisdom" defaultValue={CharacterData.attributes.wisdom} setValueFunction={(value) => setCharacterSingleAttribute({ wisdom: value })} currentValue={CharacterData.attributes.wisdom} />
+                    </Input.Container>
+                </li>
+                <li>
+                    <Input.Container color='white'>
+                        <Input.Number min={1} id="Max Life" name="maxLife" defaultValue={CharacterData.maxLife} setValueFunction={(value) => setCharacterSingleData({ maxLife: value })} currentValue={CharacterData.maxLife} />
+                    </Input.Container>
+                </li>
+                <li>
+                    <Input.Container color='white'>
+                        <Input.Number min={0} max={CharacterData.maxLife} id="Life" name="life" defaultValue={CharacterData.life} setValueFunction={(value) => setCharacterSingleData({ life: value })} currentValue={CharacterData.life} />
+                    </Input.Container>
+                </li>
+            </ul>
 
+        </section>
     )
+
 }

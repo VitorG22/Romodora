@@ -67,7 +67,7 @@ function App() {
 
 
   return (
-    <main className="bg-stone-300 text-stone-900 h-screen w-screen flex flex-row justify-center items-center">
+    <main className="bg-stone-300 text-stone-900 h-screen w-screen flex flex-row justify-center items-center selection:bg-purple-500 selection:text-stone-200">
       {isLoading &&
         <LoaderContainer>
           <Loader />

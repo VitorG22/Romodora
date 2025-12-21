@@ -19,15 +19,24 @@ interface INumberInput extends React.ComponentPropsWithoutRef<'input'> {
     max?: number
 }
 
+interface IDropMenu extends React.ComponentPropsWithoutRef<'div'>{
+    valuesList: string[]
+    value: string
+    inputId: string
+    name: string
+    setInputValueFunction: React.Dispatch<React.SetStateAction<string>> | ((value:string)=>void) 
+}
+
 
 export function Container(props: IContainer) {
     return (
         <div {...props}
-            className={`flex flex-col justify-start w-full
+            className={`group flex flex-col justify-start w-full
         ${props.color == "white" ? ("text-stone-300") : ("text-stone-900")}
         ${props.className}
         `}>
             {props.children}
+            <div className={`absolute top-0 left-0 h-0 w-0 ${props.color}`}/>
         </div>
     )
 }
@@ -95,16 +104,18 @@ export function Image({ children, setImageFunction }: { children: React.ReactNod
     )
 }
 
-export function DropMenu({ valuesList, value, inputId, setInputValueFunction }: { valuesList: string[], value: string, inputId: string, name: string, setInputValueFunction: React.Dispatch<React.SetStateAction<string>> | ((value:string)=>void) }) {
+export function DropMenu(props: IDropMenu) {
     const [isDropMenuOpen, setIsDropMenuOpen] = useState<boolean>(false)
 
     return (
-        <div className="relative flex flex-row items-center">
-            <div onClick={() => setIsDropMenuOpen(!isDropMenuOpen)} id={inputId} className=" w-full h-10.5 border border-current rounded-sm py-2 px-2 outline-0" >{value}</div>
+        <div className={`relative flex flex-row items-center ${props.className}`}>
+            <div onClick={() => setIsDropMenuOpen(!isDropMenuOpen)} id={props.inputId} className=" w-full h-10.5 border border-current rounded-sm py-2 px-2 outline-0" >{props.value}</div>
             {isDropMenuOpen ? <ChevronUp className='absolute right-2' strokeWidth={1} onClick={() => setIsDropMenuOpen(!isDropMenuOpen)} /> : <ChevronDown className='absolute right-2' strokeWidth={1} onClick={() => setIsDropMenuOpen(!isDropMenuOpen)} />}
-            {isDropMenuOpen && <ul className="border bg-stone-300 w-full absolute top-[94%] left-0  gap-1 z-20 max-h-60 overflow-scroll">
-                {valuesList.map(optionValue =>
-                    <li onClick={() => { setIsDropMenuOpen(false); setInputValueFunction(optionValue) }} className="hover:bg-stone-400/20 p-.5 pl-2 hover:cursor-pointer">
+            {isDropMenuOpen && <ul className="border  w-full absolute top-[94%] left-0  gap-1 z-20 max-h-60 overflow-scroll 
+            group-has-[.white]:bg-stone-900 group-has-[.black]:bg-stone-300
+            ">
+                {props.valuesList.map(optionValue =>
+                    <li onClick={() => { setIsDropMenuOpen(false); props.setInputValueFunction(optionValue) }} className="hover:bg-stone-400/20 p-.5 pl-2 hover:cursor-pointer">
                         {optionValue}
                     </li>
                 )
@@ -128,7 +139,7 @@ export function Number(props: INumberInput) {
 
     return (
         
-        <div className='flex flex-row gap-2 justify-between items-center w-full border-b border-current rounded-sm py-2 px-2'>
+        <div className={`flex flex-row gap-2 justify-between items-center w-full border-b border-current  py-2 px-2 ${props.className}`}>
             <p>{props.id}</p>
             <div className="flex flex-row items-center gap-1">
                 <button type='button' className='hover:bg-current/20 rounded-sm duration-150' onClick={currentValueMinus}><ChevronLeft strokeWidth={1} size={15} /></button>

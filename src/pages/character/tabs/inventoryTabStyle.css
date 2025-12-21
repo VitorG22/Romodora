@@ -1,0 +1,5 @@
+.dragOver {
+    background-color: rgba(255, 0, 0, 0.041);
+    color: red;
+    border-color: red
+}

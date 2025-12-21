@@ -1,11 +1,12 @@
 import type { Socket } from "socket.io-client";
 import type { Game, IPerson } from "../gameObject";
-import { drawInCanvas, eraseCanvas } from "../../maps/editMap/canvas";
 import { TableMapGame } from "../../maps/editMap/mapsClass";
+import type { Ammo, MeleeWeapon, RangedWeapon, TItems } from "../../items/itemsClass";
+import {Character, type  ICharacter, type TEntity } from "./entitysClasses";
 
 
 export interface IPlayer extends IPerson {
-    character?: Entity
+    character?: Character
     // character: ICharacter | null
 }
 
@@ -14,22 +15,22 @@ interface ITableControl {
     tableMap: TableMapGame | undefined
     socket: Socket | null
     lobbyId: string
-    selectedObjectOrEntity?: {
-        object?: any,
-        entity?: Entity
-    }
+    selectedEntity?: TEntity,
+    selectedObject?: TItems | undefined
+
     setGameFunction?: ({ trigger, newGameData, newTableControlData }: { trigger: 'tableControl' | 'game', newGameData?: Game, newTableControlData?: TableControl }) => void
 }
 
 export class TableControl {
-    players; tableMap; socket; lobbyId; setGameFunction; selectedObjectOrEntity;
+    players; tableMap; socket; lobbyId; setGameFunction; selectedEntity; selectedObject;
 
     constructor(data: ITableControl) {
         this.lobbyId = data.lobbyId
         this.socket = data.socket
         this.players = data.players
         this.tableMap = data.tableMap
-        this.selectedObjectOrEntity = data.selectedObjectOrEntity
+        this.selectedEntity = data.selectedEntity
+        this.selectedObject = data.selectedObject
 
         this.setGameFunction = data.setGameFunction
     }
@@ -78,7 +79,7 @@ export class TableControl {
         let selectedPlayer = this.players.find(data => data.id == playerData.id)
 
         if (playerData.character) {
-            selectedPlayer = { ...selectedPlayer, ...playerData, character: new Entity(playerData.character) }
+            selectedPlayer = { ...selectedPlayer, ...playerData, character: new Character(playerData.character) }
         } else {
             selectedPlayer = { ...selectedPlayer, ...playerData }
         }
@@ -86,7 +87,7 @@ export class TableControl {
 
     }
 
-    changeCharacterData({ userId, characterData }: { userId: string, characterData: IEntity }) {
+    changeCharacterData({ userId, characterData }: { userId: string, characterData: ICharacter }) {
         let playerIndex = this.players.findIndex(playerData => playerData.id == userId)
 
         if (playerIndex == -1) { console.log('return'); return }
@@ -96,7 +97,7 @@ export class TableControl {
         let characterOwnerId = this.players[playerIndex].id
 
         if (!this.players[playerIndex].character) {
-            this.players[playerIndex].character = new Entity({
+            this.players[playerIndex].character = new Character({
                 ...characterData,
                 emitSocket({ event, data }: { event: string, data: any }) {
                     data.gameId = lobbyId
@@ -141,156 +142,22 @@ export class TableControl {
         });
     }
 
-    setSelectedObjectOrEntity({ object, entity }: { object?: any, entity?: Entity }) {
-        if (object) {
-            this.selectedObjectOrEntity = { object: object, entity: undefined }
-        } else if (entity) {
-            this.selectedObjectOrEntity = { object: undefined, entity: entity }
-        }
+    setSelectedEntity(entity: TEntity) {
+        this.selectedEntity = entity
         this.setGame()
     }
-    deleteSelectedObjectOrEntity() {
-        this.selectedObjectOrEntity = undefined
+    setSelectedObject(object: MeleeWeapon | RangedWeapon | Ammo | undefined) {
+        this.selectedObject = object
         this.setGame()
     }
 
-}
-
-export interface IEntity {
-    name: string,
-    id: string,
-    picture: string,
-    class?: string,
-    subClass?: string,
-    race?: string,
-    subRace?: string,
-    attributes?: {
-        strength: number,
-        dexterity: number,
-        constitution: number,
-        intelligence: number,
-        wisdom: number,
-        charisma: number,
+    deleteSelectedEntity() {
+        this.selectedEntity = undefined
+        this.setGame()
     }
-    level?: number,
-    life: number,
-    maxLife: number,
-    position: { x: number, y: number }
-    lastPosition: { x: number, y: number }
-    emitSocket?: ({ event, data }: { event: string, data: any }) => void
-}
-export class Entity {
-    name; id; picture; class; subClass; race; subRace; attributes; level; life; maxLife; position; lastPosition; emitSocket;
-
-    constructor(data: IEntity) {
-        this.name = data.name
-        this.id = data.id
-        this.picture = data.picture
-        this.class = data.class
-        this.subClass = data.subClass
-        this.race = data.race
-        this.subRace = data.subRace
-        this.attributes = data.attributes
-        this.level = data.level
-        this.life = data.life
-        this.maxLife = data.maxLife
-        this.position = data.position
-        this.lastPosition = data.lastPosition || { x: -99999, y: -99999 }
-        this.emitSocket = data.emitSocket
-    }
-
-
-    
-    changeCharacterData({ CharacterData }: { CharacterData?: IEntity }) {
-        if (CharacterData != undefined) {
-            this.emitSocket?.({ event: 'changePlayerCharacterData', data: { newCharacterData: CharacterData } })
-        } else {
-            this.emitSocket?.({ event: 'changePlayerCharacterData', data: { newCharacterData: this } })
-        }
-    }
-    
-    changePosition(x: number, y: number ) {
-        this.lastPosition = this.position
-        this.position = {
-            x:x,
-            y:y
-        }
-        this.changeCharacterData({CharacterData:undefined})
-        console.log(this.emitSocket)
-    }
-
-    heal(healValue:number){
-        if(this.life +healValue >= this.maxLife){
-            this.life = this.maxLife
-        }else{
-            this.life += healValue
-        }
-        this.changeCharacterData({CharacterData:undefined})
-    }
-
-    damage(damageValue:number){
-        if(this.life - damageValue <= 0){
-            this.life = 0
-        }else{
-            this.life -= damageValue
-        }
-        this.changeCharacterData({CharacterData:undefined})
-    }
-
-    render() {
-        eraseCanvas({
-            canvasId: `EntityCanvas`,
-            sizeX: 1,
-            sizeY: 1,
-            x: this.lastPosition.x,
-            y: this.lastPosition.y
-        })
-
-        drawInCanvas({
-            canvasId: `EntityCanvas`,
-            blockData: {
-                direction: "top",
-                linkData: {
-                    mainTilePosition: this.position,
-                    isMainTile: true,
-                    groupPositions: [this.position]
-                },
-                tileData: {
-                    group: 'player',
-                    name: this.name,
-                    path: this.picture,
-                    size: { x: 1, y: 1 }
-                },
-                type: 'entity',
-                x: this.position.x,
-                y: this.position.y
-            },
-            needProxy: false
-        })
-    }
-
-    getInteractionTableFunctionsAsPrimaryObject() {
-        return {
-            Title: this.name,
-            list: [
-                {
-                    name: "Move To",
-                    executableFunction:(data:any)=> this.changePosition(data.x, data.y)
-                },
-            ]
-        }
-    }
-
-    getInteractionTableFunctionsAsSecondaryObject(){
-        return {
-            Title: this.name,
-            list: [
-                {
-                    name: "Damage",
-                    executableFunction:(data:any)=> this.damage(data.value || 0)
-                },
-            ]
-        }
+    deleteSelectedObject() {
+        this.selectedObject = undefined
+        this.setGame()
     }
 
 }

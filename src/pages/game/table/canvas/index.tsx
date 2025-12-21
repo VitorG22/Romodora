@@ -2,6 +2,16 @@ import { useContext, useEffect, useState } from "react"
 import { GameContext } from "../../../../scripts/socket"
 import { DefaultCanvasElement, DefaultGridElement } from "../../../maps/editMap/canvas"
 import { TableMapGame } from "../../../maps/editMap/mapsClass"
+import type { Entity } from "../TableControlerClass"
+
+
+interface IDataToFloatingMenuFunction {
+    x: number,
+    y: number,
+    selectedEntity: Entity | undefined
+    selectedObject: any
+    secondaryEntity: Entity | undefined
+}
 
 
 export function TableCanvas() {
@@ -29,27 +39,36 @@ export function TableCanvas() {
 
         if (!game?.tableControl.tableMap) return
 
-        let newDataToFloatingMenuFunction = {
+        let newDataToFloatingMenuFunction: IDataToFloatingMenuFunction = {
             x: x,
             y: y,
-            selectedEntity: game!.tableControl.selectedObjectOrEntity?.entity,
-            selectedObject: game!.tableControl.selectedObjectOrEntity?.object
+            selectedEntity: game!.tableControl.selectedEntity,
+            selectedObject: game!.tableControl.selectedObject,
+            secondaryEntity: undefined
         }
         setDataToFloatingMenuFunction(newDataToFloatingMenuFunction)
 
         let newFunctionsList: TFunctionList = []
 
-        let selectedEntityOrObjectFunctions = game!.tableControl.selectedObjectOrEntity?.entity?.getInteractionTableFunctionsAsPrimaryObject() || null
-        if (selectedEntityOrObjectFunctions) { newFunctionsList.push(selectedEntityOrObjectFunctions) }
+        
+        if(game!.tableControl.selectedEntity){
+            let selectedEntityFunctions = game!.tableControl.selectedEntity?.getInteractionTableFunctionsAsPrimaryObject() || null
+            if(selectedEntityFunctions)newFunctionsList.push(selectedEntityFunctions)
+        }
+        if(game!.tableControl.selectedObject){
+            let selectedObjectFunctions = game!.tableControl.selectedObject?.getInteractionTableFunctionsAsPrimaryObject?.() || null
+            if(selectedObjectFunctions)newFunctionsList.push(selectedObjectFunctions)
+        }
 
         game!.tableControl.players.map(playerData => {
             if (!playerData.character) return
             if (playerData.character.position.x == x && playerData.character?.position.y == y) {
+                newDataToFloatingMenuFunction.secondaryEntity = playerData.character
                 let playerCharacterFunction = playerData.character.getInteractionTableFunctionsAsSecondaryObject()
                 playerCharacterFunction.list.push(
                     {
                         name: "Select",
-                        executableFunction: () => game!.tableControl.setSelectedObjectOrEntity({ entity: playerData.character })
+                        executableFunction: () => game!.tableControl.setSelectedEntity(playerData.character!)
                     })
                 newFunctionsList.push(playerCharacterFunction)
             }
@@ -101,11 +120,12 @@ export function TableCanvas() {
 }
 
 
-type TFunctionList = Array<{
+export type TFunctionList = Array<{
     Title: string,
     list: {
         name: string,
         executableFunction: (data: any) => void
+        disable?: boolean
     }[]
 }>
 
@@ -117,7 +137,8 @@ function FloatingInteractionMenu({ dataToFloatingMenuFunction, functionList, flo
                     <h2 className="font-semibold px-1 border-b-1 border-stone-400/40">{functionListObject.Title}</h2>
                     <ul>
                         {functionListObject.list.map(listObject =>
-                            <li><button className='flex w-full text-nowrap px-4 hover:cursor-pointer hover:bg-stone-800'
+                            <li><button className='disabled:opacity-40 disabled:hover:bg-transparent flex w-full text-nowrap px-4 hover:cursor-pointer hover:bg-stone-800'
+                                disabled={listObject.disable || false}
                                 onClick={() => { listObject.executableFunction(dataToFloatingMenuFunction); closeFloatingMenu() }}>
                                 {listObject.name}
                             </button></li>
