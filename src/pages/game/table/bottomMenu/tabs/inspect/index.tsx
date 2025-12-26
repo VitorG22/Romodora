@@ -2,6 +2,8 @@ import { useContext} from "react"
 import { GameContext } from "../../../../../../scripts/socket"
 import { type TEntity } from "../../../entitysClasses";
 import VariableEntityInspector from "./variableEntityInspector";
+import VariableObjectInspector from "./variableObjectInspector";
+import type { TItems } from "../../../../../items/itemsClass";
 
 export default function Inspect() {
     const game = useContext(GameContext)
@@ -15,8 +17,8 @@ export default function Inspect() {
                 </h1>
             ) : (
                 <section className='grid grid-cols-2 w-full h-full overflow-hidden'>
-                    {game.tableControl.selectedEntity && <InspectEntity EntityData={game.tableControl.selectedEntity} />}
-                    {game.tableControl.selectedObject && <InspectObject ObjectData={game.tableControl.selectedObject} />}
+                    {game.tableControl.selectedEntity && <InspectEntity entityData={game.tableControl.selectedEntity} />}
+                    {game.tableControl.selectedObject && <InspectObject objectData={game.tableControl.selectedObject} />}
                 </section>
             )}
 
@@ -24,20 +26,20 @@ export default function Inspect() {
     )
 }
 
-function InspectEntity({ EntityData }: { EntityData: TEntity }) {
+function InspectEntity({ entityData }: { entityData: TEntity }) {
     return (
         <section className='col-start-1 col-end-2 flex flex-row gap-2 h-full overflow-hidden'>
-            <VariableEntityInspector item={EntityData}/>
+            <VariableEntityInspector entity={entityData}/>
         </section >
     )
 }
 
 
 
-function InspectObject({ ObjectData }: { ObjectData: any }) {
+function InspectObject({ objectData }: { objectData: TItems }) {
     return (
-        <section className='col-start-2 col-end-3 justify-self-end'>
-            <p>{ObjectData.name}</p>
+        <section className='col-start-2 col-end-3 flex flex-row gap-2 h-full overflow-hidden justify-self-end'>
+            <VariableObjectInspector object={objectData}/>
         </section>
     )
 }

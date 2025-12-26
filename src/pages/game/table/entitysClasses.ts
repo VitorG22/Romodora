@@ -1,4 +1,5 @@
 import type { TItems } from "../../items/itemsClass";
+import ParseItem from "../../items/JsonToClassParser";
 import { drawInCanvas, eraseCanvas } from "../../maps/editMap/canvas";
 
 export type TEntity = Entity | Character
@@ -26,7 +27,7 @@ export class Entity {
         this.maxLife = data.maxLife
         this.position = data.position
         this.lastPosition = data.lastPosition || { x: -99999, y: -99999 }
-        this.inventory = data.inventory
+        this.inventory = data.inventory.map(item=> ParseItem(item))
         this.emitSocket = data.emitSocket
     }
 
@@ -47,7 +48,6 @@ export class Entity {
             y: y
         }
         this.changeCharacterData({ CharacterData: undefined })
-        console.log(this.emitSocket)
     }
 
     heal(healValue: number) {

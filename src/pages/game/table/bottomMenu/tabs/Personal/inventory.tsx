@@ -1,7 +1,9 @@
 import { BoxIcon } from "lucide-react"
-import { Ammo, MeleeWeapon, RangedWeapon } from "../../../../../items/itemsClass"
+import { type TItems } from "../../../../../items/itemsClass"
 import { useContext } from "react"
 import { GameContext } from "../../../../../../scripts/socket"
+import { useSelector } from "react-redux"
+import type { RootState } from "../../../../../../redux/store"
 
 const rarityColorSet = {
     "Very Rare": "#ad46ff",
@@ -12,97 +14,30 @@ const rarityColorSet = {
 
 }
 
-type TItem = MeleeWeapon | RangedWeapon | Ammo | undefined
+
 export default function Inventory() {
+    const game = useContext(GameContext)
+    const { userData } = useSelector((state: RootState) => state.user)
+    let userCharacter = game?.tableControl.players.find(playerData => playerData.id == userData.id)?.character
 
-    let InventoryData = [
-        new MeleeWeapon({
-            id: '',
-            amount: 1,
-            damage: {
-                bonus: 2,
-                diceCount: 2,
-                diceValue: 8,
-                type: "bludgeoning",
-            },
-            description: "Lorem Ipsum doler sit amneu",
-            isMagic: true,
-            maxStack: 1,
-            name: "Teste Sword",
-            price: 100,
-            property: ["finesse", "heavy"],
-            range: 1.5,
-            rarity: "Very Rare",
-            type: "meleeWeapon",
-            weight: 1.5,
-            picture: "https://i.pinimg.com/736x/ac/fa/87/acfa874d54f1922eab9f4d93865f968c.jpg",
-        }),
-        new RangedWeapon({
-            id:'',
-            amount: 1,
-            damage: {
-                bonus: 2,
-                diceCount: 1,
-                diceValue: 10,
-                type: 'piercing',
-            },
-            description: "Lorem Ipsum doler sit amneu",
-            isMagic: false,
-            maxStack: 1,
-            name: "Teste Bow",
-            price: 120,
-            property: ["ammunition"],
-            range: {
-                normal: 80,
-                long: 150
-            },
-            rarity: "Rare",
-            type: "rangedWeapon",
-            weight: 1,
-            picture: "https://i.pinimg.com/1200x/e7/8f/3b/e78f3b4d0516b7717d0e96e49b6685cb.jpg",
-        }),
-        new MeleeWeapon({
-            amount: 1,
-            id:'',
-            damage: {
-                bonus: 2,
-                diceCount: 4,
-                diceValue: 10,
-                type: "bludgeoning",
-            },
-            description: "Lorem Ipsum doler sit amneu",
-            isMagic: true,
-            maxStack: 1,
-            name: "Battle Hammer",
-            price: 3700,
-            property: ["two-handed"],
-            range: 2,
-            rarity: "Legendary",
-            type: "meleeWeapon",
-            weight: 6,
-            picture: "https://i.pinimg.com/736x/55/3c/03/553c0349b5b44d6711dce9c7ecf024a8.jpg",
-        }),
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-    ]
-
+    let InventoryData = userCharacter?.inventory
 
     return (
-        <section className='w-full h-full'>
+        <section className='w-full h-full overflow-hidden'>
             <h1 className="flex gap-1 w-full justify-center mt-1 "><BoxIcon strokeWidth={1} />Inventory</h1>
-            <div className='flex flex-row gap-2 h-full w-full'>
+            <div className='flex flex-row  gap-2 w-full h-full items-start'>
+                <div className='w-2/3 gap-2 overflow-y-scroll pt-1 px-2 h-full overflow-scroll'>
+                    <ul className='h-fit  flex flex-row flex-wrap justify-start items-start gap-2 pb-12'>
+                        {InventoryData?.map(item => <ItemContainer itemData={item} />)}
+                    </ul>
+                </div>
                 <SelectedItemData />
-                <ul className='w-full flex flex-wrap gap-2 overflow-scroll pt-1 px-2'>
-                    {InventoryData.map(item => <ItemContainer itemData={item} />)}
-                </ul>
             </div>
         </section>
     )
 }
 
-function ItemContainer({ itemData }: { itemData?: TItem}) {
+function ItemContainer({ itemData }: { itemData?: TItems }) {
     const game = useContext(GameContext)
 
     const onLeftClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -124,14 +59,14 @@ function ItemContainer({ itemData }: { itemData?: TItem}) {
                 onAuxClick={(e) => onRightClick(e)}
                 onContextMenu={(e => e.preventDefault())}
                 className="hover:cursor-pointer flex justify-center items-center border border-stone-800 aspect-square rounded-sm h-10 object-cover overflow-hidden border-b-2"
-                style={{ 
+                style={{
                     borderBottomColor: rarityColorSet[itemData.rarity],
                     boxShadow: `0 0 2px ${rarityColorSet[itemData.rarity]}`
-                    }}>
+                }}>
                 <img src={itemData.picture} />
             </div>
         )
-    }else{
+    } else {
         return (
             <div
                 onClick={(e) => onLeftClick(e)}
@@ -149,7 +84,7 @@ function SelectedItemData() {
     let selectedItem = game?.tableControl.selectedObject
 
     return (
-        <section className='flex flex-col h-full w-3/5'>
+        <section className='flex flex-col h-full w-1/3 col-start-3 col-end-4'>
             {selectedItem &&
                 <>
                     <div className='flex flex-row'>

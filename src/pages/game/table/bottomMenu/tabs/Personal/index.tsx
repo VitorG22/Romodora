@@ -18,7 +18,7 @@ export default function Personal() {
 
 
     return (
-        <section className='flex flex-row justify-between h-full w-full items-end'>
+        <section className='flex flex-row justify-between h-full w-full items-end overflow-hidden'>
             <DicesTab />
             <Inventory />
             <div className='m-2 w-40'>
