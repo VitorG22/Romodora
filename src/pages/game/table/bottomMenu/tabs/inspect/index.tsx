@@ -1,8 +1,7 @@
-import { useContext, useEffect, useState} from "react"
+import { useContext} from "react"
 import { GameContext } from "../../../../../../scripts/socket"
 import VariableEntityInspector from "./variableEntityInspector";
 import VariableObjectInspector from "./variableObjectInspector";
-import type { TItems } from "../../../../../items/itemsClass";
 
 export default function Inspect() {
     const game = useContext(GameContext)
