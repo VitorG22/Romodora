@@ -1,13 +1,12 @@
 import type { Socket } from "socket.io-client";
 import type { Game, IPerson } from "../gameObject";
 import { TableMapGame } from "../../maps/editMap/mapsClass";
-import type { Ammo, MeleeWeapon, RangedWeapon, TItems } from "../../items/itemsClass";
-import {Character, type  ICharacter, type TEntity } from "./entitysClasses";
-
+import type { TItems } from "../../items/itemsClass";
+import { Character, type ICharacter } from "./entitysClasses";
+import ParseItem from "../../items/JsonToClassParser";
 
 export interface IPlayer extends IPerson {
     character?: Character
-    // character: ICharacter | null
 }
 
 interface ITableControl {
@@ -15,22 +14,22 @@ interface ITableControl {
     tableMap: TableMapGame | undefined
     socket: Socket | null
     lobbyId: string
-    selectedEntity?: TEntity,
-    selectedObject?: TItems | undefined
+    selectedEntityId?: string,
+    selectedObjectId?: string
 
     setGameFunction?: ({ trigger, newGameData, newTableControlData }: { trigger: 'tableControl' | 'game', newGameData?: Game, newTableControlData?: TableControl }) => void
 }
 
 export class TableControl {
-    players; tableMap; socket; lobbyId; setGameFunction; selectedEntity; selectedObject;
+    players; tableMap; socket; lobbyId; setGameFunction; selectedEntityId; selectedObjectId;
 
     constructor(data: ITableControl) {
         this.lobbyId = data.lobbyId
         this.socket = data.socket
         this.players = data.players
         this.tableMap = data.tableMap
-        this.selectedEntity = data.selectedEntity
-        this.selectedObject = data.selectedObject
+        this.selectedEntityId = data.selectedEntityId
+        this.selectedObjectId = data.selectedObjectId
 
         this.setGameFunction = data.setGameFunction
     }
@@ -45,7 +44,6 @@ export class TableControl {
 
     activeListeners() {
         this.socket?.on("updateTableData", (body) => {
-            console.log(body)
 
             switch (body.TypeToChange) {
                 case "character":
@@ -56,6 +54,9 @@ export class TableControl {
                     break
                 case "tableMap":
                     this.changeTableMapData(body.data)
+                    break
+                case "item":
+                    this.changeItemData(body.data)
                     break
             }
         })
@@ -119,11 +120,21 @@ export class TableControl {
             this.players[playerIndex].character.maxLife = characterData.maxLife || this.players[playerIndex].character.maxLife
             this.players[playerIndex].character.position = characterData.position || this.players[playerIndex].character.position
             this.players[playerIndex].character.lastPosition = characterData.lastPosition || this.players[playerIndex].character.lastPosition
+            this.players[playerIndex].character.inventory = characterData.inventory.map(item => ParseItem(item,this.players[playerIndex].character?.emitSocket)) || this.players[playerIndex].character.lastPosition
         }
 
         this.setGame()
         this.players[playerIndex].character.render()
 
+    }
+
+    changeItemData(itemData: TItems ) {
+        let item:TItems| undefined = this.getItemById(itemData.subSelectionId!)
+        if(!item)return
+
+        console.log(item)
+        item.changeData(itemData)
+        this.setGame()
     }
 
     rollDice(DiceValue: number) {
@@ -142,22 +153,61 @@ export class TableControl {
         });
     }
 
-    setSelectedEntity(entity: TEntity) {
-        this.selectedEntity = entity
+    setSelectedEntity(entity: string) {
+        this.selectedEntityId = entity
         this.setGame()
     }
-    setSelectedObject(object: MeleeWeapon | RangedWeapon | Ammo | undefined) {
-        this.selectedObject = object
+    setSelectedObject(objectId?: string) {
+        this.selectedObjectId = objectId
         this.setGame()
     }
 
     deleteSelectedEntity() {
-        this.selectedEntity = undefined
+        this.selectedEntityId = undefined
         this.setGame()
     }
     deleteSelectedObject() {
-        this.selectedObject = undefined
+        this.selectedObjectId = undefined
         this.setGame()
+    }
+
+    getSelectedEntity() {
+        // return this.players.find(playerData =>playerData.character?.id == this.selectedEntityId)?.character || undefined
+        if (!this.selectedEntityId) return undefined
+
+        return this.getEntityById(this.selectedEntityId)
+    }
+
+    getSelectedObject() {
+        if(!this.selectedObjectId)return
+        return this.getItemById(this.selectedObjectId)
+    }
+
+    getEntityById(EntityId: string) {
+        let EntityToReturn = undefined
+
+        this.players.forEach(playerData => {
+            if (playerData.character?.id == EntityId) {
+                EntityToReturn = playerData.character!
+            }
+        })
+
+        return EntityToReturn
+    }
+
+    getItemById(ItemSubSelectionId: string) {
+        let itemToReturn:TItems | undefined;
+
+        for (let playerData of this.players) {
+            playerData.character?.inventory.forEach(itemData => {
+                if (itemData.subSelectionId == ItemSubSelectionId) {
+                    itemToReturn = itemData
+                }
+            })
+        }
+
+
+        return itemToReturn
     }
 
 }

@@ -43,7 +43,7 @@ function ItemContainer({ itemData }: { itemData?: TItems }) {
     const onLeftClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         e.preventDefault();
         if (!itemData) return
-        game!.tableControl!.setSelectedObject(itemData)
+        game!.tableControl!.setSelectedObject(itemData.subSelectionId)
     }
 
     const onRightClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -81,7 +81,7 @@ function ItemContainer({ itemData }: { itemData?: TItems }) {
 
 function SelectedItemData() {
     const game = useContext(GameContext)
-    let selectedItem = game?.tableControl.selectedObject
+    let selectedItem = game!.tableControl.getSelectedObject()
 
     return (
         <section className='flex flex-col h-full w-1/3 col-start-3 col-end-4'>

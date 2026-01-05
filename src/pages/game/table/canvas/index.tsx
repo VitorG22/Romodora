@@ -42,8 +42,8 @@ export function TableCanvas() {
         let newDataToFloatingMenuFunction: IDataToFloatingMenuFunction = {
             x: x,
             y: y,
-            selectedEntity: game!.tableControl.selectedEntity,
-            selectedObject: game!.tableControl.selectedObject,
+            selectedEntity: game!.tableControl.getSelectedEntity(),
+            selectedObject: game!.tableControl.getSelectedObject(),
             secondaryEntity: undefined
         }
         setDataToFloatingMenuFunction(newDataToFloatingMenuFunction)
@@ -51,12 +51,12 @@ export function TableCanvas() {
         let newFunctionsList: TFunctionList = []
 
         
-        if(game!.tableControl.selectedEntity){
-            let selectedEntityFunctions = game!.tableControl.selectedEntity?.getInteractionTableFunctionsAsPrimaryObject() || null
+        if(newDataToFloatingMenuFunction.selectedEntity){
+            let selectedEntityFunctions = newDataToFloatingMenuFunction.selectedEntity.getInteractionTableFunctionsAsPrimaryObject() || null
             if(selectedEntityFunctions)newFunctionsList.push(selectedEntityFunctions)
         }
-        if(game!.tableControl.selectedObject){
-            let selectedObjectFunctions = game!.tableControl.selectedObject?.getInteractionTableFunctionsAsPrimaryObject?.() || null
+        if(newDataToFloatingMenuFunction.selectedObject){
+            let selectedObjectFunctions = newDataToFloatingMenuFunction.selectedObject?.getInteractionTableFunctionsAsPrimaryObject?.() || null
             if(selectedObjectFunctions)newFunctionsList.push(selectedObjectFunctions)
         }
 
@@ -68,7 +68,7 @@ export function TableCanvas() {
                 playerCharacterFunction.list.push(
                     {
                         name: "Select",
-                        executableFunction: () => game!.tableControl.setSelectedEntity(playerData.character!)
+                        executableFunction: () => game!.tableControl.setSelectedEntity(playerData.character!.id)
                     })
                 newFunctionsList.push(playerCharacterFunction)
             }

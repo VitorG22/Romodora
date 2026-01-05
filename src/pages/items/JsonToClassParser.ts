@@ -1,6 +1,10 @@
 import { Ammo, MeleeWeapon, RangedWeapon, type TItems } from "./itemsClass";
 
-export default function ParseItem(data: TItems): TItems{
+export default function ParseItem(data: TItems, emitSocket?: ({ event, data }: { event: string, data: any }) => void){
+    if(emitSocket){
+        data.emitSocket = emitSocket
+    }
+    
     switch (data.type) {
         case "meleeWeapon":
             return new MeleeWeapon(data as any)

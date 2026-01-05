@@ -1,7 +1,17 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Character, Entity, type TEntity } from "../../../entitysClasses";
+import { useContext, useEffect, useState } from "react";
+import { GameContext } from "../../../../../../scripts/socket";
 
-export default function VariableEntityInspector({ entity }: { entity: TEntity }) {
+export default function VariableEntityInspector() {
+    const game = useContext(GameContext)
+    const [entity, setEntityData] = useState<TEntity | undefined>();
+
+    useEffect(() => {
+        setEntityData(game!.tableControl.players.find(playerData => playerData.character?.id == game?.tableControl.selectedEntityId)?.character)
+    }, [game])
+
+
     switch (true) {
         case entity instanceof Character:
             return (<InspectCharacter characterData={entity} />)
@@ -24,7 +34,7 @@ function InspectCharacter({ characterData }: { characterData: Character }) {
                 break
         }
 
-        characterData.changeCharacterData({
+        characterData.changeEntityData({
             CharacterData: characterData
         })
 

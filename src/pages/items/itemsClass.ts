@@ -5,6 +5,7 @@ export type TItems = MeleeWeapon | RangedWeapon | Ammo
 
 interface IItem {
     id: string
+    subSelectionId?: string
     name: string
     picture?: string
     amount: number
@@ -14,10 +15,11 @@ interface IItem {
     description: string
     weight: number
     type: "meleeWeapon"| "rangedWeapon" | "armor" | "shield" | "tool" | "ammo" | "kit" | "accessories" | "consumable" | "catalysts" | "bag" | "materials"
+    emitSocket?: ({ event, data }: { event: string, data: any }) => void
 }
 
 export class Item {
-    id;name; picture; amount; maxStack; rarity; price; description; weight;type;
+    id;name; picture; amount; maxStack; rarity; price; description; weight;type;subSelectionId;emitSocket;
     constructor(data: IItem) {
         this.id = data.id || ""
         this.name = data.name
@@ -29,8 +31,24 @@ export class Item {
         this.description = data.description
         this.weight = data.weight
         this.type = data.type
+        this.subSelectionId = data.subSelectionId || undefined
+        this.emitSocket = data.emitSocket
     }
 
+    changeData(newItemData:Item){
+        this.amount = newItemData.amount || this.amount
+        this.price = newItemData.price || this.price
+    }
+
+    emitUpdatedItem(){
+        this.emitSocket?.({
+            event: 'ChangeItemData',
+            data: this
+        })
+            
+        
+    }
+    
     getInteractionTableFunctionsAsPrimaryObject(){}
     getInteractionTableFunctionsAsSecondaryObject(){}
 }
@@ -50,6 +68,8 @@ interface IWeapon extends IItem {
 
 
 }
+
+
 
 class Weapon extends Item {
     isMagic; damage

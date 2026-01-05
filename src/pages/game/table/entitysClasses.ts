@@ -27,13 +27,13 @@ export class Entity {
         this.maxLife = data.maxLife
         this.position = data.position
         this.lastPosition = data.lastPosition || { x: -99999, y: -99999 }
-        this.inventory = data.inventory.map(item=> ParseItem(item))
+        this.inventory = data.inventory.map(item=> ParseItem(item, data.emitSocket))
         this.emitSocket = data.emitSocket
     }
 
 
 
-    changeCharacterData({ CharacterData }: { CharacterData?: IEntity }) {
+    changeEntityData({ CharacterData }: { CharacterData?: IEntity }) {
         if (CharacterData != undefined) {
             this.emitSocket?.({ event: 'changePlayerCharacterData', data: { newCharacterData: CharacterData } })
         } else {
@@ -47,7 +47,7 @@ export class Entity {
             x: x,
             y: y
         }
-        this.changeCharacterData({ CharacterData: undefined })
+        this.changeEntityData({ CharacterData: undefined })
     }
 
     heal(healValue: number) {
@@ -56,7 +56,7 @@ export class Entity {
         } else {
             this.life += healValue
         }
-        this.changeCharacterData({ CharacterData: undefined })
+        this.changeEntityData({ CharacterData: undefined })
     }
 
     damage(damageValue: number) {
@@ -65,7 +65,7 @@ export class Entity {
         } else {
             this.life -= damageValue
         }
-        this.changeCharacterData({ CharacterData: undefined })
+        this.changeEntityData({ CharacterData: undefined })
     }
 
     render() {

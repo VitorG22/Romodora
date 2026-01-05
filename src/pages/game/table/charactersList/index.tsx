@@ -49,7 +49,7 @@ function CharacterBanner({ playerData, isCharacterListOpen }: { isCharacterListO
 
     return (
         <li ref={CharacterBannerRef}
-            className="CharacterBanner CharacterBannerOpen gap-1 pr-1 py-1 flex flex-col items-end hover:bg-stone-900/10 hover:cursor-pointer" onClick={() => game?.tableControl.setSelectedEntity(playerData.character!)} >
+            className="CharacterBanner CharacterBannerOpen gap-1 pr-1 py-1 flex flex-col items-end hover:bg-stone-900/10 hover:cursor-pointer" onClick={() => game?.tableControl.setSelectedEntity(playerData.character!.id)} >
             <div className='flex flex-row h-fit w-full justify-end text-end items-end'>
                 <article ref={ArticleRef} className="subElements flex flex-col justify-end pr-2 ">
                     <p className='text-stone-300'>{playerData.character?.name} </p>
