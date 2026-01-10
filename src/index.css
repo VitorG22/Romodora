@@ -33,3 +33,13 @@ body{
     height: 4px;
     scroll-behavior: smooth;
 }
+
+.league-spartan{
+    font-family: "League Spartan", sans-serif;
+    font-optical-sizing: auto;
+}
+
+.arimo{
+    font-family: "Arimo", sans-serif;
+    font-optical-sizing: auto;
+}

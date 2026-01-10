@@ -14,14 +14,19 @@ import SelectMapToEdit from "./pages/maps";
 import Items from "./pages/items";
 import CreateItem from "./pages/items/subPages/createItem";
 import ItemsList from "./pages/items/subPages/itemsList";
+import Presentation from "./pages/presentation";
 
 export const router = createBrowserRouter([
+    {
+        path: '/',
+        element: <Presentation/>
+    },
     {
         path: '/',
         element: <App />,
         children: [
             {
-                path: '/',
+                path: '/login',
                 element: <Login />
             },
             {

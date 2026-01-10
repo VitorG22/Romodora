@@ -26,7 +26,7 @@ function App() {
   }, [location])
 
   const verifyIfIsValidToken = () => {
-    if (location == '/' || location == '/register' && token && !isLogged) {
+    if (location == '/'|| location == '/login' || location == '/register' && token && !isLogged) {
       setIsLoading(true)
       getData({
         endPoint: 'getUserDataByToken',
@@ -42,7 +42,7 @@ function App() {
       return
     }
 
-    if (location != '/' && location != '/register' && token && !isLogged) {
+    if (location != '/' && location !='/login' && location != '/register' && token && !isLogged) {
       setIsLoading(true)
       getData({
         endPoint: 'getUserDataByToken',
@@ -58,7 +58,7 @@ function App() {
       return
     }
 
-    if (location != '/' && location != '/register' && !token) {
+    if (location != '/' && location != '/login' && location != '/register' && !token) {
       navigate('/')
       return
     }

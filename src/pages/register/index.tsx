@@ -79,7 +79,7 @@ function SendRegisterData({ setCurrentStep, setUserEmail }: { setCurrentStep: Re
                     <Button.Primary color='white' type="submit">
                         Confirm
                     </Button.Primary>
-                    <p>Already have an account? <span onClick={() => navigate('/')} className='text-purple-400 underline hover:cursor-pointer'>Log in</span></p>
+                    <p>Already have an account? <span onClick={() => navigate('/login')} className='text-purple-400 underline hover:cursor-pointer'>Log in</span></p>
                 </div>
             </form>
             <p className='text-red-500'>{ErrorMessage}</p>
