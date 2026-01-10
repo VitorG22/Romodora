@@ -5,14 +5,18 @@ interface ISwitch extends React.ComponentPropsWithoutRef<'input'> {
     name: string
     id: string
     label: string
-    onChangeFunction?: (value:boolean)=>void
+    onChangeFunction?: (value: boolean) => void
 }
 
 export function Primary(props: ISwitch) {
     const [currentCheckBoxValue, setCurrentCheckBoxValue] = useState<boolean>(false)
 
+    useEffect(() => {
+        props.onChangeFunction?.(currentCheckBoxValue)
+    }, [currentCheckBoxValue])
+
     return (
-        <div {...props} className='flex flex-row item-center justify-between' onClick={()=> setCurrentCheckBoxValue(value => !value)}>
+        <div {...props} className='flex flex-row item-center justify-between' onClick={() => setCurrentCheckBoxValue(value => !value)}>
             <label htmlFor={props.id}>{props.label}</label>
             <div className='relative group'>
                 <input checked={currentCheckBoxValue} value={currentCheckBoxValue.toString()} name={props.name} id={props.id} type="checkbox"
@@ -29,13 +33,13 @@ export function Primary(props: ISwitch) {
 
 export function Secondary(props: ISwitch) {
     const [currentCheckBoxValue, setCurrentCheckBoxValue] = useState<boolean>(!!props.defaultChecked!)
-    
-    useEffect(()=>{
+
+    useEffect(() => {
         props.onChangeFunction?.(currentCheckBoxValue)
-    },[currentCheckBoxValue])
-    
+    }, [currentCheckBoxValue])
+
     return (
-        <div {...props} className='h-fit w-full flex flex-row item-center justify-between' onClick={()=> setCurrentCheckBoxValue(value => !value)}>
+        <div {...props} className='h-fit w-full flex flex-row item-center justify-between' onClick={() => setCurrentCheckBoxValue(value => !value)}>
             <label htmlFor={props.id}>{props.label}</label>
             <div className='relative group flex flex-row items-center'>
                 {
@@ -43,14 +47,14 @@ export function Secondary(props: ISwitch) {
                         <input checked={currentCheckBoxValue} type="checkbox"
                             className='w-0 h-0 absolute top-0 left-0 opacity-0 z-10'
                         />
-                    ):(
+                    ) : (
                         <input checked={currentCheckBoxValue} value={currentCheckBoxValue.toString()} name={props.name} id={props.id} type="checkbox"
                             className='w-0 h-0 absolute top-0 left-0 opacity-0 z-10'
                         />
                     )
                 }
                 <div className='flex flex-row items-center justify-center size-5  p-[2px] ring ring-stone-900 group-has-checked:ring-purple-500 group-has-checked:bg-purple-500 duration-300 ease-in '>
-                    {currentCheckBoxValue && <Check  className='text-white h-full w-full'/>}
+                    {currentCheckBoxValue && <Check className='text-white h-full w-full' />}
                 </div>
             </div>
         </div>

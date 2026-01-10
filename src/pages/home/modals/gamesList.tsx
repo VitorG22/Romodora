@@ -1,11 +1,12 @@
-import { Loader, LoaderContainer } from '../../assets/loader/loader'
+import { Loader, LoaderContainer } from '../../../assets/loader/loader'
 import { useContext, useEffect, useState } from "react"
-import { GameContext } from "../../scripts/socket"
-import { LockKeyhole, User2, X } from "lucide-react"
+import { GameContext } from "../../../scripts/socket"
+import { LockKeyhole, User2} from "lucide-react"
 import { useNavigate } from "react-router-dom"
-import type { Game, IPerson } from './gameObject'
-import {TableControl, type IPlayer } from './table/TableControlerClass'
-import { Character } from './table/entitysClasses'
+import type { Game, IPerson } from '../../game/gameObject'
+import { TableControl, type IPlayer } from '../../game/table/TableControlerClass'
+import { Character } from '../../game/table/entitysClasses'
+import ModalBase from '../../../assets/modal/ModalBase'
 
 interface IGameInList {
     id: string
@@ -14,7 +15,7 @@ interface IGameInList {
     game_host: IPerson
 }
 
-export default function GamesListDefault({ setIsGamesListOpen }: { setIsGamesListOpen: React.Dispatch<React.SetStateAction<boolean>> }) {
+export default function GamesListModal({ setIsModalOpen }: { setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>> }) {
     const game = useContext(GameContext)
     const [GamesList, setGamesList] = useState<IGameInList[]>([])
     const [isLoadingList, setIsLoadingList] = useState<boolean>(false)
@@ -46,13 +47,19 @@ export default function GamesListDefault({ setIsGamesListOpen }: { setIsGamesLis
                     <Loader />
                 </LoaderContainer>
             }
-            <div className="absolute top-0 left-0 h-full w-full bg-stone-500/40 backdrop-blur-[1px] z-10"></div>
-            <section className='z-20 bg-stone-200 px-4 py-4 max-h-3/4'>
-                <X strokeWidth={1} className="justify-self-end mb-2 hover:bg-purple-500 hover:text-white duration-150 hover:cursor-pointer" onClick={() => setIsGamesListOpen(false)} />
-                <ul className="flex flex-col gap-2 overflow-y-scroll ">
-                    {GamesList.map(gameData => <GameCard gameData={gameData} />)}
-                </ul>
-            </section>
+
+            <ModalBase setIsModalOpen={setIsModalOpen} modalTitle='Games' >
+                {GamesList.length > 0 ? (
+                    <section className='max-h-90 overflow-y-scroll showScroll overflow-x-hidden pr-2'>
+                        <ul className="flex flex-col">
+                            {GamesList.map(gameData => <GameCard gameData={gameData} />)}
+                        </ul>
+                    </section>
+                ) : (
+                    <h4 className='arimo px-18 py-12'>No Games Found</h4>
+                )
+                }
+            </ModalBase>
         </main>
     )
 }
@@ -62,15 +69,16 @@ function GameCard({ gameData }: { gameData: IGameInList }) {
     const navigate = useNavigate()
 
     const joinInGame = () => {
-        game?.socket?.emit("joinInGame", { gameId: gameData.id }, (res: { status: 200, gameData:Game  }) => {
+        game?.socket?.emit("joinInGame", { gameId: gameData.id }, (res: { status: 200, gameData: Game }) => {
             if (res.status != 200) return
             game.isHost = false
-            game.lobbyId = gameData.id,
+            game.lobbyId = gameData.id
             game.users = res.gameData.users
-            game.tableControl = new TableControl({...game.tableControl ,...res.gameData.tableControl, 
+            game.tableControl = new TableControl({
+                ...game.tableControl, ...res.gameData.tableControl,
                 players: res.gameData.tableControl.players.map((playerData: IPlayer) => {
-                    let playerObject= {...playerData}
-                    if(playerData.character){
+                    let playerObject = { ...playerData }
+                    if (playerData.character) {
                         playerObject.character = new Character(playerData.character)
                     }
                     return playerObject
@@ -84,11 +92,7 @@ function GameCard({ gameData }: { gameData: IGameInList }) {
     }
 
     return (
-        <li onClick={() => joinInGame()} className='hover:cursor-pointer flex flex-row items-center gap-10 py-4 px-4  bg-linear-45 duration-150
-                        from-stone-500/40 via-stone-500/10 to-stone-500/10
-                        hover:from-purple-700 hover:via-purple-600/50 hover:to-purple-500/50 hover:ring-purple-500 hover:text-white hover:ring 
-                        hover:translate-x-1
-                        '>
+        <li onClick={() => joinInGame()} className='hover:cursor-pointer flex flex-row items-center gap-10 py-4 px-4  hover:bg-stone-400/40'>
             <p>{gameData.id}</p>
             <p>{gameData.name}</p>
             <div className='flex flex-row items-center gap-2'>
