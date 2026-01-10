@@ -45,7 +45,9 @@ export default function Presentation() {
                 </div>
                 <article className='flex flex-col gap-2'>
                     <h2 className="font-bold text-6xl text-end">IMAGINE<br /> AND <span className='text-purple-500'>CREATE</span></h2>
-                    <p className="font-thin text-end">Participate in online <span className='text-purple-500 font-bold'>RPG</span> sessions and play with your<br /> friends from <span className='text-purple-500 font-bold'>anywhere</span> in the world.</p>
+                    
+                    <p className="font-thin text-end">Romodora offers a variety of creation <br/> options, from <span className='text-purple-500 font-bold'>maps</span> to <span className='text-purple-500 font-bold'>items</span> and <br/><span className='text-purple-500 font-bold'>characters</span>.
+</p>
                 </article>
                 
             </section>
