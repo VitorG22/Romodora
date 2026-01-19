@@ -24,7 +24,7 @@ export default function HostGameOptionsModal({ setIsModalOpen }: { setIsModalOpe
         game?.socket?.emit('createGame', {
             name: gameSettings.GameName,
             onlyFriends: gameSettings.OnlyFriends || false,
-            Password: gameSettings.password || undefined
+            password: gameSettings.password || undefined
         },
             ({ status, gameData }: { status: number, gameData: IGame }) => {
                 setIsLoading(false)

@@ -112,7 +112,7 @@ function ModalChangeCharacter({ setIsModalChangeCharacterOpen }: { setIsModalCha
 
     const changeUserCharacter = (characterData: ICharacter) => {
         if(!game?.socket)return        
-        game.socket.emit('changePlayerCharacterData', {gameId:game.lobbyId, newCharacterData: characterData, characterOwnerId: userData.id})
+        game.socket.emit('changePlayerSelectedCharacter', {gameId:game.lobbyId, newCharacterData: characterData, characterOwnerId: userData.id})
     }
 
     return (

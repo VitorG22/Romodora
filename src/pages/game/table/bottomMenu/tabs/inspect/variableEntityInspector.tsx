@@ -23,21 +23,11 @@ export default function VariableEntityInspector() {
 
 function InspectCharacter({ characterData }: { characterData: Character }) {
 
-    const changeAttribute = ({ attribute, type }: { attribute: "charisma" | "constitution" | "dexterity" | "intelligence" | "strength" | "wisdom", type: "plus" | "minus" }) => {
-
-        switch (type) {
-            case "plus":
-                characterData.attributes[attribute] += 1
-                break
-            case "minus":
-                characterData.attributes[attribute] -= 1
-                break
-        }
-
-        characterData.changeEntityData({
-            CharacterData: characterData
+    const changeAttribute = ({ attribute, value }: { attribute: "charisma" | "constitution" | "dexterity" | "intelligence" | "strength" | "wisdom", value: number }) => {
+        characterData.changeAttribute({
+            attribute: attribute,
+            value: value
         })
-
     }
 
     return (
@@ -54,34 +44,34 @@ function InspectCharacter({ characterData }: { characterData: Character }) {
                         <button onClick={() => characterData.heal(1)} className='h-full hover:cursor-pointer hover:bg-stone-800'><ChevronRight className="h-1/2" /></button>
                     </div></li>
                     <li className='flex flex-row gap-1'><p className='font-semibold'>charisma:</p><div className='flex flex-row gap-1 items-center font-thin italic'>
-                        <button onClick={() => changeAttribute({ attribute: "charisma", type: 'minus' })} className='h-full w-fit hover:cursor-pointer hover:bg-stone-800'><ChevronLeft className="h-1/2" /></button>
+                        <button onClick={() => changeAttribute({ attribute: "charisma", value: characterData.attributes!.charisma - 1 })} className='h-full w-fit hover:cursor-pointer hover:bg-stone-800'><ChevronLeft className="h-1/2" /></button>
                         <p>{characterData.attributes?.charisma}</p>
-                        <button onClick={() => changeAttribute({ attribute: "charisma", type: 'plus' })} className='h-full hover:cursor-pointer hover:bg-stone-800'><ChevronRight className="h-1/2" /></button>
+                        <button onClick={() => changeAttribute({ attribute: "charisma", value: characterData.attributes!.charisma + 1 })} className='h-full hover:cursor-pointer hover:bg-stone-800'><ChevronRight className="h-1/2" /></button>
                     </div></li>
                     <li className='flex flex-row gap-1'><p className='font-semibold'>constitution:</p><div className='flex flex-row gap-1 items-center font-thin italic'>
-                        <button onClick={() => changeAttribute({ attribute: "constitution", type: 'minus' })} className='h-full w-fit hover:cursor-pointer hover:bg-stone-800'><ChevronLeft className="h-1/2" /></button>
+                        <button onClick={() => changeAttribute({ attribute: "constitution", value: characterData.attributes!.constitution - 1 })} className='h-full w-fit hover:cursor-pointer hover:bg-stone-800'><ChevronLeft className="h-1/2" /></button>
                         <p>{characterData.attributes?.constitution}</p>
-                        <button onClick={() => changeAttribute({ attribute: "constitution", type: 'plus' })} className='h-full hover:cursor-pointer hover:bg-stone-800'><ChevronRight className="h-1/2" /></button>
+                        <button onClick={() => changeAttribute({ attribute: "constitution", value: characterData.attributes!.constitution + 1 })} className='h-full hover:cursor-pointer hover:bg-stone-800'><ChevronRight className="h-1/2" /></button>
                     </div></li>
                     <li className='flex flex-row gap-1'><p className='font-semibold'>dexterity:</p><div className='flex flex-row gap-1 items-center font-thin italic'>
-                        <button onClick={() => changeAttribute({ attribute: "dexterity", type: 'minus' })} className='h-full w-fit hover:cursor-pointer hover:bg-stone-800'><ChevronLeft className="h-1/2" /></button>
+                        <button onClick={() => changeAttribute({ attribute: "dexterity", value: characterData.attributes!.dexterity - 1 })} className='h-full w-fit hover:cursor-pointer hover:bg-stone-800'><ChevronLeft className="h-1/2" /></button>
                         <p>{characterData.attributes?.dexterity}</p>
-                        <button onClick={() => changeAttribute({ attribute: "dexterity", type: 'plus' })} className='h-full hover:cursor-pointer hover:bg-stone-800'><ChevronRight className="h-1/2" /></button>
+                        <button onClick={() => changeAttribute({ attribute: "dexterity", value: characterData.attributes!.dexterity + 1 })} className='h-full hover:cursor-pointer hover:bg-stone-800'><ChevronRight className="h-1/2" /></button>
                     </div></li>
                     <li className='flex flex-row gap-1'><p className='font-semibold'>intelligence:</p><div className='flex flex-row gap-1 items-center font-thin italic'>
-                        <button onClick={() => changeAttribute({ attribute: "intelligence", type: 'minus' })} className='h-full w-fit hover:cursor-pointer hover:bg-stone-800'><ChevronLeft className="h-1/2" /></button>
+                        <button onClick={() => changeAttribute({ attribute: "intelligence", value: characterData.attributes!.intelligence - 1 })} className='h-full w-fit hover:cursor-pointer hover:bg-stone-800'><ChevronLeft className="h-1/2" /></button>
                         <p>{characterData.attributes?.intelligence}</p>
-                        <button onClick={() => changeAttribute({ attribute: "intelligence", type: 'plus' })} className='h-full hover:cursor-pointer hover:bg-stone-800'><ChevronRight className="h-1/2" /></button>
+                        <button onClick={() => changeAttribute({ attribute: "intelligence", value: characterData.attributes!.intelligence + 1 })} className='h-full hover:cursor-pointer hover:bg-stone-800'><ChevronRight className="h-1/2" /></button>
                     </div></li>
                     <li className='flex flex-row gap-1'><p className='font-semibold'>strength:</p><div className='flex flex-row gap-1 items-center font-thin italic'>
-                        <button onClick={() => changeAttribute({ attribute: "strength", type: 'minus' })} className='h-full w-fit hover:cursor-pointer hover:bg-stone-800'><ChevronLeft className="h-1/2" /></button>
+                        <button onClick={() => changeAttribute({ attribute: "strength", value: characterData.attributes!.strength - 1 })} className='h-full w-fit hover:cursor-pointer hover:bg-stone-800'><ChevronLeft className="h-1/2" /></button>
                         <p>{characterData.attributes?.strength}</p>
-                        <button onClick={() => changeAttribute({ attribute: "strength", type: 'plus' })} className='h-full hover:cursor-pointer hover:bg-stone-800'><ChevronRight className="h-1/2" /></button>
+                        <button onClick={() => changeAttribute({ attribute: "strength", value: characterData.attributes!.strength + 1 })} className='h-full hover:cursor-pointer hover:bg-stone-800'><ChevronRight className="h-1/2" /></button>
                     </div></li>
                     <li className='flex flex-row gap-1'><p className='font-semibold'>wisdom:</p><div className='flex flex-row gap-1 items-center font-thin italic'>
-                        <button onClick={() => changeAttribute({ attribute: "wisdom", type: 'minus' })} className='h-full w-fit hover:cursor-pointer hover:bg-stone-800'><ChevronLeft className="h-1/2" /></button>
+                        <button onClick={() => changeAttribute({ attribute: "wisdom", value: characterData.attributes!.wisdom - 1 })} className='h-full w-fit hover:cursor-pointer hover:bg-stone-800'><ChevronLeft className="h-1/2" /></button>
                         <p>{characterData.attributes?.wisdom}</p>
-                        <button onClick={() => changeAttribute({ attribute: "wisdom", type: 'plus' })} className='h-full hover:cursor-pointer hover:bg-stone-800'><ChevronRight className="h-1/2" /></button>
+                        <button onClick={() => changeAttribute({ attribute: "wisdom", value: characterData.attributes!.wisdom + 1 })} className='h-full hover:cursor-pointer hover:bg-stone-800'><ChevronRight className="h-1/2" /></button>
                     </div></li>
                 </ul>
             </article>

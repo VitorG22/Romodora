@@ -32,40 +32,25 @@ export class Entity {
     }
 
 
-
-    changeEntityData({ CharacterData }: { CharacterData?: IEntity }) {
-        if (CharacterData != undefined) {
-            this.emitSocket?.({ event: 'changePlayerCharacterData', data: { newCharacterData: CharacterData } })
-        } else {
-            this.emitSocket?.({ event: 'changePlayerCharacterData', data: { newCharacterData: this } })
-        }
-    }
-
     changePosition(x: number, y: number) {
-        this.lastPosition = this.position
-        this.position = {
-            x: x,
-            y: y
-        }
-        this.changeEntityData({ CharacterData: undefined })
+        this.emitSocket?.({
+            event:"entity_move",
+            data: {position:{x: x,y: y}}
+        })
     }
 
     heal(healValue: number) {
-        if (this.life + healValue >= this.maxLife) {
-            this.life = this.maxLife
-        } else {
-            this.life += healValue
-        }
-        this.changeEntityData({ CharacterData: undefined })
+        this.emitSocket?.({
+            event:'entity_heal',
+            data: {healValue: healValue}
+        })
     }
 
     damage(damageValue: number) {
-        if (this.life - damageValue <= 0) {
-            this.life = 0
-        } else {
-            this.life -= damageValue
-        }
-        this.changeEntityData({ CharacterData: undefined })
+        this.emitSocket?.({
+            event:'entity_damage',
+            data: {healValue: damageValue}
+        })
     }
 
     render() {
@@ -154,4 +139,12 @@ export class Character extends Entity{
         this.subRace =  data.subRace
         this.attributes = data.attributes
     }
+
+    changeAttribute({attribute, value}:{attribute:"strength"|"dexterity"|"constitution"|"intelligence"|"wisdom"|"charisma", value: number}){
+        this.emitSocket?.({
+            event:'entity_changeAttribute',
+            data:{attribute:attribute,value:value}
+        })
+    }
+    
 }

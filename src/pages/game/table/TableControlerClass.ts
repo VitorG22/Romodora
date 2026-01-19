@@ -103,6 +103,7 @@ export class TableControl {
                 emitSocket({ event, data }: { event: string, data: any }) {
                     data.gameId = lobbyId
                     data.characterOwnerId = characterOwnerId
+                    data.entityId = characterData.id
                     socket?.emit(event, data)
                 },
             })
